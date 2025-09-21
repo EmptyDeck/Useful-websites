@@ -20,7 +20,7 @@ let isUnlimitedMode = false;
 let isTTSEnabled = true;
 
 const MIN_WORD = 1;
-const MAX_WORD = 52;
+const MAX_WORD = 30;
 
 // Load saved settings or defaults
 function loadSettings() {
