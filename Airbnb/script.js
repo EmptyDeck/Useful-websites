@@ -1,6 +1,7 @@
 // === Language handling ===
 // Using in-memory storage instead of localStorage
 const lang = localStorage.getItem("selectedLanguage") || "en";
+console.log("Yes its updated 25/10/12/1746i");
 console.log("Selected language:", lang);
 
 // === Translations ===
