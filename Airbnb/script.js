@@ -1,6 +1,7 @@
 // === Language handling ===
 // Using in-memory storage instead of localStorage
-const lang = localStorage.getItem("selectedLanguage") || "en";
+let selectedLanguage = "ko"; // Default language
+const lang = selectedLanguage;
 console.log("Selected language:", lang);
 
 // === Translations ===
@@ -176,6 +177,19 @@ const listingsData = {
       bad: "Expensive + Car required",
       link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
       img: "9.avif"
+    },
+    {
+      id: 10,
+      name: "Entire condo in Helsinki, Finland",
+      cost: "€1200",
+      costBreakdown: "€1200 total",
+      region: "Helsinki",
+      transport: "Excellent",
+      timeToHelsinki: "City center",
+      good: "Helsinki city center + Convenient transport",
+      bad: "Expensive",
+      link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
+      img: "10.jpeg"
     }
   ],
   es: [
@@ -295,6 +309,19 @@ const listingsData = {
       bad: "Caro + Se requiere coche",
       link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
       img: "9.avif"
+    },
+    {
+      id: 10,
+      name: "Condominio completo en Helsinki, Finlandia",
+      cost: "€1200",
+      costBreakdown: "€1200 total",
+      region: "Helsinki",
+      transport: "Excelente",
+      timeToHelsinki: "Centro de la ciudad",
+      good: "Centro de Helsinki + Transporte conveniente",
+      bad: "Caro",
+      link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
+      img: "10.jpeg"
     }
   ],
   fi: [
@@ -414,6 +441,19 @@ const listingsData = {
       bad: "Kallis + Auto tarvitaan",
       link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
       img: "9.avif"
+    },
+    {
+      id: 10,
+      name: "Koko asunto, Helsinki, Suomi",
+      cost: "€1200",
+      costBreakdown: "€1200 yhteensä",
+      region: "Helsinki",
+      transport: "Erinomainen",
+      timeToHelsinki: "Kaupungin keskusta",
+      good: "Helsingin keskusta + Hyvät kulkuyhteydet",
+      bad: "Kallis",
+      link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
+      img: "10.jpeg"
     }
   ],
   fr: [
@@ -533,6 +573,19 @@ const listingsData = {
       bad: "Cher + Voiture nécessaire",
       link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
       img: "9.avif"
+    },
+    {
+      id: 10,
+      name: "Appartement entier à Helsinki, Finlande",
+      cost: "€1200",
+      costBreakdown: "€1200 total",
+      region: "Helsinki",
+      transport: "Excellent",
+      timeToHelsinki: "Centre-ville",
+      good: "Centre d'Helsinki + Transport pratique",
+      bad: "Cher",
+      link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
+      img: "10.jpeg"
     }
   ],
   ko: [
@@ -652,6 +705,19 @@ const listingsData = {
       bad: "비쌈 + 차량 필요",
       link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
       img: "9.avif"
+    },
+    {
+      id: 10,
+      name: "헬싱키(Helsinki), 핀란드의 공동 주택 전체",
+      cost: "€1200",
+      costBreakdown: "",
+      region: "헬싱키",
+      transport: "",
+      timeToHelsinki: "",
+      good: "헬싱키 중심부 + 편리한 교통",
+      bad: "비쌈",
+      link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
+      img: "10.jpeg"
     }
   ]
 };
