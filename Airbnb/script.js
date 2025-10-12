@@ -1,7 +1,6 @@
 // === Language handling ===
 // Using in-memory storage instead of localStorage
-let selectedLanguage = "ko"; // Default language
-const lang = selectedLanguage;
+const lang = localStorage.getItem("selectedLanguage") || "en";
 console.log("Selected language:", lang);
 
 // === Translations ===
