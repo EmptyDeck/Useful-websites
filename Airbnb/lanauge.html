@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Select Language | Airbnb Comparison</title>
+  <style>
+    :root {
+      --card-bg: rgba(255,255,255,0.25);
+      --card-border: rgba(255,255,255,0.5);
+      --btn-bg: rgba(255,255,255,0.65);
+      --btn-hover: rgba(51,51,51,1);
+      --text: #1f2937;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg,#a8edea 0%,#c8d6ff 35%,#fed6e3 100%);
+      background-size: 300% 300%;
+      animation: gradientShift 18s ease infinite;
+      overflow: hidden;
+    }
+    /* Floating glow orbs */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: -20vmax;
+      background:
+        radial-gradient(closest-side, rgba(255,255,255,0.35), transparent 70%) 10% 20%/35vmax 35vmax no-repeat,
+        radial-gradient(closest-side, rgba(255,200,240,0.35), transparent 70%) 80% 30%/40vmax 40vmax no-repeat,
+        radial-gradient(closest-side, rgba(160,220,255,0.35), transparent 70%) 50% 80%/45vmax 45vmax no-repeat;
+      filter: blur(20px);
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+    body::before { animation: floatOrbs1 28s linear infinite alternate; }
+    body::after  { animation: floatOrbs2 32s linear infinite alternate; }
+
+    .language-container {
+      width: min(720px, 92vw);
+      text-align: center;
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 40px 28px;
+      border-radius: 22px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.20);
+      animation: fadeIn 0.8s ease both;
+    }
+    .language-container h1 {
+      margin: 0 0 20px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .languages {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border: 1px solid rgba(0,0,0,0.05);
+      border-radius: 14px;
+      background: var(--btn-bg);
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .25s ease, box-shadow .25s ease, color .25s ease, background .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .lang-btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.45) 50%, transparent 70%);
+      transform: translateX(-150%);
+      transition: transform .6s ease;
+    }
+    .lang-btn:hover::after { transform: translateX(150%); }
+    .lang-btn:hover {
+      background: var(--btn-hover);
+      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.22);
+    }
+    .lang-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.35), 0 10px 24px rgba(0,0,0,0.18);
+    }
+    .flag { font-size: 22px; line-height: 1; }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 0%; filter: hue-rotate(0deg); }
+      50% { background-position: 100% 100%; filter: hue-rotate(10deg); }
+      100% { background-position: 0% 0%; filter: hue-rotate(0deg); }
+    }
+    @keyframes floatOrbs1 {
+      0% { transform: translate3d(-2%, -2%, 0) scale(1); }
+      100% { transform: translate3d(2%, 2%, 0) scale(1.05); }
+    }
+    @keyframes floatOrbs2 {
+      0% { transform: translate3d(2%, -3%, 0) scale(1.02); }
+      100% { transform: translate3d(-2%, 3%, 0) scale(0.98); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="language-container">
+    <h1>🌍 Choose your language</h1>
+    <div class="languages">
+      <button class="lang-btn" data-lang="en" aria-label="English"><span class="flag">🇬🇧</span> English</button>
+      <button class="lang-btn" data-lang="es" aria-label="Español"><span class="flag">🇪🇸</span> Español</button>
+      <button class="lang-btn" data-lang="fi" aria-label="Suomi"><span class="flag">🇫🇮</span> Suomi</button>
+      <button class="lang-btn" data-lang="fr" aria-label="Français"><span class="flag">🇫🇷</span> Français</button>
+      <button class="lang-btn" data-lang="ko" aria-label="한국어"><span class="flag">🇰🇷</span> 한국어</button>
+    </div>
+  </div>
+
+  <script>
+    function selectLanguage(lang) {
+      localStorage.setItem('selectedLanguage', lang);
+      window.location.href = 'index.html';
+    }
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => selectLanguage(btn.dataset.lang));
+    });
+  </script>
+</body>
+</html>
