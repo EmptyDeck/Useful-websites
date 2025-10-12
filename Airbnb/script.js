@@ -188,7 +188,7 @@ const listingsData = {
       timeToHelsinki: "City center",
       good: "Helsinki city center + Convenient transport",
       bad: "Expensive",
-      link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
+      link: "https://www.airbnb.co.kr/rooms/710819953484653387?check_in=2025-11-27&check_out=2025-12-01&guests=1&adults=7&s=67&unique_share_id=f6dae256-4814-4acc-9c53-c848c7e736fd",
       img: "10.jpeg"
     }
   ],
@@ -320,7 +320,7 @@ const listingsData = {
       timeToHelsinki: "Centro de la ciudad",
       good: "Centro de Helsinki + Transporte conveniente",
       bad: "Caro",
-      link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
+      link: "https://www.airbnb.co.kr/rooms/710819953484653387?check_in=2025-11-27&check_out=2025-12-01&guests=1&adults=7&s=67&unique_share_id=f6dae256-4814-4acc-9c53-c848c7e736fd",
       img: "10.jpeg"
     }
   ],
@@ -452,7 +452,7 @@ const listingsData = {
       timeToHelsinki: "Kaupungin keskusta",
       good: "Helsingin keskusta + Hyvät kulkuyhteydet",
       bad: "Kallis",
-      link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
+      link: "https://www.airbnb.co.kr/rooms/710819953484653387?check_in=2025-11-27&check_out=2025-12-01&guests=1&adults=7&s=67&unique_share_id=f6dae256-4814-4acc-9c53-c848c7e736fd",
       img: "10.jpeg"
     }
   ],
@@ -584,7 +584,7 @@ const listingsData = {
       timeToHelsinki: "Centre-ville",
       good: "Centre d'Helsinki + Transport pratique",
       bad: "Cher",
-      link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
+      link: "https://www.airbnb.co.kr/rooms/710819953484653387?check_in=2025-11-27&check_out=2025-12-01&guests=1&adults=7&s=67&unique_share_id=f6dae256-4814-4acc-9c53-c848c7e736fd",
       img: "10.jpeg"
     }
   ],
@@ -716,7 +716,7 @@ const listingsData = {
       timeToHelsinki: "",
       good: "헬싱키 중심부 + 편리한 교통",
       bad: "비쌈",
-      link: "https://www.airbnb.co.kr/rooms/657625381223499931?adults=7&check_in=2025-11-27&check_out=2025-12-01",
+      link: "https://www.airbnb.co.kr/rooms/710819953484653387?check_in=2025-11-27&check_out=2025-12-01&guests=1&adults=7&s=67&unique_share_id=f6dae256-4814-4acc-9c53-c848c7e736fd",
       img: "10.jpeg"
     }
   ]
