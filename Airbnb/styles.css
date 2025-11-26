@@ -1,0 +1,132 @@
+:root {
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --accent: #0ea5a4;
+  --muted: #6b7280;
+  --border: #e2e8f0;
+}
+
+body {
+  font-family: "Inter", Arial, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: #111827;
+}
+
+header {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #d9f9ff, #f0faff);
+  border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #0f172a;
+}
+
+header p {
+  color: var(--muted);
+}
+
+main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  border: 1px solid var(--border);
+  transition: transform 0.2s ease;
+}
+.card:hover { transform: translateY(-4px); }
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+.card-body h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.3rem;
+}
+
+.meta {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+ul.pros, ul.cons {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.4rem 0;
+}
+ul.pros li::before {
+  content: "✔ ";
+  color: green;
+}
+ul.cons li::before {
+  content: "✖ ";
+  color: red;
+}
+
+.card-footer {
+  padding: 0.8rem 1rem 1rem;
+}
+
+.card-footer a {
+  color: var(--accent);
+  font-weight: 500;
+  text-decoration: none;
+}
+.card-footer a:hover {
+  text-decoration: underline;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 1.2rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  background: #f9fafb;
+}
+#map-section {
+  text-align: center;
+  margin: 2em auto;
+  max-width: 800px;
+}
+
+.map-container {
+  background-color: #fafafa;
+  border-radius: 12px;
+  padding: 1em;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.map-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.map-caption {
+  font-size: 0.9em;
+  color: #555;
+  margin-top: 0.5em;
+}
