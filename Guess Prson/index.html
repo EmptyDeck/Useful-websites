@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who's That Coworker?</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Who's That Coworker? 🔍</h1>
+        
+        <div class="file-selector" id="fileSelector">
+            <div class="file-selector-content">
+                <h2>📁 Load Photos</h2>
+                <p>Select all the photos you want to use for the game</p>
+                <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
+                <button class="btn btn-select" id="selectBtn">
+                    Choose Photos
+                </button>
+                <p class="file-count" id="fileCount">No photos selected</p>
+            </div>
+        </div>
+        
+        <div class="game-area" id="gameArea" style="display: none;">
+            <div class="image-container" id="imageContainer">
+                <canvas id="canvas"></canvas>
+            </div>
+            
+            <div class="controls">
+                <button class="btn btn-location" id="locationBtn">
+                    📍 Change Location
+                </button>
+                <button class="btn btn-zoom" id="zoomBtn">
+                    🔎 Zoom Out
+                </button>
+            </div>
+            
+            <div class="info">
+                <p>Current Zoom: <span id="zoomLevel">400%</span></p>
+                <p>Photo: <span id="photoName">Loading...</span></p>
+            </div>
+            
+            <button class="btn btn-next" id="nextBtn">
+                ➡️ Next Photo
+            </button>
+            
+            <button class="btn btn-reload" id="reloadBtn">
+                🔄 Load Different Photos
+            </button>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
