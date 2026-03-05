@@ -150,14 +150,14 @@ programs.sort((a, b) => a.engineeringRank - b.engineeringRank);
 
 // 각 프로그램 카드 생성
 programs.forEach((program, index) => {
-    const card = createProgramCard(program);
+    const card = createProgramCard(program, index + 1);
     universityList.appendChild(card);
 });
 
 /**
  * 프로그램 카드 요소 생성
  */
-function createProgramCard(program) {
+function createProgramCard(program, displayIndex) {
     const card = document.createElement('div');
     card.className = `university-card ${program.accepted ? 'accepted' : ''}`;
     card.id = `card-${program.id}`;
@@ -166,6 +166,7 @@ function createProgramCard(program) {
     const statusText = program.accepted ? '합격!' : '대기 중';
     
     card.innerHTML = `
+        <div class="card-number">${displayIndex}</div>
         <a href="${program.website}" target="_blank" class="university-logo-link">
             <div class="university-logo">
                 <img src="${program.logoFile}" alt="${program.university}" onerror="loadFallbackLogo(this)">
