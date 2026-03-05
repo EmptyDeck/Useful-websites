@@ -1,0 +1,661 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.6s ease-out;
+    text-align: center;
+}
+
+.header-content h1 {
+    font-size: 2.2em;
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.header-content p {
+    font-size: 1em;
+    color: #666;
+}
+
+/* Main Content */
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* Universities List */
+.universities-list {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    animation: slideDown 0.6s ease-out;
+}
+
+.universities-list h2 {
+    font-size: 1.3em;
+    color: #667eea;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.universities-list ol {
+    list-style-position: inside;
+    line-height: 2;
+    font-size: 0.95em;
+    color: #333;
+}
+
+.universities-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.universities-list li:last-child {
+    border-bottom: none;
+}
+
+/* University Cards */
+.university-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.university-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-left: 4px solid #e0e0e0;
+}
+
+.university-card.accepted {
+    background: linear-gradient(135deg, #f0f7ff, #e8f5e9);
+    border-left-color: #4caf50;
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.2);
+}
+
+.university-card:hover {
+    transform: translateX(8px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+}
+
+.university-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0px;
+}
+
+.university-logo {
+    width: 90px;
+    height: 60px;
+    min-width: 90px;
+    border-radius: 8px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 5px;
+    border: 1px solid #e0e0e0;
+}
+
+.university-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.university-logo-link {
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.university-logo-link:hover .university-logo {
+    border-color: #667eea;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.university-link {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.university-link:hover {
+    color: #667eea;
+    text-decoration: underline;
+}
+
+.university-info {
+    flex: 1;
+}
+
+.university-card h2 {
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 8px;
+    font-weight: 600;
+    word-wrap: break-word;
+}
+
+.program-name {
+    display: none;
+}
+
+.rank-info {
+    display: flex;
+    gap: 12px;
+    font-size: 0.85em;
+}
+
+.rank-item {
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border-left: 2px solid #667eea;
+}
+
+.rank-item label {
+    display: block;
+    font-size: 0.75em;
+    color: #888;
+    margin-bottom: 3px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.rank-item .rank-value {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 4px;
+}
+
+.tuition-info {
+    font-size: 0.9em;
+    color: #333;
+    background: #fff9f0;
+    padding: 10px;
+    border-radius: 6px;
+    border-left: 2px solid #ff9800;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tuition-info:hover {
+    background: #ffe8cc;
+    border-left-color: #f57c00;
+}
+
+.tuition-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.tuition-label {
+    font-size: 0.75em;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.tuition-toggle {
+    font-size: 0.8em;
+    color: #ff9800;
+    transition: transform 0.3s ease;
+}
+
+.tuition-value {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #d84315;
+}
+
+.tuition-details {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #ffe0b2;
+    font-size: 0.85em;
+    color: #555;
+    line-height: 1.6;
+    animation: slideDown 0.3s ease;
+}
+
+.status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85em;
+    white-space: nowrap;
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.accepted {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* Stats Section */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    animation: fadeIn 1s ease-out;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.stat-card.highlight {
+    background: linear-gradient(135deg, #d4edda, #c8e6c9);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.2);
+    transform: scale(1.02);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card h3 {
+    color: #666;
+    font-size: 0.85em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-number {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.stat-card.highlight .stat-number {
+    color: #4caf50;
+}
+
+.stat-sub {
+    display: none;
+}
+
+/* Post Acceptance Checklist */
+.post-acceptance {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    animation: slideDown 0.6s ease-out;
+}
+
+.post-acceptance h2 {
+    font-size: 1.4em;
+    color: #667eea;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.checklist {
+    display: grid;
+    gap: 12px;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.checklist-item:hover {
+    background: #eef2f7;
+    transform: translateX(4px);
+}
+
+.checklist-item input[type="checkbox"] {
+    display: none;
+}
+
+.checklist-item label {
+    display: none;
+}
+
+.item-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.95em;
+}
+
+.item-text {
+    flex: 1;
+    font-size: 0.95em;
+    color: #333;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.sub-items {
+    margin-top: 10px;
+    margin-left: 10px;
+    padding-left: 20px;
+    list-style: none;
+    border-left: 2px solid #667eea;
+}
+
+.sub-items li {
+    padding: 8px 0;
+    font-size: 0.9em;
+    color: #555;
+    font-weight: 400;
+}
+
+.sub-items li:before {
+    content: "└ ";
+    color: #667eea;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+
+
+/* Animations */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+    }
+
+    .header-content h1 {
+        font-size: 1.8em;
+    }
+
+    .header-content p {
+        font-size: 0.95em;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card.highlight {
+        transform: scale(1.02);
+    }
+
+    .universities-list {
+        padding: 20px;
+    }
+
+    .universities-list h2 {
+        font-size: 1.1em;
+    }
+
+    .universities-list ol {
+        font-size: 0.9em;
+        line-height: 1.8;
+    }
+
+    .post-acceptance {
+        padding: 20px;
+    }
+
+    .post-acceptance h2 {
+        font-size: 1.2em;
+    }
+
+    .checklist-item {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .item-number {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9em;
+    }
+
+    .item-text {
+        font-size: 0.9em;
+    }
+
+    .sub-items {
+        margin-top: 8px;
+        margin-left: 8px;
+    }
+
+    .university-card {
+        padding: 15px;
+    }
+
+    .university-logo {
+        width: 80px;
+        height: 50px;
+    }
+
+    .university-card h2 {
+        font-size: 1em;
+    }
+
+    .rank-info {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .rank-item {
+        padding: 6px 10px;
+    }
+
+    .rank-item .rank-value {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    header {
+        padding: 20px 15px;
+    }
+
+    .header-content h1 {
+        font-size: 1.4em;
+    }
+
+    .header-content p {
+        font-size: 0.85em;
+    }
+
+    .universities-list {
+        padding: 15px;
+    }
+
+    .universities-list h2 {
+        font-size: 1em;
+    }
+
+    .universities-list ol {
+        font-size: 0.85em;
+        line-height: 1.6;
+    }
+
+    .post-acceptance {
+        padding: 15px;
+    }
+
+    .post-acceptance h2 {
+        font-size: 1.1em;
+    }
+
+    .checklist-item {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .item-number {
+        width: 28px;
+        height: 28px;
+        font-size: 0.85em;
+    }
+
+    .item-text {
+        font-size: 0.85em;
+    }
+
+    .sub-items {
+        margin-top: 6px;
+        margin-left: 6px;
+        font-size: 0.8em;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .university-card {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .university-logo {
+        width: 70px;
+        height: 45px;
+    }
+
+    .university-card h2 {
+        font-size: 0.9em;
+    }
+
+    .program-name {
+        font-size: 0.8em;
+    }
+
+    .rank-info {
+        gap: 6px;
+    }
+
+    .rank-item {
+        padding: 5px 8px;
+        font-size: 0.8em;
+    }
+
+    .rank-item label {
+        font-size: 0.7em;
+    }
+
+    .status-badge {
+        font-size: 0.75em;
+        padding: 6px 10px;
+    }
+}
