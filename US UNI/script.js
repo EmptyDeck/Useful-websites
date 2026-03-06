@@ -35,7 +35,7 @@ const programs = [
         engineeringRank: 11,
         overallRank: 47,
         location: 'Texas',
-        accepted: false,
+        accepted: true,
         logoFile: 'texas_am.svg',
         tuition: '$58,976',
         tuitionKRW: '7,077만원',
