@@ -273,6 +273,22 @@ function updateStats() {
     const totalPrograms = programs.length;
     const acceptedCount = programs.filter(p => p.accepted).length;
     const acceptanceRate = Math.round((acceptedCount / totalPrograms) * 100);
+
+    const summaryText = document.getElementById('summary-text');
+    const totalProgramsEl = document.getElementById('total-programs');
+    const acceptedProgramsEl = document.getElementById('accepted-programs');
+
+    if (summaryText) {
+        summaryText.textContent = `💌 총 ${totalPrograms}개 프로그램 지원 | ${acceptedCount}개 합격 🎉`;
+    }
+
+    if (totalProgramsEl) {
+        totalProgramsEl.textContent = totalPrograms;
+    }
+
+    if (acceptedProgramsEl) {
+        acceptedProgramsEl.textContent = acceptedCount;
+    }
     
     console.log(`📊 통계:`);
     console.log(`- 지원: ${totalPrograms}개`);
