@@ -2,63 +2,172 @@
 const programs = [
     {
         id: 1,
-        university: 'University of Illinois Urbana-Champaign (UIUC)',
-        program: 'Engineering',
+        university: 'University of Illinois Urbana-Champaign - 전자공학과',
+        program: '전자공학과 (ECE)',
         engineeringRank: 7,
         overallRank: 36,
         location: 'Illinois',
         accepted: false,
         logoFile: 'uiuc.svg',
-        tuition: '$59,328',
-        tuitionKRW: '7,119만원',
+        tuition: '$67,086',
+        tuitionKRW: '8,050만원',
         website: 'https://illinois.edu/',
-        tuitionDetails: 'UIUC의 2026-2027학년도 Grainger Engineering 국제 학생 학비는 $40,444입니다. 룸앤보드 $15,184, 서적 및 비품 $1,200, 기타 비용 $2,500으로 예상됩니다. 총 예상 비용: $59,328 (약 7,119만원)'
+        tuitionImage: 'illinois_cost.png',
+        tuitionDetails: `<div class="tuition-breakdown">
+            <h4>🎓 UIUC 전기 및 컴퓨터 공학(ECE) 석사 예상 비용 보고서</h4>
+            <p class="note"><strong>기준:</strong> 2026년 가을 ~ 2027년 봄 (1년 / 2학기) | 국제 학생, 대학원생, 학기당 12학점 이수</p>
+            
+            <div class="total-cost">📍 연간 총 비용: <strong>$67,086.00</strong> (약 8,050만원)</div>
+            
+            <div class="cost-section">
+                <h5>💰 1. 직접 교육비 (Tuition & Fees)</h5>
+                <p style="font-size: 0.85em; color: #666; margin-bottom: 8px;">학교에 직접 납부해야 하는 필수 항목입니다.</p>
+                <div class="cost-row"><span>수업료 (Tuition)</span><span>$40,444.00</span></div>
+                <div class="cost-row total"><span><strong>필수 수수료 합계</strong></span><span><strong>$5,840.00</strong></span></div>
+                <div class="cost-row" style="margin-left: 15px;"><span>의료 보험</span><span>$2,250.00</span></div>
+                <div class="cost-row" style="margin-left: 15px;"><span>AFMFA (학술 시설 유지비)</span><span>$758.00</span></div>
+                <div class="cost-row" style="margin-left: 15px;"><span>서비스 수수료</span><span>$712.00</span></div>
+                <div class="cost-row" style="margin-left: 15px;"><span>일반 수수료</span><span>$618.00</span></div>
+                <div class="cost-row" style="margin-left: 15px;"><span>보건 서비스료</span><span>$518.00</span></div>
+                <div class="cost-row" style="margin-left: 15px;"><span>도서관/IT 수수료</span><span>$512.00</span></div>
+                <div class="cost-row" style="margin-left: 15px;"><span>학생 주도 수수료</span><span>$164.00</span></div>
+                <div class="cost-row" style="margin-left: 15px;"><span>국제 학생 수수료</span><span>$160.00</span></div>
+                <div class="cost-row" style="margin-left: 15px;"><span>교통비</span><span>$148.00</span></div>
+            </div>
+            
+            <div class="cost-section">
+                <h5>🏠 2. 간접 생활비 (Additional Expenses)</h5>
+                <p style="font-size: 0.85em; color: #666; margin-bottom: 8px;">개인의 소비 습관에 따라 달라질 수 있는 추정 비용입니다.</p>
+                <div class="cost-row"><span>식비 및 주거비</span><span>$16,512.00</span></div>
+                <div class="cost-row"><span>교재 및 학용품</span><span>$1,200.00</span></div>
+                <div class="cost-row"><span>기타 개인 비용</span><span>$3,090.00</span></div>
+                <div class="cost-row total"><span><strong>생활비 소계</strong></span><span><strong>$20,802.00</strong></span></div>
+            </div>
+            
+            <img src="illinois_cost.png" alt="UIUC Cost Breakdown" class="tuition-image">
+        </div>`
     },
     {
         id: 2,
-        university: 'Purdue University',
-        program: 'Engineering',
+        university: 'Purdue University - 기계공학과',
+        program: '기계공학과 (ME) - PhD',
         engineeringRank: 4,
         overallRank: 43,
         location: 'Indiana',
         accepted: false,
         logoFile: 'purdue_system.svg',
-        tuition: '$64,531.50',
-        tuitionKRW: '7,744만원',
+        tuition: '$0',
+        tuitionKRW: '박사 지원',
         website: 'https://www.purdue.edu/',
-        tuitionDetails: 'Purdue 컴퓨터 과학 석사 과정 학비는 $42,397.50입니다. 국제 학생 추가 등록금 $1,000, 숙식비 $16,734, 서적 등 $750, 교통비 $1,100, 기타 $2,550. 총 예상 비용: $64,531.50 (약 7,744만원)'
+        tuitionDetails: `<div class="tuition-breakdown">
+            <h4>🎓 박사 과정 (PhD Program)</h4>
+            <p class="note"><strong>펀딩 지원:</strong> 박사 과정은 일반적으로 학비가 면제됩니다.</p>
+            
+            <div class="total-cost">💰 예상 학비: <strong>$0</strong> (펀딩 지원)</div>
+            
+            <div class="important-note">
+                <strong>📌 박사 과정 재정 지원 안내</strong>
+                <ul>
+                    <li><strong>학비 면제:</strong> 연구 장학금 또는 조교 장학금을 통해 학비 전액 면제</li>
+                    <li><strong>생활비 지원:</strong> 월 급여 형태로 생활비 지원 (일반적으로 연간 $20,000~$35,000)</li>
+                    <li><strong>건강 보험:</strong> 대부분의 경우 건강보험도 포함</li>
+                    <li><strong>지원 조건:</strong> Research Assistantship (RA) 또는 Teaching Assistantship (TA) 수행</li>
+                </ul>
+            </div>
+            
+            <div class="cost-section">
+                <h5>💵 개인 부담 예상 비용 (자비 부분)</h5>
+                <div class="cost-row"><span>초기 정착 비용</span><span>~$2,000</span></div>
+                <div class="cost-row"><span>교재 및 학용품 (연간)</span><span>~$1,000</span></div>
+                <div class="cost-row"><span>개인 생활비 추가분</span><span>변동</span></div>
+            </div>
+            
+            <p style="margin-top: 15px; color: #666; font-size: 0.9em;">※ 실제 펀딩 조건은 합격 통지서에 명시된 내용을 확인해야 합니다.</p>
+        </div>`
     },
     {
         id: 3,
-        university: 'Texas A&M University',
-        program: 'Engineering',
+        university: 'Texas A&M University - 컴퓨터공학과',
+        program: '컴퓨터공학과 (CS)',
         engineeringRank: 11,
         overallRank: 47,
         location: 'Texas',
-        accepted: true,
+        accepted: false,
         logoFile: 'texas_am.svg',
-        tuition: '$58,976',
-        tuitionKRW: '7,077만원',
+        tuition: '$52,611.60',
+        tuitionKRW: '6,313만원',
         website: 'https://www.tamu.edu/',
-        tuitionDetails: 'Texas A&M의 비거주자/국제 학생 9개월 예상 비용은 약 $58,976입니다. 이 비용에는 학비 및 수수료, 숙식비, 서적, 교통비, 기타 경비가 포함됩니다. (약 7,077만원)'
+        tuitionImage: 'tamu_cost.png',
+        tuitionDetails: `<div class="tuition-breakdown">
+            <h4>📊 2025-2026학년도 대학원 공학 프로그램 예상 비용 (연간)</h4>
+            <p class="note"><strong>기준:</strong> 2학기 (가을+봄) | 국제 학생, 교내 거주, 학기당 12학점 이수</p>
+            
+            <div class="total-cost">📍 연간 총 예상 비용: <strong>$52,611.60</strong> (약 6,313만원)</div>
+            
+            <div class="cost-section">
+                <h5>💰 등록금 및 필수 수수료 (연간)</h5>
+                <div class="cost-row"><span>수업료 및 필수 수수료</span><span>$22,945.60</span></div>
+                <div class="cost-row"><span>대학원 공학 프로그램 수수료</span><span>$5,130.00</span></div>
+                <div class="cost-row total"><span><strong>등록금 합계</strong></span><span><strong>$28,075.60</strong></span></div>
+            </div>
+            
+            <div class="cost-section">
+                <h5>📚 기타 예상 비용 (연간)</h5>
+                <div class="cost-row"><span>교재 및 학용품</span><span>$1,306.00</span></div>
+                <div class="cost-row"><span>주거 및 식비</span><span>$13,690.00</span></div>
+                <div class="cost-row"><span>대출 수수료</span><span>$158.00</span></div>
+                <div class="cost-row"><span>여행 경비</span><span>$4,266.00</span></div>
+                <div class="cost-row"><span>개인 생활비</span><span>$5,116.00</span></div>
+                <div class="cost-row total"><span><strong>기타 비용 합계</strong></span><span><strong>$24,536.00</strong></span></div>
+            </div>
+            
+            <div class="important-note">
+                <strong>⚠️ 별도 예산 책정 필요 (연간):</strong>
+                <ul>
+                    <li>국제 학생 서비스 수수료: $300 (학기당 $150 × 2)</li>
+                    <li>국제 학생 건강 보험료: 약 $3,275 (여름 $252 + 가을 $1,010 + 봄 $2,013)</li>
+                    <li>신입생 보증금: $100</li>
+                    <li>오리엔테이션 수수료 등</li>
+                </ul>
+            </div>
+            
+            <img src="tamu_cost.png" alt="TAMU Cost Breakdown" class="tuition-image">
+        </div>`
     },
     {
         id: 4,
-        university: 'University of Texas at Austin',
-        program: 'Engineering',
+        university: 'University of Texas at Austin - 컴퓨터공학과',
+        program: '컴퓨터공학과 (CS)',
         engineeringRank: 10,
         overallRank: 32,
         location: 'Texas',
         accepted: false,
         logoFile: 'ut_austin.svg',
-        tuition: '$85,710',
-        tuitionKRW: '1억 285만원',
+        tuition: '$43,690',
+        tuitionKRW: '5,243만원',
         website: 'https://www.utexas.edu/',
-        tuitionDetails: 'UT Austin MSISP(정보 보안 석사) 프로그램 기준 학비는 $63,000입니다(추가 독립 연구 과정 포함). 주거 및 식비 $17,300, 서적 $776, 개인/기타 $4,634. 총 예상 비용: $85,710 (약 1억 285만원)'
+        tuitionImage: 'austin_cost.png',
+        tuitionDetails: `<div class="tuition-breakdown">
+            <h4>📊 2025-2026학년도 예상 출석 비용</h4>
+            <p class="note"><strong>참고:</strong> 주거, 교통, 교재 및 개인 비용은 학부생 기준 학기당 12학점 이상, 대학원생 기준 9학점 이상 등록을 가정합니다.</p>
+            
+            <div class="total-cost">📍 총 예상 비용: <strong>$43,690</strong> (약 5,243만원)</div>
+            
+            <div class="cost-section">
+                <h5>💰 비용 상세 내역</h5>
+                <div class="cost-row"><span>등록금 (Tuition)</span><span>$19,320</span></div>
+                <div class="cost-row"><span>주거비 (Housing)</span><span>$17,052</span></div>
+                <div class="cost-row"><span>교통비 (Transportation)</span><span>$1,786</span></div>
+                <div class="cost-row"><span>교재 및 학용품 (Books & Supplies)</span><span>$774</span></div>
+                <div class="cost-row"><span>개인/기타 비용 (Personal/Misc)</span><span>$4,758</span></div>
+            </div>
+            
+            <img src="austin_cost.png" alt="UT Austin Cost Breakdown" class="tuition-image">
+        </div>`
     },
     {
         id: 5,
-        university: 'Virginia Tech',
+        university: 'Virginia Tech - 기계공학과',
         program: 'Engineering',
         engineeringRank: 13,
         overallRank: 47,
@@ -273,22 +382,6 @@ function updateStats() {
     const totalPrograms = programs.length;
     const acceptedCount = programs.filter(p => p.accepted).length;
     const acceptanceRate = Math.round((acceptedCount / totalPrograms) * 100);
-
-    const summaryText = document.getElementById('summary-text');
-    const totalProgramsEl = document.getElementById('total-programs');
-    const acceptedProgramsEl = document.getElementById('accepted-programs');
-
-    if (summaryText) {
-        summaryText.textContent = `💌 총 ${totalPrograms}개 프로그램 지원 | ${acceptedCount}개 합격 🎉`;
-    }
-
-    if (totalProgramsEl) {
-        totalProgramsEl.textContent = totalPrograms;
-    }
-
-    if (acceptedProgramsEl) {
-        acceptedProgramsEl.textContent = acceptedCount;
-    }
     
     console.log(`📊 통계:`);
     console.log(`- 지원: ${totalPrograms}개`);

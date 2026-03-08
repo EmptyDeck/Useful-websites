@@ -287,6 +287,112 @@ main {
     animation: slideDown 0.3s ease;
 }
 
+/* Tuition Breakdown Styles */
+.tuition-breakdown h4 {
+    font-size: 1.05em;
+    color: #d84315;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.tuition-breakdown .note {
+    font-size: 0.9em;
+    color: #666;
+    background: #fff3e0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    border-left: 3px solid #ff9800;
+}
+
+.tuition-breakdown .total-cost {
+    font-size: 1.1em;
+    color: #d84315;
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+    padding: 12px 15px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 15px 0;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.2);
+}
+
+.tuition-breakdown .cost-section {
+    margin: 15px 0;
+    background: #fafafa;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.tuition-breakdown .cost-section h5 {
+    font-size: 0.95em;
+    color: #666;
+    margin-bottom: 10px;
+    font-weight: 600;
+    border-bottom: 2px solid #ff9800;
+    padding-bottom: 5px;
+}
+
+.tuition-breakdown .cost-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+    margin: 4px 0;
+    background: white;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.tuition-breakdown .cost-row.total {
+    background: #fff3e0;
+    font-weight: 600;
+    border-left: 3px solid #ff9800;
+    margin-top: 8px;
+}
+
+.tuition-breakdown .important-note {
+    background: #fff8e1;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-size: 0.9em;
+    border-left: 3px solid #ffa726;
+}
+
+.tuition-breakdown .important-note strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #e65100;
+}
+
+.tuition-breakdown .important-note ul {
+    margin-left: 20px;
+    margin-top: 8px;
+}
+
+.tuition-breakdown .important-note li {
+    padding: 4px 0;
+    color: #666;
+}
+
+.tuition-breakdown .tuition-image {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin-top: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e0e0e0;
+    display: block;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tuition-breakdown .tuition-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
 .status-badge {
     display: flex;
     align-items: center;
@@ -583,6 +689,19 @@ main {
     .rank-item .rank-value {
         font-size: 1em;
     }
+
+    .tuition-breakdown h4 {
+        font-size: 0.95em;
+    }
+
+    .tuition-breakdown .cost-row {
+        font-size: 0.85em;
+        padding: 6px 8px;
+    }
+
+    .tuition-breakdown .tuition-image {
+        max-width: 100%;
+    }
 }
 
 @media (max-width: 480px) {
@@ -686,6 +805,34 @@ main {
 
     .rank-item label {
         font-size: 0.7em;
+    }
+
+    .tuition-breakdown h4 {
+        font-size: 0.9em;
+    }
+
+    .tuition-breakdown .note {
+        font-size: 0.8em;
+        padding: 6px 10px;
+    }
+
+    .tuition-breakdown .total-cost {
+        font-size: 0.95em;
+        padding: 10px 12px;
+    }
+
+    .tuition-breakdown .cost-row {
+        font-size: 0.8em;
+        padding: 6px 8px;
+    }
+
+    .tuition-breakdown .cost-section h5 {
+        font-size: 0.85em;
+    }
+
+    .tuition-breakdown .important-note {
+        font-size: 0.8em;
+        padding: 10px;
     }
 
     .status-badge {
