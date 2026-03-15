@@ -1,4 +1,25 @@
 // 지원 프로그램 데이터
+const USD_TO_KRW = 1477.897663; // As of 2026-03-12 05:39 UTC
+
+function formatKRWFromUSD(usd) {
+    const krw = usd * USD_TO_KRW;
+    const man = Math.round(krw / 10000);
+    if (man >= 10000) {
+        const eok = Math.floor(man / 10000);
+        const rest = man % 10000;
+        return rest ? `${eok}억 ${rest.toLocaleString()}만원` : `${eok}억원`;
+    }
+    return `${man.toLocaleString()}만원`;
+}
+
+function formatKRWApprox(usd) {
+    return `약 ${formatKRWFromUSD(usd)}`;
+}
+
+function formatKRWRange(minUsd, maxUsd) {
+    return `${formatKRWFromUSD(minUsd)}-${formatKRWFromUSD(maxUsd)}`;
+}
+
 const programs = [
     {
         id: 1,
@@ -10,14 +31,14 @@ const programs = [
         accepted: false,
         logoFile: 'uiuc.svg',
         tuition: '$67,086',
-        tuitionKRW: '8,050만원',
+        tuitionKRW: formatKRWFromUSD(67086),
         website: 'https://illinois.edu/',
         tuitionImage: 'illinois_cost.png',
         tuitionDetails: `<div class="tuition-breakdown">
             <h4>🎓 UIUC 전기 및 컴퓨터 공학(ECE) 석사 예상 비용 보고서</h4>
             <p class="note"><strong>기준:</strong> 2026년 가을 ~ 2027년 봄 (1년 / 2학기) | 국제 학생, 대학원생, 학기당 12학점 이수</p>
             
-            <div class="total-cost">📍 연간 총 비용: <strong>$67,086.00</strong> (약 8,050만원)</div>
+            <div class="total-cost">📍 연간 총 비용: <strong>$67,086.00</strong> (${formatKRWApprox(67086)})</div>
             
             <div class="cost-section">
                 <h5>💰 1. 직접 교육비 (Tuition & Fees)</h5>
@@ -95,14 +116,14 @@ const programs = [
         accepted: false,
         logoFile: 'texas_am.svg',
         tuition: '$52,611.60',
-        tuitionKRW: '6,313만원',
+        tuitionKRW: formatKRWFromUSD(52611.6),
         website: 'https://www.tamu.edu/',
         tuitionImage: 'tamu_cost.png',
         tuitionDetails: `<div class="tuition-breakdown">
             <h4>📊 2025-2026학년도 대학원 공학 프로그램 예상 비용 (연간)</h4>
             <p class="note"><strong>기준:</strong> 2학기 (가을+봄) | 국제 학생, 교내 거주, 학기당 12학점 이수</p>
             
-            <div class="total-cost">📍 연간 총 예상 비용: <strong>$52,611.60</strong> (약 6,313만원)</div>
+            <div class="total-cost">📍 연간 총 예상 비용: <strong>$52,611.60</strong> (${formatKRWApprox(52611.6)})</div>
             
             <div class="cost-section">
                 <h5>💰 등록금 및 필수 수수료 (연간)</h5>
@@ -144,14 +165,14 @@ const programs = [
         accepted: false,
         logoFile: 'ut_austin.svg',
         tuition: '$43,690',
-        tuitionKRW: '5,243만원',
+        tuitionKRW: formatKRWFromUSD(43690),
         website: 'https://www.utexas.edu/',
         tuitionImage: 'austin_cost.png',
         tuitionDetails: `<div class="tuition-breakdown">
             <h4>📊 2025-2026학년도 예상 출석 비용</h4>
             <p class="note"><strong>참고:</strong> 주거, 교통, 교재 및 개인 비용은 학부생 기준 학기당 12학점 이상, 대학원생 기준 9학점 이상 등록을 가정합니다.</p>
             
-            <div class="total-cost">📍 총 예상 비용: <strong>$43,690</strong> (약 5,243만원)</div>
+            <div class="total-cost">📍 총 예상 비용: <strong>$43,690</strong> (${formatKRWApprox(43690)})</div>
             
             <div class="cost-section">
                 <h5>💰 비용 상세 내역</h5>
@@ -175,9 +196,9 @@ const programs = [
         accepted: false,
         logoFile: 'virginia_tech.svg',
         tuition: '$55,000-65,000',
-        tuitionKRW: '6,600-7,800만원',
+        tuitionKRW: formatKRWRange(55000, 65000),
         website: 'https://www.vt.edu/',
-        tuitionDetails: 'Virginia Tech의 정확한 2026년 가을 학기 컴퓨터 과학 석사 과정 학비는 문서에서 찾을 수 없습니다. 실제 학비는 거주자/비거주자 상태, 학위 프로그램에 따라 달라집니다. 예상 범위: $55,000-65,000 (약 6,600-7,800만원). 재정 지원 사무실에 문의 권장.'
+        tuitionDetails: `Virginia Tech의 정확한 2026년 가을 학기 컴퓨터 과학 석사 과정 학비는 문서에서 찾을 수 없습니다. 실제 학비는 거주자/비거주자 상태, 학위 프로그램에 따라 달라집니다. 예상 범위: $55,000-65,000 (약 ${formatKRWRange(55000, 65000)}). 재정 지원 사무실에 문의 권장.`
     },
     {
         id: 6,
@@ -189,9 +210,9 @@ const programs = [
         accepted: true,
         logoFile: 'uc_boulder.svg',
         tuition: '$37,466',
-        tuitionKRW: '4,496만원',
+        tuitionKRW: formatKRWFromUSD(37466),
         website: 'https://www.colorado.edu/',
-        tuitionDetails: 'CU Boulder 컴퓨터 과학 석사(30학점) 학비는 총 $20,010입니다. 룸앤보드 $15,676, 서적 및 용품 $1,200, 신입생 수수료 $500, 이민 준수 수수료 $80. 총 예상 비용: $37,466 (약 4,496만원)'
+        tuitionDetails: `CU Boulder 컴퓨터 과학 석사(30학점) 학비는 총 $20,010입니다. 룸앤보드 $15,676, 서적 및 용품 $1,200, 신입생 수수료 $500, 이민 준수 수수료 $80. 총 예상 비용: $37,466 (${formatKRWApprox(37466)})`
     },
     {
         id: 7,
@@ -203,9 +224,9 @@ const programs = [
         accepted: false,
         logoFile: 'uc_boulder.svg',
         tuition: '$37,466',
-        tuitionKRW: '4,496만원',
+        tuitionKRW: formatKRWFromUSD(37466),
         website: 'https://www.colorado.edu/',
-        tuitionDetails: 'CU Boulder 전기 컴퓨터 공학 석사 프로그램 예상 비용은 CS 프로그램과 유사합니다. 학비 $20,010, 룸앤보드 $15,676, 기타 비용 약 $1,780. 총 예상 비용: $37,466 (약 4,496만원)'
+        tuitionDetails: `CU Boulder 전기 컴퓨터 공학 석사 프로그램 예상 비용은 CS 프로그램과 유사합니다. 학비 $20,010, 룸앤보드 $15,676, 기타 비용 약 $1,780. 총 예상 비용: $37,466 (${formatKRWApprox(37466)})`
     },
     {
         id: 8,
@@ -217,9 +238,9 @@ const programs = [
         accepted: false,
         logoFile: 'uc_davis.svg',
         tuition: '$98,690',
-        tuitionKRW: '1억 1,843만원',
+        tuitionKRW: formatKRWFromUSD(98690),
         website: 'https://www.ucdavis.edu/',
-        tuitionDetails: 'UC Davis 비거주자/국제 학생의 총 예상 비용은 $84,366~$93,358입니다. 학비 및 수수료 $54,953, 건강 보험 $7,446, 숙식비 $20,771, 서적 $1,463, 개인/교통 $3,194. 총 예상 비용: $98,690 (약 1억 1,843만원)'
+        tuitionDetails: `UC Davis 비거주자/국제 학생의 총 예상 비용은 $84,366~$93,358입니다. 학비 및 수수료 $54,953, 건강 보험 $7,446, 숙식비 $20,771, 서적 $1,463, 개인/교통 $3,194. 총 예상 비용: $98,690 (${formatKRWApprox(98690)})`
     },
     {
         id: 9,
@@ -231,9 +252,9 @@ const programs = [
         accepted: true,
         logoFile: 'iowa_state.svg',
         tuition: '$51,208',
-        tuitionKRW: '6,145만원',
+        tuitionKRW: formatKRWFromUSD(51208),
         website: 'https://www.iastate.edu/',
-        tuitionDetails: 'Iowa State 국제 대학원생의 2025-2026 학년도 학비 및 수수료는 9개월 기준 $32,496입니다. 생활비 $18,712(룸앤보드, 서적, 개인 경비, 건강 보험 포함). 총 예상 비용: $51,208 (약 6,145만원)'
+        tuitionDetails: `Iowa State 국제 대학원생의 2025-2026 학년도 학비 및 수수료는 9개월 기준 $32,496입니다. 생활비 $18,712(룸앤보드, 서적, 개인 경비, 건강 보험 포함). 총 예상 비용: $51,208 (${formatKRWApprox(51208)})`
     },
     {
         id: 10,
@@ -245,9 +266,9 @@ const programs = [
         accepted: true,
         logoFile: 'asu.svg',
         tuition: '$69,113',
-        tuitionKRW: '8,294만원',
+        tuitionKRW: formatKRWFromUSD(69113),
         website: 'https://www.asu.edu/',
-        tuitionDetails: 'Arizona State 2025-2026 석사 과정 비거주자 기준 총 예상 비용은 $69,113입니다. 학비 $37,085, 학비 할증료 $350, 등록금 $290, 숙식비 $20,460, 서적 $1,908, 교통 $3,564, 개인 $4,656. 약 8,294만원'
+        tuitionDetails: `Arizona State 2025-2026 석사 과정 비거주자 기준 총 예상 비용은 $69,113입니다. 학비 $37,085, 학비 할증료 $350, 등록금 $290, 숙식비 $20,460, 서적 $1,908, 교통 $3,564, 개인 $4,656. ${formatKRWApprox(69113)}`
     }
 ];
 
