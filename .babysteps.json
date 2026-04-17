@@ -1,0 +1,10 @@
+{
+  "title": "BabySteps",
+  "shell": "powershell",
+  "steps": [
+    { "name": "git status", "cmd": "git status" },
+    { "name": "python version", "cmd": "python -V" },
+    { "name": "list files", "cmd": "Get-ChildItem" },
+    { "name": "echo number {n}", "cmd": "echo n={n}" }
+  ]
+}

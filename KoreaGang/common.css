@@ -1,0 +1,130 @@
+/* ===== KoreaGang — common styles ===== */
+:root {
+  --bg: #faf6f0;
+  --bg-soft: #fff;
+  --ink: #1f1a14;
+  --ink-soft: #6b5d52;
+  --red: #cd2e3a;        /* taegeuk red  (top of the flag) */
+  --blue: #0047a0;       /* taegeuk blue (bottom of the flag) */
+  --accent: var(--red);
+  --accent-2: var(--blue);
+  --accent-3: #e6b422;   /* warm gold for tags */
+  --line: #e6dccf;
+  --shadow: 0 8px 28px rgba(20, 30, 60, 0.10);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.55;
+}
+
+a { color: var(--accent-2); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 28px 80px;
+}
+
+/* ===== Top bar ===== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 28px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+}
+.topbar::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--red) 0%, var(--red) 50%, var(--blue) 50%, var(--blue) 100%);
+}
+.topbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.3px;
+}
+.topbar .brand .dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: linear-gradient(180deg, var(--red) 0%, var(--red) 50%, var(--blue) 50%, var(--blue) 100%);
+  box-shadow: 0 0 0 3px rgba(0, 71, 160, 0.12);
+}
+.topbar nav a {
+  margin-left: 18px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+.topbar nav a.active { color: var(--accent); }
+
+/* ===== Buttons / chips ===== */
+.btn {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.btn.ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #fde8ea;
+  color: var(--red);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid #f6c9cd;
+}
+.chip.blue { background: #e3edfa; color: var(--blue); border-color: #c2d4ee; }
+.chip.gold { background: #fbf2dc; color: #8a6210; border-color: #f0dca7; }
+
+/* ===== Card ===== */
+.card {
+  background: var(--bg-soft);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  padding: 22px;
+}
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-soft);
+  padding: 30px 0 20px;
+}
