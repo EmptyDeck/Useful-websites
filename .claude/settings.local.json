@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mv index.html _index.html)",
+      "Bash(mv index.css _index.css)",
+      "Bash(mv index.js _index.js)",
+      "Bash(ls _index.*)"
+    ]
+  }
+}

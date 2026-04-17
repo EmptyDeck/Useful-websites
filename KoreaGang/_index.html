@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>KoreaGang 2026 — Calendar</title>
+  <link rel="stylesheet" href="common.css">
+  <link rel="stylesheet" href="_index.css">
+</head>
+
+<body>
+  <div id="topbar-slot"></div>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <h1>KoreaGang 2026</h1>
+        <p>May 14 (Thu) → May 28 (Thu) · 15 days in Korea · pick a day to see the plan</p>
+      </div>
+      <div>
+        <span class="chip">Seoul</span>
+        <span class="chip blue">Busan</span>
+        <span class="chip gold">Gyeongju</span>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="calendar card" id="calendar"></section>
+
+      <aside class="side card" id="todo">
+        <h3>To plan <span class="pill">TBD</span></h3>
+        <ul class="todo-list" id="todo-list"></ul>
+        <p class="legend">
+          Anything without a date yet lives here. Tick it off once we lock it in,
+          and move it into the matching day page.
+        </p>
+      </aside>
+    </div>
+
+    <p class="footer">Sejik Park Made it · last updated <span id="updated"></span></p>
+  </main>
+
+  <script src="common.js"></script>
+  <script src="_index.js"></script>
+  <script>document.getElementById("updated").textContent = new Date().toLocaleDateString();</script>
+</body>
+
+</html>
