@@ -1,0 +1,35 @@
+{
+  "comments": {
+    "_index": [
+      {
+        "id": 1776935911806,
+        "nickname": "Sejik",
+        "text": "Whats up Gang",
+        "image": "/uploads/1776935911791_3974.gif",
+        "timestamp": "2026-04-23T18:18:31.806955",
+        "reactions": {
+          "❤️": 0,
+          "😂": 0,
+          "🔥": 0,
+          "👍": 0
+        },
+        "replies": []
+      }
+    ]
+  },
+  "reactions": {
+    "_index": {
+      "🔥": 6,
+      "😂": 1
+    }
+  },
+  "hidden": {
+    "day21": {
+      "message": "Find Inner Peace"
+    },
+    "day22": {
+      "message": "Find Inner Peace"
+    }
+  },
+  "wishlist": []
+}

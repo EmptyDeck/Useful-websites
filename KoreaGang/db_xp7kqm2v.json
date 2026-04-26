@@ -1,0 +1,152 @@
+{
+  "comments": {
+    "_index": [
+      {
+        "id": 1776935911806,
+        "nickname": "Sejik",
+        "text": "Whats up Gang",
+        "image": "/uploads/1776935911791_3974.gif",
+        "timestamp": "2026-04-23T18:18:31.806955",
+        "reactions": {
+          "❤️": 1,
+          "😂": 1,
+          "🔥": 1,
+          "👍": 1
+        },
+        "replies": [
+          {
+            "nickname": "Jere",
+            "text": "Very cool webpage",
+            "timestamp": "2026-04-24T23:31:02.123794"
+          },
+          {
+            "nickname": "Sejik",
+            "text": "Thanks XD",
+            "timestamp": "2026-04-25T10:59:24.579084"
+          }
+        ]
+      },
+      {
+        "id": 1777040895508,
+        "nickname": "Jere",
+        "text": "Me trying to focus during class when thinking about Korea trip🇰🇷",
+        "image": "/uploads/1777040895507_5759.gif",
+        "timestamp": "2026-04-24T23:28:15.508605",
+        "reactions": {
+          "❤️": 0,
+          "😂": 0,
+          "🔥": 0,
+          "👍": 0,
+          "✈️": 0,
+          "🍜": 0,
+          "🏯": 0,
+          "🫡": 0,
+          "😭": 0,
+          "✅": 0,
+          "😱": 0,
+          "🤮": 0,
+          "🤨": 0
+        },
+        "replies": [
+          {
+            "nickname": "Sejik",
+            "text": "Holy damn you are the first one HERE!",
+            "timestamp": "2026-04-25T10:59:01.381270"
+          },
+          {
+            "nickname": "Sejik",
+            "text": "Lets see when others will come",
+            "timestamp": "2026-04-25T10:59:15.497090"
+          }
+        ],
+        "_fp": "089da6vnwyfmod0279t"
+      }
+    ],
+    "day16": [
+      {
+        "id": 1777044551461,
+        "nickname": "Jere",
+        "text": "me coming to wedding",
+        "image": "/uploads/1777044551460_7655.gif",
+        "timestamp": "2026-04-25T00:29:11.461124",
+        "reactions": {
+          "❤️": 0,
+          "😂": 0,
+          "🔥": 0,
+          "👍": 0,
+          "✈️": 0,
+          "🍜": 0,
+          "🏯": 0,
+          "🫡": 0,
+          "😭": 0,
+          "✅": 0,
+          "😱": 0,
+          "🤮": 0,
+          "🤨": 0
+        },
+        "replies": [
+          {
+            "nickname": "Sejik",
+            "text": "yooooooooooooooooo 😂😂😂😂😂😂😂😂😂😂😂",
+            "timestamp": "2026-04-25T11:00:38.166109"
+          }
+        ],
+        "_fp": "089da6vnwyfmod0279t"
+      }
+    ],
+    "day18": [
+      {
+        "id": 1777100537787,
+        "nickname": "Sejik",
+        "text": "",
+        "image": "/uploads/1777100537783_6543.gif",
+        "timestamp": "2026-04-25T16:02:17.787379",
+        "reactions": {
+          "❤️": 0,
+          "😂": 0,
+          "🔥": 0,
+          "👍": 0,
+          "✈️": 0,
+          "🍜": 0,
+          "🏯": 0,
+          "🫡": 0,
+          "😭": 0,
+          "✅": 0,
+          "😱": 0,
+          "🤮": 0,
+          "🤨": 0
+        },
+        "replies": [],
+        "_fp": "fosop7ty83tmocnaq99"
+      }
+    ]
+  },
+  "reactions": {
+    "_index": {
+      "🔥": 52,
+      "😂": 1
+    }
+  },
+  "hidden": {
+    "day21": {
+      "message": "Find Inner Peace"
+    },
+    "day22": {
+      "message": "Find Inner Peace"
+    }
+  },
+  "wishlist": [
+    {
+      "id": 1777023553686,
+      "text": "Central Museum",
+      "nickname": "Sejik",
+      "timestamp": "2026-04-24T18:39:13.686106"
+    },
+    {
+      "id": 1777039412569,
+      "text": "HAUS NOWHERE SEOUL",
+      "nickname": "Jere",
+      "timestamp": "2026-04-24T23:03:32.569243"
+    }
+  ]
+}

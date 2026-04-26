@@ -1,161 +1,283 @@
-/* ===== Per-day page shared layout ===== */
-
-.day-hero {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  margin-bottom: 28px;
-  padding: 28px;
-  border-radius: var(--radius);
-  background: #fff;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  position: relative;
-  overflow: hidden;
-}
-.day-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--red) 0%, var(--red) 50%, var(--blue) 50%, var(--blue) 100%);
-}
-.day-hero .badge {
-  flex: 0 0 auto;
-  width: 110px; height: 110px;
-  border-radius: 24px;
-  background: linear-gradient(180deg, var(--red) 0%, var(--red) 50%, var(--blue) 50%, var(--blue) 100%);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 24px rgba(0, 71, 160, 0.25);
-}
-.day-hero .badge .num { font-size: 44px; font-weight: 800; line-height: 1; }
-.day-hero .badge .month { font-size: 12px; letter-spacing: 2px; margin-top: 6px; }
-.day-hero h1 {
-  margin: 0 0 6px;
-  font-size: 32px;
-  letter-spacing: -0.8px;
-}
-.day-hero .sub {
-  margin: 0;
-  color: var(--ink-soft);
-  font-size: 14px;
-}
-.day-hero .tags { margin-top: 10px; }
-.day-hero .tags span {
-  display: inline-block;
-  font-size: 11px;
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: #e3edfa;
-  color: var(--blue);
-  margin-right: 6px;
-  font-weight: 700;
-  border: 1px solid #c2d4ee;
-}
-
-/* navigation between days */
-.day-nav {
-  display: flex;
-  justify-content: space-between;
-  margin: 0 0 24px;
-}
-.day-nav a {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink-soft);
-}
-.day-nav a:hover { color: var(--accent); }
-
-/* layout */
-.day-layout {
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 24px;
-}
-@media (max-width: 920px) {
-  .day-layout { grid-template-columns: 1fr; }
-}
-
-/* schedule timeline */
-.timeline {
-  position: relative;
-  margin: 0;
-  padding: 6px 0 6px 22px;
-  list-style: none;
-  border-left: 2px dashed var(--line);
-}
-.timeline li {
-  position: relative;
-  padding: 0 0 22px 14px;
-}
-.timeline li::before {
-  content: "";
-  position: absolute;
-  left: -23px; top: 6px;
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  background: var(--red);
-  border: 3px solid #fff;
-  box-shadow: 0 0 0 2px var(--blue);
-}
-.timeline .time {
-  display: inline-block;
-  font-weight: 700;
-  font-size: 12px;
-  color: var(--blue);
-  background: #e3edfa;
-  padding: 2px 8px;
-  border-radius: 999px;
-  margin-bottom: 4px;
-  border: 1px solid #c2d4ee;
-}
-.timeline .what {
-  font-size: 15px;
-  font-weight: 600;
-  margin: 2px 0 4px;
-}
-.timeline .desc {
-  font-size: 13px;
-  color: var(--ink-soft);
-}
-
-/* info blocks */
-.info-block { margin-top: 24px; }
-.info-block h2 {
-  font-size: 18px;
-  margin: 0 0 10px;
-  letter-spacing: -0.4px;
-  display: flex;
+/* ============================================
+   KoreaGang — Day detail page
+   ============================================ */
+.day-back {
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-}
-.info-block h2::before {
-  content: "";
-  width: 8px; height: 18px;
-  background: linear-gradient(180deg, var(--red) 0%, var(--red) 50%, var(--blue) 50%, var(--blue) 100%);
-  border-radius: 2px;
-}
-.info-block p { margin: 6px 0; font-size: 14px; }
-
-/* side */
-.side-card { margin-bottom: 18px; }
-.side-card h4 {
-  margin: 0 0 8px;
-  font-size: 14px;
-  color: var(--ink-soft);
+  position: absolute;
+  top: 68px; left: 18px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  color: var(--ink-soft);
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  z-index: 10;
+  transition: color .2s, border-color .2s, background .2s;
 }
-.side-card ul {
-  margin: 0; padding: 0; list-style: none;
+.day-back:hover { color: var(--ink); border-color: var(--ink); }
+body.day-japan .day-back {
+  color: rgba(240,236,228,.6);
+  border-color: rgba(240,236,228,.2);
+  background: rgba(240,236,228,.06);
 }
-.side-card li {
-  padding: 6px 0;
-  border-bottom: 1px dashed var(--line);
+body.day-japan .day-back:hover {
+  color: #f0ece4;
+  border-color: rgba(240,236,228,.5);
+  background: rgba(240,236,228,.1);
+}
+@media (min-width: 720px) {
+  .day-back { left: 40px; }
+}
+
+.day-hero {
+  position: relative;
+  border-bottom: 1px solid var(--ink);
+}
+@media (max-width: 720px) {
+  .day-hero { padding: 80px 0 24px; }
+}
+.day-hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.day-hero-eyebrow::before {
+  content: ""; width: 28px; height: 1px; background: var(--ink);
+}
+.day-hero-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 36px;
+  align-items: end;
+}
+@media (max-width: 560px) { .day-hero-row { grid-template-columns: 1fr; gap: 12px; } }
+.day-num {
+  font-family: var(--serif);
+  font-size: clamp(100px, 28vw, 340px);
+  line-height: 0.82;
+  letter-spacing: -0.06em;
+  color: var(--dc-red);
+  font-weight: 400;
+}
+.day-num-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 12px;
+}
+.day-title {
+  font-family: var(--serif);
+  font-size: clamp(28px, 5.5vw, 72px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 14px;
+  font-weight: 400;
+}
+.day-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.day-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: lowercase;
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-soft);
+}
+
+.day-body {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 60px;
+  padding: 48px 0;
+}
+@media (max-width: 900px) { .day-body { grid-template-columns: 1fr; gap: 32px; padding: 32px 0; } }
+
+.timeline {
+  list-style: none;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.tl-item {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+@media (max-width: 480px) {
+  .tl-item { grid-template-columns: 1fr; gap: 4px; padding: 16px 0; }
+}
+.tl-time {
+  font-family: var(--mono);
   font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--dc-red);
+  padding-top: 4px;
 }
-.side-card li:last-child { border-bottom: none; }
+.tl-what {
+  font-family: var(--serif);
+  font-size: clamp(20px, 3.5vw, 28px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.tl-desc { color: var(--ink-soft); font-size: 14px; line-height: 1.6; }
+
+.tl-empty {
+  padding: 60px 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink-soft);
+}
+
+.day-notes {
+  margin-top: 40px;
+  padding: 28px;
+  background: var(--paper-2);
+  border-left: 3px solid var(--dc-red);
+}
+.day-notes-lbl {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+}
+.day-notes-txt {
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.5;
+}
+
+.side-card {
+  padding: 22px;
+  border: 1px solid var(--line);
+  margin-bottom: 20px;
+  background: var(--paper);
+}
+.side-card h4 {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.side-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line-2);
+  font-size: 14px;
+}
+.side-row:last-child { border-bottom: none; }
+.side-row .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); padding-top: 2px; }
+.side-row .v { font-family: var(--serif); font-size: 17px; line-height: 1.3; }
+.side-links a {
+  display: block;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line-2);
+  font-family: var(--serif);
+  font-size: 17px;
+  font-style: italic;
+  color: var(--ink);
+}
+.side-links a:hover { color: var(--dc-red); }
+.side-links a::after { content: " ↗"; font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
+
+.day-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+  margin-top: 32px;
+}
+.day-nav a {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: color .2s;
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.day-nav a:hover { color: var(--ink); }
+.day-nav a .big {
+  font-family: var(--serif);
+  font-size: clamp(16px, 3.5vw, 26px);
+  font-style: italic;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  text-transform: none;
+  margin-top: 4px;
+}
+.day-nav .center { text-align: center; }
+.day-nav .right { text-align: right; }
+
+/* ===== Japan day pages (18–20) ===== */
+body.day-japan {
+  --paper: #f0ece4;
+  --paper-2: #e8e0d4;
+}
+body.day-japan .day-hero {
+  background: #0c1832;
+  color: #f0ece4;
+  border-bottom-color: #d4271b;
+  position: relative;
+}
+body.day-japan .day-hero-eyebrow { color: rgba(240,236,228,.5); }
+body.day-japan .day-hero-eyebrow::before { background: rgba(240,236,228,.4); }
+body.day-japan .day-num { color: #d4271b; }
+body.day-japan .day-num-sub { color: rgba(240,236,228,.5); }
+body.day-japan .day-title { color: #f0ece4; }
+body.day-japan .day-tag { border-color: rgba(240,236,228,.25); color: rgba(240,236,228,.6); }
+body.day-japan .tl-time { color: #d4271b; }
+body.day-japan .day-notes { border-left-color: #d4271b; }
+
+/* Big kanji watermark in hero */
+.day-japan-kanji {
+  position: absolute;
+  right: 5%; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(120px, 22vw, 300px);
+  line-height: 1;
+  color: rgba(212,39,27,.1);
+  user-select: none; pointer-events: none;
+}
+
+/* Japan flag top stripe — injected as div by JS, not ::before */
+.kg-japan-stripe {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #d4271b 0 38%, #f5f5f5 38% 62%, #d4271b 62% 100%);
+  z-index: 9999; pointer-events: none;
+}
