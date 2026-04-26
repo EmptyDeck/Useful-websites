@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>KoreaGang — Mobile Preview</title>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="../ios-frame.jsx"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0d0a08;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 20px 60px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .tb-btn {
+      padding: 8px 18px;
+      border: 1px solid rgba(244,236,224,.3);
+      border-radius: 999px;
+      background: transparent;
+      color: rgba(244,236,224,.7);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .18s, color .18s, border-color .18s;
+    }
+    .tb-btn:hover, .tb-btn.active {
+      background: rgba(244,236,224,.1);
+      color: #f4ece0;
+      border-color: rgba(244,236,224,.6);
+    }
+    .label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(244,236,224,.3);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="label">KoreaGang 2026 · Mobile Preview</div>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const PAGES = [
+      { label: 'Home',     src: '_index.html' },
+      { label: 'Day 16',   src: 'day16.html'  },
+      { label: 'Day 21',   src: 'day21.html'  },
+      { label: 'Day 28',   src: 'day28.html'  },
+    ];
+
+    function App() {
+      const [page, setPage] = useState(0);
+
+      return (
+        <div>
+          <div className="toolbar">
+            {PAGES.map((p, i) => (
+              <button
+                key={i}
+                className={'tb-btn' + (page === i ? ' active' : '')}
+                onClick={() => setPage(i)}
+              >{p.label}</button>
+            ))}
+          </div>
+          <IOSDevice width={390} height={844} dark={true}>
+            <iframe
+              key={page}
+              src={PAGES[page].src}
+              style={{ width: '390px', height: '100%', border: 'none', display: 'block' }}
+              title="preview"
+            />
+          </IOSDevice>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

@@ -1,49 +1,142 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>KoreaGang 2026 — Calendar</title>
-  <link rel="stylesheet" href="common.css">
-  <link rel="stylesheet" href="_index.css">
+  <title>KoreaGang 2026 — Helsinki to Seoul, fifteen days</title>
+  <link rel="stylesheet" href="common.css?v=1777018882393">
+  <link rel="stylesheet" href="index.css?v=1777018882393">
+  <link rel="stylesheet" href="interactive.css?v=1777018882393">
 </head>
-
 <body>
-  <div id="topbar-slot"></div>
-
-  <main class="container">
-    <section class="hero">
-      <div>
-        <h1>KoreaGang 2026</h1>
-        <p>May 14 (Thu) → May 28 (Thu) · 15 days in Korea · pick a day to see the plan</p>
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <canvas class="hero-globe" id="globe"></canvas>
+    <div class="wrap">
+      <div class="hero-eyebrow"><span>Issue №01 · Spring MMXXVI</span></div>
+      <h1 class="hero-title">
+        Welcome to <span style="color:#1d3f8a">Korea,</span><br>
+        country of<br><em style="color:#c8312b">old
+        traditions</em> &amp; <span style="color:#3a2f24">dynamic cities.</span>
+      </h1>
+      <div class="hero-meta">
+        <div>
+          <div class="hm-label">Travelers</div>
+          <div class="hm-value">Saimi · Jere · Ada · Alexsis · Sejik</div>
+        </div>
+        <div>
+          <div class="hm-label">Depart</div>
+          <div class="hm-value mono">14 · V · 2026</div>
+        </div>
+        <div>
+          <div class="hm-label">Return</div>
+          <div class="hm-value mono">28 · V · 2026</div>
+        </div>
+        <div>
+          <div class="hm-label">Route</div>
+          <div class="hm-value">HEL → PKX → ICN</div>
+        </div>
       </div>
-      <div>
-        <span class="chip">Seoul</span>
-        <span class="chip blue">Busan</span>
-        <span class="chip gold">Gyeongju</span>
-      </div>
-    </section>
-
-    <div class="layout">
-      <section class="calendar card" id="calendar"></section>
-
-      <aside class="side card" id="todo">
-        <h3>To plan <span class="pill">TBD</span></h3>
-        <ul class="todo-list" id="todo-list"></ul>
-        <p class="legend">
-          Anything without a date yet lives here. Tick it off once we lock it in,
-          and move it into the matching day page.
-        </p>
-      </aside>
     </div>
+  </section>
 
-    <p class="footer">Sejik Park Made it · last updated <span id="updated"></span></p>
-  </main>
+  <!-- Countdown -->
+  <section class="countdown-section">
+    <div class="wrap">
+      <div class="cd-row">
+        <div class="cd-label">
+          Wheels up in
+          <strong>HEL → ICN</strong>
+        </div>
+        <div class="cd-timer" id="cd-wrap">
+          <div class="cd-cell"><b id="cd-d">--</b><small>Days</small></div>
+          <div class="cd-cell"><b id="cd-h">--</b><small>Hours</small></div>
+          <div class="cd-cell"><b id="cd-m">--</b><small>Minutes</small></div>
+          <div class="cd-cell"><b id="cd-s">--</b><small>Seconds</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <script src="common.js"></script>
-  <script src="_index.js"></script>
-  <script>document.getElementById("updated").textContent = new Date().toLocaleDateString();</script>
+  <!-- Itinerary / Calendar -->
+  <section class="itinerary">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="section-eyebrow">§ 01 — Itinerary</div>
+          <h2 class="section-title">Fifteen <em>chapters</em>.</h2>
+        </div>
+        <aside>
+          Each day is a page — with a schedule, notes, and a place to drop comments. Pick a number, see what's planned, add what you'd like to do.
+        </aside>
+      </div>
+      <div class="it-grid" id="calendar"></div>
+    </div>
+  </section>
+
+  <!-- Wishlist -->
+  <section class="wishlist-section" id="wishlist">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="section-eyebrow">§ 02 — Wishlist · <span id="wl-count">00</span></div>
+          <h2 class="section-title">Things we'd <em>love</em> to do.</h2>
+        </div>
+        <aside>
+          A running list of places, foods, and moments. Add whatever you're curious about — we'll try to fit it in.
+        </aside>
+      </div>
+      <div class="wl-layout">
+        <ul class="wl-list" id="wl-list"></ul>
+        <div class="wl-add">
+          <h3>Got an <em>idea?</em></h3>
+          <p>A dish, a temple, a weird subway station, a neon alley. Add it and we'll try.</p>
+          <div class="kg-person" id="wl-person-row" style="border:none;padding:8px 0;margin-bottom:4px">
+            <span class="kg-person-lbl">I am</span>
+            <!-- filled by JS -->
+          </div>
+          <div class="wl-input-row">
+            <input class="wl-input" id="wl-input" type="text" maxlength="140" placeholder="e.g. late-night tteokbokki in Sindang">
+            <button class="wl-add-btn" id="wl-btn" title="Add">＋</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conversation -->
+  <section class="conv-section" id="conversation">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="section-eyebrow">§ 03 — Conversation</div>
+          <h2 class="section-title">Say <em>hi.</em></h2>
+        </div>
+        <aside>
+          The general chat. For day-specific thoughts, head into that day's page.
+        </aside>
+      </div>
+      <div id="kg-interactive"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="kg-footer">
+    <div class="wrap">
+      <div class="kg-footer-row">
+        <div>
+          <div class="kg-footer-mark">KoreaGang</div>
+          <div style="margin-top:6px">Made by Sejik the Great.</div>
+        </div>
+        <div>Last updated <span id="updated"></span></div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="common.js?v=1777018882393"></script>
+  <script src="intro.js?v=1777018882393"></script>
+  <script src="interactive.js?v=1777018882393"></script>
+  <script src="index.js?v=1777018882393"></script>
+  <script>document.getElementById("updated").textContent = new Date().toLocaleDateString('en-GB');</script>
 </body>
-
 </html>
