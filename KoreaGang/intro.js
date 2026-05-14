@@ -144,6 +144,9 @@
     ctx.strokeStyle = `rgba(244,236,224,${0.1 * alpha})`; ctx.lineWidth = 1; ctx.stroke();
     ctx.restore();
 
+    // Land masses
+    drawLand(cx, cy, r, rot, alpha);
+
     // Graticule
     ctx.save();
     ctx.strokeStyle = `rgba(244,236,224,${0.06 * alpha})`; ctx.lineWidth = 0.5;
@@ -246,6 +249,34 @@
   let skipped     = false;
   let dismissed   = false;
   let rafId       = null;
+
+  // ---- Land polygons ----
+  let landRings = [];
+  if (window.KG_GEO) {
+    window.KG_GEO.getLandRings().then(function(r) { landRings = r; });
+  }
+
+  function drawLand(cx, cy, r, rot, alpha) {
+    if (!landRings.length) return;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(160, 200, 255, ' + (0.45 * alpha) + ')';
+    ctx.lineWidth   = 0.9;
+    ctx.lineJoin    = 'round';
+    for (var ri = 0; ri < landRings.length; ri++) {
+      var ring = landRings[ri];
+      ctx.beginPath();
+      var first = true;
+      for (var pi = 0; pi < ring.length; pi++) {
+        var la = ring[pi][0], lo = ring[pi][1];
+        var p = project(la, lo, cx, cy, r, rot);
+        if (p.z <= 0.01) { first = true; continue; }
+        if (first) { ctx.moveTo(p.x, p.y); first = false; }
+        else ctx.lineTo(p.x, p.y);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
 
   function dismiss() {
     if (dismissed) return;

@@ -14,21 +14,37 @@ const PEOPLE = ['Saimi', 'Jere', 'Ada', 'Alexsis', 'Sejik'];
 
 const DAYS = [
   { d: 14, dow: "Thu", title: "Departure Day",              tags: ["flight"],                        city: "Helsinki" },
-  { d: 15, dow: "Fri", title: "Arrival Day in Incheon",     tags: ["arrival", "incheon"],            city: "Incheon" },
+  { d: 15, dow: "Fri", title: "Arrival Day in Incheon",     tags: ["arrival", "incheon"],            city: "Seoul" },
   { d: 16, dow: "Sat", title: "Settle-In Day",              tags: ["seoul", "wedding"],              city: "Seoul" },
-  { d: 17, dow: "Sun", title: "Old Friends Day",            tags: ["seoul", "festival", "dinner"],   city: "Seoul" },
+  { d: 17, dow: "Sun", title: "Culture & Festival Day",     tags: ["seoul", "museum", "festival"],   city: "Seoul" },
   { d: 18, dow: "Mon", title: "Depart to Japan 07:10",      tags: ["flight", "japan"],               city: "Japan" },
   { d: 19, dow: "Tue", title: "Japan",                      tags: ["japan"],                         city: "Japan" },
-  { d: 20, dow: "Wed", title: "Arrive Incheon 19:55",       tags: ["arrival", "incheon"],            city: "Incheon" },
-  { d: 21, dow: "Thu", title: "Be a Monk Day",              tags: ["jeonnam", "templestay"],         city: "Jeonnam" },
-  { d: 22, dow: "Fri", title: "Korea Town Day",             tags: ["lunch", "cafe", "spa"],          city: "Seoul / Icheon" },
-  { d: 23, dow: "Sat", title: "Energy Day",                 tags: ["escape room", "trivia"], city: "Seoul" },
+  { d: 20, dow: "Wed", title: "Arrive Incheon 19:55",       tags: ["arrival", "incheon"],            city: "Seoul" },
+  { d: 21, dow: "Thu", title: "Be a Monk Day",              tags: ["templestay"],                    city: "Seoul" },
+  { d: 22, dow: "Fri", title: "Korea Town Day",             tags: ["lunch", "cafe", "spa"],          city: "Seoul" },
+  { d: 23, dow: "Sat", title: "Energy Day",                 tags: ["escape room", "trivia"],         city: "Seoul" },
   { d: 24, dow: "Sun", title: "Event Day",                  tags: ["holiday", "itaewon", "night"],   city: "Seoul" },
-  { d: 25, dow: "Mon", title: "History Day",                tags: ["gyeongbokgung", "town", "art"],  city: "Seoul" },
-  { d: 26, dow: "Tue", title: "North Korea Day",            tags: ["dmz", "tour", "day trip"],       city: "DMZ" },
+  { d: 25, dow: "Mon", title: "History & Euljiro Day",      tags: ["gyeongbokgung", "town", "dinner"], city: "Seoul" },
+  { d: 26, dow: "Tue", title: "North Korea Day",            tags: ["dmz", "tour", "day trip"],       city: "Seoul" },
   { d: 27, dow: "Wed", title: "Last Pick Day",              tags: ["tbd", "group choice", "final day"], city: "Seoul" },
-  { d: 28, dow: "Thu", title: "Departure Day",              tags: ["departure"],                     city: "Incheon" },
+  { d: 28, dow: "Thu", title: "Departure Day",              tags: ["departure"],                     city: "Seoul" },
 ];
+
+
+// City coordinates for globe focus [lat, lon]
+const CITY_COORDS = {
+  'Helsinki':       [60.17, 24.94],
+  'Incheon':        [37.46, 126.70],
+  'Seoul':          [37.57, 126.98],
+  'Japan':          [35.68, 139.69],     // Tokyo proxy
+  'Jeonnam':        [34.81, 126.46],
+  'Seoul / Icheon': [37.27, 127.43],
+  'DMZ':            [37.96, 126.68],
+};
+function cityFor(d) {
+  const day = (typeof DAYS !== 'undefined' ? DAYS : []).find(x => x.d === d);
+  return day ? CITY_COORDS[day.city] || CITY_COORDS['Seoul'] : null;
+}
 
 const TODO = [
   { text: "DMZ Tour", owner: "" },
@@ -79,11 +95,16 @@ const DAY_DATA = {
   },
   17: {
     timeline: [
-      { time: "Evening", what: "Dinner with Korean friends", desc: "Meeting up with Yubin and other Korean friends — group dinner." },
+      { time: "12:00", what: "Meet at accommodation", desc: "Gather before heading out for lunch." },
+      { time: "12:30", what: "Lunch at Oksoban", desc: "Shabu-shabu at Oksoban (옥소반)." },
+      { time: "Afternoon", what: "National Museum of Korea", desc: "Explore the National Museum." },
+      { time: "Late Afternoon", what: "DDP & Cheonggyecheon", desc: "Dongdaemun Design Plaza, Cheonggyecheon Stream, and Dongdaemun Market. Dinner at the market." },
+      { time: "19:00", what: "Lotus Lantern Festival Parade", desc: "Watch the parade at Jonggak Station (7 PM - 9 PM)." },
+      { time: "Night", what: "Return & Pack", desc: "Head back to the accommodation and pack for tomorrow's trip to Japan." },
     ],
-    notes: "Time and venue TBD — Yubin will confirm.",
-    logistics: [["Base", "Seoul main house"], ["Joining", "Yubin + Korean friends"]],
-    links: [],
+    notes: "Action-packed day covering culture, shopping, and the Lantern Festival.",
+    logistics: [["Base", "Seoul main house"], ["Dinner", "Dongdaemun Market"]],
+    links: [["Lotus Lantern Festival", "http://www.llf.or.kr/info/festival.php?wr_id=4#layout"]],
   },
   18: {
     timeline: [
@@ -189,12 +210,12 @@ const DAY_DATA = {
   },
   25: {
     timeline: [
-      { time: "Morning", what: "Gyeongbokgung Palace", desc: "Start with the grand, formal Seoul. Traditional clothing rental is about ₩30,000 (€17.31) per person." },
-      { time: "Afternoon", what: "Bukchon Hanok Village", desc: "Move into the older residential texture of the city." },
-      { time: "Later", what: "National Museum of Korea", desc: "End with a slower museum chapter rather than modern art." },
+      { time: "Morning", what: "Breakfast & Gyeongbokgung Palace", desc: "Start with breakfast and head to the grand, formal Seoul. Traditional clothing rental is about ₩30,000 (€17.31) per person." },
+      { time: "Afternoon", what: "Lunch at Bukchon Hanok Village", desc: "Lunch and walk around the older residential texture of the city." },
+      { time: "Evening", what: "Dinner at Euljiro", desc: "Enjoy dinner in the lively Euljiro area." },
     ],
-    notes: "A classic Seoul sequence: royal scale, hanok lanes, then the National Museum of Korea.",
-    logistics: [["Stops", "Gyeongbokgung, Bukchon, National Museum of Korea"], ["Hanbok rental", "About ₩30,000 (€17.31) per person"], ["Pace", "Best as a walking-heavy culture day"]],
+    notes: "A classic Seoul sequence: royal scale, hanok lanes, and an evening in Euljiro.",
+    logistics: [["Stops", "Gyeongbokgung, Bukchon, Euljiro"], ["Hanbok rental", "About ₩30,000 (€17.31) per person"], ["Pace", "Best as a walking-heavy culture day"]],
     links: [],
   },
   26: {
@@ -396,6 +417,15 @@ async function apiPost(url, body) {
       (s.wishlist || []).forEach(w => { if (String(w.id) === String(body.wishlist_id)) w.text = body.text; });
       saveOffline(s); return { ok: true };
     }
+    if (url === '/api/reply/react') {
+      const cmt = s.comments?.[page]?.find(c => String(c.id) === String(body.comment_id));
+      if (cmt?.replies?.[body.reply_index]) {
+        const rpl = cmt.replies[body.reply_index];
+        rpl.reactions = rpl.reactions || {};
+        rpl.reactions[body.emoji] = (rpl.reactions[body.emoji] || 0) + 1;
+      }
+      saveOffline(s); return { ok: true };
+    }
     if (url === '/api/admin/delete_reply') {
       const cmt = s.comments?.[page]?.find(c => String(c.id) === String(body.comment_id));
       if (cmt?.replies) cmt.replies.splice(body.reply_index, 1);
@@ -479,22 +509,23 @@ function injectNav(activeLabel) {
   const nav = document.createElement('nav');
   nav.className = 'kg-nav';
   nav.innerHTML = `
-    <a class="kg-nav-brand" href="_index.html">
-      <span id="kg-brand-dot" title="5× for admin" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;padding:6px;margin:-6px;cursor:pointer">
-        <svg width="22" height="22" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <!-- Red background (fills entire left half by default) -->
-          <circle cx="50" cy="50" r="50" fill="#C60C30"/>
-          <!-- Blue lower half — S-curve taegeuk -->
-          <!-- Large blue half-circle (bottom) -->
-          <path d="M100,50 A50,50 0 0,1 0,50 A25,25 0 0,0 50,50 A25,25 0 0,1 100,50 Z" fill="#003478"/>
-          <!-- Red small circle top (in blue zone) -->
-          <circle cx="50" cy="25" r="12.5" fill="#C60C30"/>
-          <!-- Blue small circle bottom (in red zone) -->
-          <circle cx="50" cy="75" r="12.5" fill="#003478"/>
-        </svg>
-      </span>
-      <span>${TRIP.name} <em style="font-style:italic;opacity:.6;">${TRIP.year}</em></span>
-    </a>
+    <div class="kg-nav-left">
+      <a class="kg-nav-brand" href="_index.html">
+        <span id="kg-brand-dot" title="5× for admin" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;padding:6px;margin:-6px;cursor:pointer">
+          <svg width="22" height="22" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="50" fill="#C60C30"/>
+            <path d="M100,50 A50,50 0 0,1 0,50 A25,25 0 0,0 50,50 A25,25 0 0,1 100,50 Z" fill="#003478"/>
+            <circle cx="50" cy="25" r="12.5" fill="#C60C30"/>
+            <circle cx="50" cy="75" r="12.5" fill="#003478"/>
+          </svg>
+        </span>
+        <span>${TRIP.name} <em style="font-style:italic;opacity:.6;">${TRIP.year}</em></span>
+      </a>
+      <div class="kg-nav-extra">
+        <a href="packing.html" class="${activeLabel==='packing'?'active':''}">Packing</a>
+        <a href="info.html" class="${activeLabel==='info'?'active':''}">Travel Notes</a>
+      </div>
+    </div>
     <div class="kg-nav-links">
       <a href="_index.html" class="${activeLabel==='home'?'active':''}">Calendar</a>
       <a href="_index.html#wishlist" class="${activeLabel==='wish'?'active':''}">Wishlist</a>

@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>박세직의 TAMU 유학 안내</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --navy:     #1B3352;
+            --amber:    #B97318;
+            --amber-bg: #FEF4E3;
+            --amber-lt: #FFD98A;
+            --green:    #256B48;
+            --green-bg: #EAF5EE;
+            --blue-bg:  #EBF2FF;
+            --blue-txt: #1A55B0;
+            --bg:       #F4F2ED;
+            --white:    #FFFFFF;
+            --text:     #1A1918;
+            --sub:      #6B6560;
+            --border:   #E4E1DA;
+            --shadow:   0 1px 6px rgba(0,0,0,0.07), 0 0 0 1px rgba(0,0,0,0.03);
+        }
+        body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+        /* HEADER */
+        .header { background:var(--navy); padding:52px 24px 32px; color:white; }
+        .header-chip { display:inline-block; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18); color:rgba(255,255,255,0.75); font-size:11px; font-weight:500; letter-spacing:1px; text-transform:uppercase; padding:5px 12px; border-radius:100px; margin-bottom:16px; }
+        .header h1 { font-size:30px; font-weight:700; line-height:1.2; margin-bottom:8px; }
+        .header h1 strong { color:var(--amber-lt); }
+        .header p { font-size:14px; color:rgba(255,255,255,0.55); }
+        .rate-bar { display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18); border-radius:8px; padding:7px 12px; margin-top:16px; font-size:13px; color:rgba(255,255,255,0.8); }
+        .rate-dot { width:7px; height:7px; border-radius:50%; background:#6EE4A0; display:inline-block; flex-shrink:0; }
+        .rate-tag { font-size:11px; color:rgba(255,255,255,0.45); }
+
+        /* PAGE */
+        .page { max-width:480px; margin:0 auto; padding:22px 16px 72px; }
+        .sec-label { font-size:10px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--sub); margin:28px 0 10px 2px; }
+
+        /* CARD */
+        .card { background:var(--white); border-radius:18px; padding:20px; box-shadow:var(--shadow); margin-bottom:12px; }
+        .card-head { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+        .card-icon { width:38px; height:38px; border-radius:10px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+        .card-title { font-size:16px; font-weight:700; }
+        .card-sub { font-size:12px; color:var(--sub); margin-top:2px; }
+
+        /* AMT PAIR */
+        .amt { display:flex; flex-direction:column; align-items:flex-end; flex-shrink:0; }
+        .amt-d { font-size:15px; font-weight:600; color:var(--text); }
+        .amt-w { font-size:11px; color:var(--sub); margin-top:1px; }
+
+        /* SUMMARY CARD */
+        .sum-card { background:var(--navy); color:white; border-radius:18px; padding:24px 22px; margin-top:4px; margin-bottom:4px; }
+        .sum-label { font-size:11px; color:rgba(255,255,255,0.5); letter-spacing:0.5px; margin-bottom:4px; }
+        .sum-big { font-size:42px; font-weight:700; color:var(--amber-lt); line-height:1; letter-spacing:-1px; }
+        .sum-big-krw { font-size:14px; color:rgba(255,255,255,0.5); margin-bottom:20px; margin-top:2px; }
+        .sum-divider { border:none; border-top:1px solid rgba(255,255,255,0.1); margin-bottom:12px; }
+        .sum-row { display:flex; justify-content:space-between; align-items:baseline; padding:5px 0; }
+        .sum-row-label { font-size:13px; color:rgba(255,255,255,0.65); }
+        .sum-row-vals { text-align:right; }
+        .sum-row-usd { font-size:15px; font-weight:600; color:rgba(255,255,255,0.92); display:block; }
+        .sum-row-krw { font-size:11px; color:rgba(255,255,255,0.4); display:block; margin-top:1px; }
+        .sum-row.total-row { margin-top:8px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.15); }
+        .sum-row.total-row .sum-row-usd { font-size:18px; color:var(--amber-lt); }
+        .sum-row.total-row .sum-row-krw { font-size:13px; color:rgba(255,255,255,0.6); }
+
+        /* ALLOWANCE CARD */
+        .allow-card { background:var(--amber-bg); border-radius:18px; padding:20px; margin-bottom:12px; }
+        .allow-title { font-size:14px; font-weight:700; color:var(--amber); margin-bottom:4px; }
+        .allow-sub { font-size:12px; color:#8B5E1A; margin-bottom:16px; }
+        .allow-display { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:12px; }
+        .allow-main { font-size:28px; font-weight:700; color:var(--amber); line-height:1; }
+        .allow-usd-right { text-align:right; }
+        .allow-usd-big { font-size:17px; font-weight:600; display:block; color:#7A4E0A; }
+        input[type=range] { width:100%; -webkit-appearance:none; appearance:none; height:4px; background:#EDCF9A; border-radius:2px; outline:none; cursor:pointer; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:22px; height:22px; border-radius:50%; background:var(--amber); border:3px solid white; box-shadow:0 1px 6px rgba(0,0,0,0.2); cursor:pointer; }
+        input[type=range]::-moz-range-thumb { width:22px; height:22px; border-radius:50%; background:var(--amber); border:3px solid white; cursor:pointer; }
+        .slider-labels { display:flex; justify-content:space-between; font-size:11px; color:#A07030; margin-top:6px; }
+        .allow-year { background:rgba(0,0,0,0.06); border-radius:10px; padding:10px 12px; margin-top:12px; display:flex; justify-content:space-between; align-items:center; }
+        .allow-year-label { font-size:12px; color:#8B5E1A; }
+        .allow-year-right { text-align:right; }
+        .allow-year-val { font-size:13px; font-weight:600; color:var(--amber); }
+        .allow-year-usd { font-size:11px; color:#A07030; margin-top:1px; }
+
+        /* SCHEDULE */
+        .sc-semester-label { font-size:12px; font-weight:700; color:var(--sub); letter-spacing:0.5px; margin:16px 0 8px 2px; display:flex; align-items:center; gap:8px; }
+        .sc-est-badge { font-size:10px; font-weight:700; background:var(--bg); color:var(--sub); padding:2px 7px; border-radius:5px; }
+        .sc-card { background:var(--white); border-radius:14px; border-left:3px solid var(--navy); padding:14px 16px; box-shadow:var(--shadow); margin-bottom:10px; }
+        .sc-card.est { border-left-color:var(--border); background:#FAFAF8; }
+        .sc-send-date { font-size:14px; font-weight:700; color:var(--text); }
+        .sc-due { font-size:12px; color:var(--sub); margin-top:1px; margin-bottom:10px; }
+        .sc-rows { border-top:1px solid var(--border); padding-top:10px; display:flex; flex-direction:column; gap:6px; }
+        .sc-row { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+        .sc-row-label { font-size:13px; color:var(--sub); flex:1; }
+        .sc-row.allowance .sc-row-label { color:var(--amber); font-weight:500; }
+        .sc-row-right { text-align:right; flex-shrink:0; }
+        .sc-row-usd { font-size:13px; font-weight:600; color:var(--text); display:block; }
+        .sc-row-krw { font-size:11px; color:var(--sub); display:block; }
+        .sc-total { margin-top:10px; padding-top:10px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:flex-end; }
+        .sc-total-label { font-size:12px; font-weight:600; color:var(--sub); }
+        .sc-total-right { text-align:right; }
+        .sc-total-usd { font-size:18px; font-weight:700; color:var(--navy); display:block; }
+        .sc-total-krw { font-size:12px; color:var(--amber); display:block; font-weight:600; }
+
+        /* TOGGLE BUTTON */
+        .spring-toggle { width:100%; padding:12px 16px; border-radius:12px; border:1.5px dashed var(--border); background:transparent; font-family:'Noto Sans KR',sans-serif; font-size:13px; font-weight:600; color:var(--sub); cursor:pointer; margin-bottom:10px; transition:all 0.15s; }
+        .spring-toggle:hover { background:var(--white); color:var(--text); }
+
+        /* FEE ROWS */
+        .fee-row { display:flex; justify-content:space-between; align-items:flex-start; padding:11px 0; border-bottom:1px solid var(--border); gap:10px; }
+        .fee-row:last-child { border-bottom:none; }
+        .fee-name { font-size:14px; color:var(--text); flex:1; }
+        .fee-hint { font-size:11px; color:var(--sub); margin-top:2px; }
+
+        /* TOTAL PILL */
+        .total-pill { display:flex; justify-content:space-between; align-items:center; border-radius:12px; padding:13px 16px; margin-top:12px; }
+        .total-pill.amber { background:var(--amber-bg); }
+        .total-pill.blue  { background:var(--blue-bg); }
+        .total-pill.gray  { background:var(--bg); }
+        .total-pill-label { font-size:13px; font-weight:600; }
+        .total-pill.amber .total-pill-label { color:var(--amber); }
+        .total-pill.blue  .total-pill-label { color:var(--blue-txt); }
+        .total-pill.gray  .total-pill-label { color:var(--sub); }
+        .total-pill-right { text-align:right; }
+        .total-pill-usd { font-size:20px; font-weight:700; display:block; }
+        .total-pill.amber .total-pill-usd { color:var(--amber); }
+        .total-pill.blue  .total-pill-usd { color:var(--blue-txt); }
+        .total-pill.gray  .total-pill-usd { color:var(--sub); }
+        .total-pill-krw { font-size:11px; font-weight:500; margin-top:1px; display:block; color:var(--sub); }
+
+        /* TIMELINE */
+        .timeline { position:relative; }
+        .tl-line { position:absolute; left:6px; top:14px; bottom:14px; width:2px; background:var(--border); border-radius:2px; }
+        .tl-item { display:flex; gap:16px; padding-bottom:20px; position:relative; }
+        .tl-item:last-child { padding-bottom:0; }
+        .tl-dot-wrap { flex-shrink:0; width:14px; display:flex; align-items:center; padding-top:4px; }
+        .tl-dot { width:14px; height:14px; border-radius:50%; border:2px solid var(--border); background:var(--white); position:relative; z-index:1; }
+        .tl-dot.navy  { background:var(--navy);  border-color:var(--navy); }
+        .tl-dot.money { background:var(--amber); border-color:var(--amber); }
+        .tl-dot.green { background:var(--green); border-color:var(--green); }
+        .tl-body { flex:1; }
+        .tl-date  { font-size:11px; font-weight:600; color:var(--sub); margin-bottom:2px; }
+        .tl-title { font-size:14px; font-weight:600; color:var(--text); }
+        .tl-amount{ font-size:14px; font-weight:700; color:var(--amber); margin-top:3px; }
+        .tl-note  { font-size:12px; color:var(--sub); margin-top:2px; line-height:1.5; }
+
+        /* INFO BOXES */
+        .info-box { border-radius:10px; padding:12px 14px; margin-top:14px; font-size:13px; line-height:1.55; }
+        .info-box.green { background:var(--green-bg); color:#1B4D33; }
+        .info-box.amber { background:var(--amber-bg); color:#6B3E0A; }
+        .info-box strong { font-weight:700; }
+        .group-label { font-size:12px; font-weight:600; color:var(--sub); margin:14px 0 8px; padding-bottom:6px; border-bottom:1px solid var(--border); }
+
+        /* BADGE */
+        .badge { display:inline-block; font-size:10px; font-weight:700; padding:2px 7px; border-radius:5px; vertical-align:middle; margin-left:4px; }
+        .badge-gray { background:var(--bg); color:var(--sub); }
+        .badge-green { background:var(--green-bg); color:var(--green); }
+
+        /* FLYWIRE */
+        .flywire-card { background:linear-gradient(145deg,#1B3352 0%,#2A5298 100%); border-radius:18px; padding:22px 20px; color:white; margin-bottom:12px; }
+        .fw-title { font-size:17px; font-weight:700; margin-bottom:6px; }
+        .fw-badge { display:inline-block; background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.85); font-size:11px; font-weight:600; padding:3px 9px; border-radius:6px; margin-bottom:10px; }
+        .fw-desc { font-size:13px; color:rgba(255,255,255,0.7); line-height:1.6; margin-bottom:18px; }
+        .fw-steps { display:flex; flex-direction:column; gap:11px; }
+        .fw-step { display:flex; align-items:flex-start; gap:12px; }
+        .fw-num { width:24px; height:24px; border-radius:50%; background:rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; margin-top:1px; }
+        .fw-text { font-size:13px; color:rgba(255,255,255,0.82); line-height:1.5; }
+
+        /* METHOD LIST */
+        .method-item { display:flex; align-items:flex-start; gap:14px; padding:13px 0; border-bottom:1px solid var(--border); }
+        .method-item:last-child { border-bottom:none; }
+        .method-icon-box { width:40px; height:40px; border-radius:10px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+        .method-name { font-size:14px; font-weight:600; margin-bottom:3px; }
+        .method-desc { font-size:13px; color:var(--sub); line-height:1.5; }
+
+        /* INSTALLMENT GRID */
+        .install-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
+        .install-cell { background:var(--bg); border-radius:10px; padding:12px; }
+        .install-cell-num  { font-size:11px; font-weight:600; color:var(--sub); margin-bottom:4px; }
+        .install-cell-date { font-size:13px; font-weight:600; color:var(--text); margin-bottom:2px; }
+        .install-cell-amt  { font-size:15px; font-weight:700; color:var(--amber); }
+        .install-cell-krw  { font-size:11px; color:var(--sub); margin-top:1px; }
+
+        /* PROF CARD */
+        .prof-card { background:var(--navy); border-radius:18px; padding:22px 20px; color:white; margin-bottom:12px; }
+        .prof-avatar { width:52px; height:52px; border-radius:14px; background:rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center; font-size:26px; margin-bottom:14px; }
+        .prof-name { font-size:20px; font-weight:700; color:white; margin-bottom:2px; }
+        .prof-title { font-size:12px; color:rgba(255,255,255,0.55); margin-bottom:14px; }
+        .prof-career { display:flex; flex-direction:column; gap:8px; }
+        .prof-career-item { display:flex; align-items:flex-start; gap:10px; }
+        .prof-career-logo { width:28px; height:28px; border-radius:6px; background:white; display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden; padding:3px; }
+        .prof-career-logo img { width:100%; height:100%; object-fit:contain; }
+        .prof-career-text { font-size:13px; color:rgba(255,255,255,0.78); line-height:1.5; }
+        .prof-career-year { font-size:11px; color:rgba(255,255,255,0.4); margin-top:1px; }
+        .prof-research { background:rgba(255,255,255,0.08); border-radius:10px; padding:10px 12px; margin-top:14px; }
+        .prof-research-label { font-size:10px; font-weight:700; color:rgba(255,255,255,0.4); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+        .prof-research-tags { display:flex; gap:7px; flex-wrap:wrap; }
+        .prof-tag { display:inline-block; background:rgba(255,255,255,0.13); color:rgba(255,255,255,0.85); font-size:12px; font-weight:500; padding:4px 10px; border-radius:20px; }
+
+        /* TAMU INTRO */
+        .tamu-intro-card { background:var(--white); border-radius:18px; padding:20px; box-shadow:var(--shadow); margin-bottom:12px; }
+        .tamu-intro-header { display:flex; align-items:center; gap:14px; margin-bottom:12px; }
+        .tamu-logo-box { width:52px; height:52px; flex-shrink:0; }
+        .tamu-logo-box img { width:100%; height:100%; object-fit:contain; }
+        .tamu-intro-badge { display:inline-block; background:var(--navy); color:white; font-size:10px; font-weight:700; padding:3px 9px; border-radius:6px; letter-spacing:0.5px; margin-bottom:4px; }
+        .tamu-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+        .tamu-stat { background:var(--bg); border-radius:10px; padding:11px 12px; }
+        .tamu-stat-val { font-size:17px; font-weight:700; color:var(--navy); }
+        .tamu-stat-desc { font-size:11px; color:var(--sub); margin-top:2px; }
+
+        .footer { text-align:center; font-size:13px; color:var(--sub); padding:32px 16px 24px; line-height:1.8; }
+        .footer span { font-size:11px; opacity:0.7; }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <div class="header-chip">Texas A&amp;M University · 2026–2027</div>
+    <h1>박<strong>세직</strong>의<br>TAMU 유학 안내</h1>
+    <p>컴퓨터공학 석사 대학원 · 부모님께 드립니다</p>
+    <div class="rate-bar" id="rate-badge">환율 로딩 중...</div>
+</header>
+
+<div class="page">
+
+    <!-- ══ TAMU 소개 ══ -->
+    <div class="sec-label">🎓 Texas A&amp;M University</div>
+
+    <div class="tamu-intro-card">
+        <div class="tamu-intro-header">
+            <div class="tamu-logo-box"><img src="tamu.svg" alt="TAMU"></div>
+            <div>
+                <div class="tamu-intro-badge">TAMU · College Station, TX</div>
+                <div style="font-size:15px;font-weight:700;color:var(--navy);">Texas A&amp;M University</div>
+            </div>
+        </div>
+        <div style="font-size:13px;color:var(--sub);line-height:1.65;">
+            미국 텍사스주 College Station에 위치한 플래그십 주립대학교. 공학 및 컴퓨터과학 분야에서 미국 상위권으로 꼽히며, 연구 중심 대학(R1)으로 분류됩니다.
+        </div>
+        <div class="tamu-stat-grid">
+            <div class="tamu-stat">
+                <div class="tamu-stat-val">#1</div>
+                <div class="tamu-stat-desc">텍사스 주립대 시스템</div>
+            </div>
+            <div class="tamu-stat">
+                <div class="tamu-stat-val">~74,000</div>
+                <div class="tamu-stat-desc">재학생 수 (2024)</div>
+            </div>
+            <div class="tamu-stat">
+                <div class="tamu-stat-val">R1</div>
+                <div class="tamu-stat-desc">최상위 연구 대학</div>
+            </div>
+            <div class="tamu-stat">
+                <div class="tamu-stat-val">CS 석사</div>
+                <div class="tamu-stat-desc">전공 · 2026 가을 입학</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 지도 교수 소개 ══ -->
+    <div class="sec-label">👨‍🏫 지도 교수 소개</div>
+
+    <div class="prof-card">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+            <img src="headshot.png" alt="Zhengzhong Tu" style="width:64px;height:64px;border-radius:14px;object-fit:cover;border:2px solid rgba(255,255,255,0.2);">
+            <div>
+                <div class="prof-name">Zhengzhong Tu</div>
+                <div class="prof-title" style="margin-bottom:0;">지도 교수 · Dept. of Computer Science &amp; Engineering</div>
+            </div>
+        </div>
+        <div class="prof-career">
+            <div class="prof-career-item">
+                <div class="prof-career-logo"><img src="tamu.svg" alt="TAMU"></div>
+                <div>
+                    <div class="prof-career-text">Assistant Professor, Texas A&amp;M University</div>
+                    <div class="prof-career-year">2024 – 현재</div>
+                </div>
+            </div>
+            <div class="prof-career-item">
+                <div class="prof-career-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google"></div>
+                <div>
+                    <div class="prof-career-text">Research Engineer, Google Research</div>
+                    <div class="prof-career-year">2022 – 2024</div>
+                </div>
+            </div>
+            <div class="prof-career-item">
+                <div class="prof-career-logo"><img src="University_of_Texas_at_Austin_seal.svg" alt="UT Austin"></div>
+                <div>
+                    <div class="prof-career-text">Ph.D. in ECE, University of Texas at Austin</div>
+                    <div class="prof-career-year">2018 – 2022</div>
+                </div>
+            </div>
+            <div class="prof-career-item">
+                <div class="prof-career-logo"><img src="Fudan_University_Logo.svg" alt="Fudan"></div>
+                <div>
+                    <div class="prof-career-text">M.S. &amp; B.S. in EE, Fudan University (Shanghai)</div>
+                    <div class="prof-career-year">학부 · 석사</div>
+                </div>
+            </div>
+        </div>
+        <div class="prof-research">
+            <div class="prof-research-label">현재 연구 분야 (둘 중 하나 할 예정)</div>
+            <div class="prof-research-tags">
+                <span class="prof-tag">🎬 동영상 생성 (Video Generation)</span>
+                <span class="prof-tag">🤖 AI 에이전트</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 납부 데드라인 ══ -->
+    <div class="sec-label">⏰ 주요 데드라인</div>
+
+    <div class="card">
+        <div class="card-head">
+            <div class="card-icon">📅</div>
+            <div>
+                <div class="card-title">Fall 2026 전체 납부 일정</div>
+                <div class="card-sub">등록금 · 보험 · 기숙사 모든 항목 포함</div>
+            </div>
+        </div>
+        <div class="timeline">
+            <div class="tl-line"></div>
+            <div class="tl-item">
+                <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+                <div class="tl-body">
+                    <div class="tl-date">2026년 7월 28일</div>
+                    <div class="tl-title">등록금 청구서 오픈</div>
+                    <div class="tl-note">Howdy 포털 확인 · 분할납부 신청 시작</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot-wrap"><div class="tl-dot money"></div></div>
+                <div class="tl-body">
+                    <div class="tl-date">2026년 8월 1일</div>
+                    <div class="tl-title">신입생 도착 보험</div>
+                    <div class="tl-amount">$262.50 <span class="pill-krw" data-usd="262.50"></span></div>
+                    <div class="tl-note">8월 1일 ~ 8월 31일</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot-wrap"><div class="tl-dot money"></div></div>
+                <div class="tl-body">
+                    <div class="tl-date">2026년 8월 15일</div>
+                    <div class="tl-title">8월 기숙사비</div>
+                    <div class="tl-amount">$931 <span class="pill-krw" data-usd="931"></span></div>
+                    <div class="tl-note">Gardens Apartment · TAMU 학생 계정 청구</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot-wrap"><div class="tl-dot money"></div></div>
+                <div class="tl-body">
+                    <div class="tl-date">2026년 8월 21일 오후 5시 ⚠️</div>
+                    <div class="tl-title">1차 등록금 납부 마감</div>
+                    <div class="tl-amount">$3,613 <span class="pill-krw" data-usd="3613"></span></div>
+                    <div class="tl-note">등록금 1차 $3,563 + 분할신청비 $50</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot-wrap"><div class="tl-dot money"></div></div>
+                <div class="tl-body">
+                    <div class="tl-date">2026년 9월 1일</div>
+                    <div class="tl-title">Fall 건강보험 + 9월 기숙사비</div>
+                    <div class="tl-amount">$1,982 <span class="pill-krw" data-usd="1982"></span></div>
+                    <div class="tl-note">건강보험 $1,051 (9~12월) + 기숙사 $931</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot-wrap"><div class="tl-dot money"></div></div>
+                <div class="tl-body">
+                    <div class="tl-date">2026년 9월 18일 오후 5시</div>
+                    <div class="tl-title">2차 등록금 납부 마감</div>
+                    <div class="tl-amount">$3,563 <span class="pill-krw" data-usd="3563.45"></span></div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot-wrap"><div class="tl-dot money"></div></div>
+                <div class="tl-body">
+                    <div class="tl-date">2026년 10월 1일</div>
+                    <div class="tl-title">10월 기숙사비</div>
+                    <div class="tl-amount">$931 <span class="pill-krw" data-usd="931"></span></div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot-wrap"><div class="tl-dot money"></div></div>
+                <div class="tl-body">
+                    <div class="tl-date">2026년 10월 16일 오후 5시</div>
+                    <div class="tl-title">3차 등록금 납부 마감</div>
+                    <div class="tl-amount">$3,563 <span class="pill-krw" data-usd="3563.45"></span></div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot-wrap"><div class="tl-dot money"></div></div>
+                <div class="tl-body">
+                    <div class="tl-date">2026년 11월 1일</div>
+                    <div class="tl-title">11월 기숙사비</div>
+                    <div class="tl-amount">$931 <span class="pill-krw" data-usd="931"></span></div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot-wrap"><div class="tl-dot money"></div></div>
+                <div class="tl-body">
+                    <div class="tl-date">2026년 11월 20일 오후 5시</div>
+                    <div class="tl-title">4차 등록금 납부 마감</div>
+                    <div class="tl-amount">$3,563 <span class="pill-krw" data-usd="3563.45"></span></div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot-wrap"><div class="tl-dot money"></div></div>
+                <div class="tl-body">
+                    <div class="tl-date">2026년 12월 1일</div>
+                    <div class="tl-title">12월 기숙사비</div>
+                    <div class="tl-amount">$931 <span class="pill-krw" data-usd="931"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 총 예상 비용 ══ -->
+    <div class="sec-label">💰 1년 총 예상 비용</div>
+
+    <div class="sum-card">
+        <div class="sum-label">1년 전체 예상 합계 (용돈 포함)</div>
+        <div class="sum-big" id="sum-grand-usd">$46,384</div>
+        <div class="sum-big-krw" id="sum-grand-krw">약 6,958만원</div>
+        <hr class="sum-divider">
+        <div class="sum-row">
+            <span class="sum-row-label">등록금 Fall 2026</span>
+            <div class="sum-row-vals">
+                <span class="sum-row-usd">$15,567</span>
+                <span class="sum-row-krw" id="sum-fall-krw">₩2,335만원</span>
+            </div>
+        </div>
+        <div class="sum-row">
+            <span class="sum-row-label">등록금 Spring 2027 <span style="font-size:10px;opacity:0.5">(예상)</span></span>
+            <div class="sum-row-vals">
+                <span class="sum-row-usd">~$15,305</span>
+                <span class="sum-row-krw" id="sum-spring-krw">~₩2,296만원</span>
+            </div>
+        </div>
+        <div class="sum-row">
+            <span class="sum-row-label">기숙사 (9.5개월)</span>
+            <div class="sum-row-vals">
+                <span class="sum-row-usd">$8,845</span>
+                <span class="sum-row-krw" id="sum-housing-krw">₩1,327만원</span>
+            </div>
+        </div>
+        <div class="sum-row">
+            <span class="sum-row-label">용돈 (10개월)</span>
+            <div class="sum-row-vals">
+                <span class="sum-row-usd" id="sum-allow-usd">$6,667</span>
+                <span class="sum-row-krw" id="sum-allow-krw">₩1,000만원</span>
+            </div>
+        </div>
+        <div class="sum-row total-row">
+            <span class="sum-row-label" style="color:rgba(255,255,255,0.9);font-weight:600;">총 합계</span>
+            <div class="sum-row-vals">
+                <span class="sum-row-usd" id="sum-total-usd">$46,384</span>
+                <span class="sum-row-krw" id="sum-total-krw">약 6,958만원</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ 월 용돈 설정 ══ -->
+    <div class="sec-label">📬 매달 받는 돈 (용돈 설정)</div>
+
+    <div class="allow-card">
+        <div class="allow-title">💰 매달 보낼 용돈</div>
+        <div class="allow-sub">슬라이더로 조정하면 아래 송금 일정이 자동으로 업데이트됩니다</div>
+
+        <div class="allow-display">
+            <div>
+                <div class="allow-main" id="allow-krw-label">100만원</div>
+                <div style="font-size:12px;color:#8B5E1A;margin-top:2px;">/ 월</div>
+            </div>
+            <div class="allow-usd-right">
+                <span style="font-size:12px;color:#A07030;">달러 환산</span>
+                <span class="allow-usd-big" id="allow-usd-label">$667/월</span>
+            </div>
+        </div>
+
+        <input type="range" id="allowance-slider" min="0" max="3000000" step="50000" value="1000000">
+        <div class="slider-labels"><span>₩0</span><span>₩150만원</span><span>₩300만원</span></div>
+
+        <div class="allow-year">
+            <div class="allow-year-label">10개월 합계</div>
+            <div class="allow-year-right">
+                <div class="allow-year-val" id="allow-year-krw">1,000만원</div>
+                <div class="allow-year-usd" id="allow-year-usd">$6,667</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 부모님 송금 일정 ══ -->
+    <div class="sec-label">📤 월별 송금 일정</div>
+
+    <div class="card" style="padding:14px 16px;margin-bottom:12px;">
+        <div style="font-size:13px;color:var(--sub);line-height:1.7;">
+            국제 송금(Flywire)은 <strong style="color:var(--text)">2~5영업일</strong> 소요됩니다.<br>
+            납부 마감일 <strong style="color:var(--text)">1~2주 전</strong>에 미리 보내주세요.
+        </div>
+    </div>
+
+    <div id="schedule-container"></div>
+
+    <!-- ══ 기숙사 ══ -->
+    <div class="sec-label">🏠 기숙사</div>
+
+    <div class="card">
+        <div class="card-head">
+            <div class="card-icon">🏠</div>
+            <div>
+                <div class="card-title">Gardens Apartment</div>
+                <div class="card-sub">2인 1실, 화장실 1개 <span class="badge badge-green">가장 저렴한 옵션</span></div>
+            </div>
+        </div>
+        <div class="fee-row">
+            <div class="fee-name">
+                월 임대료
+                <div class="fee-hint">매월 TAMU 학생 계정으로 청구 · 룸메이트: Hyunjoon Jo (한국인)</div>
+            </div>
+            <div class="amt" data-usd="931">
+                <span class="amt-d">$931</span>
+                <span class="amt-w"></span>
+            </div>
+        </div>
+        <div class="fee-row">
+            <div class="fee-name">계약 기간</div>
+            <div style="font-size:13px;font-weight:600;text-align:right;line-height:1.5;color:var(--text);">2026.08.15<br>~ 2027.05.31</div>
+        </div>
+        <div class="fee-row">
+            <div class="fee-name">총 계약 기간</div>
+            <div style="font-size:15px;font-weight:600;color:var(--text);">9.5개월</div>
+        </div>
+        <div class="total-pill amber">
+            <div class="total-pill-label">기숙사 전체 합계</div>
+            <div class="total-pill-right">
+                <span class="total-pill-usd">$8,844.50</span>
+                <span class="total-pill-krw" data-pill="8844.5"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 등록금 Fall ══ -->
+    <div class="sec-label">📚 등록금 — Fall 2026 (확정)</div>
+
+    <div class="card">
+        <div class="card-head">
+            <div class="card-icon">📚</div>
+            <div>
+                <div class="card-title">2026년 가을학기</div>
+                <div class="card-sub">컴퓨터공학 석사 · 국제학생 기준</div>
+            </div>
+        </div>
+        <div class="group-label">등록금 청구 항목</div>
+        <div class="fee-row">
+            <div class="fee-name">기본 등록금 &amp; 필수 비용<div class="fee-hint">Tuition &amp; Required Fees</div></div>
+            <div class="amt" data-usd="11688.80"><span class="amt-d">$11,688.80</span><span class="amt-w"></span></div>
+        </div>
+        <div class="fee-row">
+            <div class="fee-name">공대 대학원 프로그램비<div class="fee-hint">Engineering Graduate Program Fee</div></div>
+            <div class="amt" data-usd="2565"><span class="amt-d">$2,565.00</span><span class="amt-w"></span></div>
+        </div>
+        <div class="fee-row">
+            <div class="fee-name">국제학생 서비스비<div class="fee-hint">ISSS Fee · 위 항목에 포함</div></div>
+            <div class="amt" data-usd="150"><span class="amt-d">$150.00</span><span class="amt-w"></span></div>
+        </div>
+        <div class="total-pill amber">
+            <div class="total-pill-label">등록금 청구액 소계</div>
+            <div class="total-pill-right">
+                <span class="total-pill-usd">$14,253.80</span>
+                <span class="total-pill-krw" data-pill="14253.80"></span>
+            </div>
+        </div>
+        <div class="group-label" style="margin-top:18px;">건강보험 (별도 청구)</div>
+        <div class="fee-row">
+            <div class="fee-name">신입생 도착 보험<div class="fee-hint">8월 1일 ~ 8월 31일</div></div>
+            <div class="amt" data-usd="262.50"><span class="amt-d">$262.50</span><span class="amt-w"></span></div>
+        </div>
+        <div class="fee-row">
+            <div class="fee-name">가을학기 건강보험<div class="fee-hint">9월 1일 ~ 12월 31일</div></div>
+            <div class="amt" data-usd="1051"><span class="amt-d">$1,051.00</span><span class="amt-w"></span></div>
+        </div>
+        <div class="total-pill blue" style="margin-top:12px;">
+            <div class="total-pill-label">Fall 2026 총계</div>
+            <div class="total-pill-right">
+                <span class="total-pill-usd">$15,567.30</span>
+                <span class="total-pill-krw" data-pill="15567.30"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 등록금 Spring ══ -->
+    <div class="sec-label">📚 등록금 — Spring 2027 <span class="badge badge-gray">예상치</span></div>
+
+    <div class="card">
+        <div class="card-head">
+            <div class="card-icon">📚</div>
+            <div>
+                <div class="card-title">2027년 봄학기</div>
+                <div class="card-sub">Fall 2026 기준 추정 · 실제와 다를 수 있음</div>
+            </div>
+        </div>
+        <div class="fee-row">
+            <div class="fee-name">등록금 (Fall과 유사 예상)</div>
+            <div class="amt" data-usd="14253.80" style="opacity:0.65;"><span class="amt-d">~$14,253.80</span><span class="amt-w"></span></div>
+        </div>
+        <div class="fee-row">
+            <div class="fee-name">봄학기 건강보험<div class="fee-hint">1월 ~ 5월</div></div>
+            <div class="amt" data-usd="1051" style="opacity:0.65;"><span class="amt-d">~$1,051.00</span><span class="amt-w"></span></div>
+        </div>
+        <div class="total-pill gray">
+            <div class="total-pill-label">Spring 2027 예상 총계</div>
+            <div class="total-pill-right">
+                <span class="total-pill-usd">~$15,304.80</span>
+                <span class="total-pill-krw" data-pill="15304.80"></span>
+            </div>
+        </div>
+        <div class="info-box amber" style="margin-top:12px;">⚠️ <strong>참고:</strong> Spring 청구서는 아직 미발행. 발행 후 실제 금액 확인 필요.</div>
+    </div>
+
+    <!-- ══ 분할납부 ══ -->
+    <div class="sec-label">💳 분할납부 안내</div>
+
+    <div class="card">
+        <div class="card-head">
+            <div class="card-icon">💳</div>
+            <div>
+                <div class="card-title">4회 분할납부 플랜</div>
+                <div class="card-sub">등록금 $14,253.80 ÷ 4 + $50 신청비</div>
+            </div>
+        </div>
+        <div class="install-grid">
+            <div class="install-cell">
+                <div class="install-cell-num">1차</div>
+                <div class="install-cell-date">8월 21일</div>
+                <div class="install-cell-amt">$3,613</div>
+                <div class="install-cell-krw" data-pill="3613"></div>
+            </div>
+            <div class="install-cell">
+                <div class="install-cell-num">2차</div>
+                <div class="install-cell-date">9월 18일</div>
+                <div class="install-cell-amt">$3,563</div>
+                <div class="install-cell-krw" data-pill="3563.45"></div>
+            </div>
+            <div class="install-cell">
+                <div class="install-cell-num">3차</div>
+                <div class="install-cell-date">10월 16일</div>
+                <div class="install-cell-amt">$3,563</div>
+                <div class="install-cell-krw" data-pill="3563.45"></div>
+            </div>
+            <div class="install-cell">
+                <div class="install-cell-num">4차</div>
+                <div class="install-cell-date">11월 20일</div>
+                <div class="install-cell-amt">$3,563</div>
+                <div class="install-cell-krw" data-pill="3563.45"></div>
+            </div>
+        </div>
+        <div class="info-box green" style="margin-top:14px;">✅ 신청 시 <strong>$50 수수료(비환불)</strong>가 1차에 추가됩니다. 7월 28일 이후 Howdy 포털에서 신청 가능.</div>
+    </div>
+
+    <!-- ══ 송금 방법 ══ -->
+    <div class="sec-label">🌏 송금 방법</div>
+
+    <div class="flywire-card">
+        <div class="fw-badge">한국에서 추천</div>
+        <div class="fw-title">🌏 Flywire 국제 송금</div>
+        <div class="fw-desc">한국 원화(KRW)로 직접 송금할 수 있는 TAMU 공식 지원 서비스입니다.</div>
+        <div class="fw-steps">
+            <div class="fw-step"><div class="fw-num">1</div><div class="fw-text">Howdy 포털 → My Finances → Pay My Tuition 접속</div></div>
+            <div class="fw-step"><div class="fw-num">2</div><div class="fw-text">Flywire 선택 → 국가: 대한민국 선택</div></div>
+            <div class="fw-step"><div class="fw-num">3</div><div class="fw-text">원화 금액 확인 후 은행 이체 또는 카드 결제</div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="method-item">
+            <div class="method-icon-box">🏦</div>
+            <div>
+                <div class="method-name">미국 계좌 이체 (eCheck)</div>
+                <div class="method-desc">세직이가 미국 은행 계좌 개설 후 직접 납부. 수수료 없음 ✅</div>
+            </div>
+        </div>
+        <div class="method-item">
+            <div class="method-icon-box">💳</div>
+            <div>
+                <div class="method-name">신용카드</div>
+                <div class="method-desc">VISA, MasterCard 사용 가능. 결제 금액의 <strong>2.25% 수수료</strong> 발생</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box amber" style="border-radius:14px;padding:16px 18px;margin-top:4px;font-size:14px;line-height:1.7;">
+        <strong>📌 부모님께</strong><br>
+        위 금액은 등록금·기숙사비 기준입니다. 책, 여행, 비상금 등 추가 지출은 별도로 여유 있게 예산을 잡아두시면 좋습니다. 
+    </div>
+
+</div>
+
+<div class="footer">
+    Sejik Park💙<br>
+    <span>Texas A&amp;M University · Computer Science &amp; Engineering M.S. · 2026–2027</span>
+</div>
+
+<script>
+    // ── State
+    let rate = 1500;
+    let rateSource = 'fallback';
+    let allowanceKRW = 1_000_000;
+    let showSpring = false;
+
+    // ── Formatters
+    function fmtUSD(n) {
+        return '$' + Math.round(n).toLocaleString('en-US');
+    }
+    function fmtKRW(n) {
+        const man = Math.round(n / 10000);
+        if (man >= 10000) {
+            const eok = Math.floor(man / 10000);
+            const rem = man % 10000;
+            return rem === 0 ? `약 ${eok}억원` : `약 ${eok}억 ${rem.toLocaleString()}만원`;
+        }
+        return `약 ${man.toLocaleString()}만원`;
+    }
+    function fmtKRWShort(n) {
+        return Math.round(n / 10000).toLocaleString() + '만원';
+    }
+
+    // ── Schedule data
+    const SCHEDULE = [
+        {
+            sendBy: '8월 1일',
+            dueNote: '등록금 1차 마감 8/21 · 20일 여유',
+            semester: 'Fall 2026', estimated: false,
+            items: [
+                { label: '1차 등록금 분할', usd: 3563.45, due: '마감 8월 21일 오후 5시' },
+                { label: '분할납부 신청비', usd: 50, due: '마감 8월 21일 오후 5시' },
+                { label: '신입생 도착 보험 (8월)', usd: 262.50, due: '청구 8월 1일 · 보장 8/1~8/31' },
+                { label: '8월 기숙사', usd: 931, due: '청구 8월 15일 (입주일)' },
+            ],
+        },
+        {
+            sendBy: '9월 1일',
+            dueNote: '등록금 2차 마감 9/18 · Fall 건강보험 포함',
+            semester: 'Fall 2026', estimated: false,
+            items: [
+                { label: '2차 등록금 분할', usd: 3563.45, due: '마감 9월 18일 오후 5시' },
+                { label: 'Fall 건강보험 (9~12월)', usd: 1051, due: '청구 9월 1일 · 보장 9/1~12/31' },
+                { label: '9월 기숙사', usd: 931, due: '청구 9월 1일' },
+            ],
+        },
+        {
+            sendBy: '10월 1일',
+            dueNote: '등록금 3차 마감 10/16',
+            semester: 'Fall 2026', estimated: false,
+            items: [
+                { label: '3차 등록금 분할', usd: 3563.45, due: '마감 10월 16일 오후 5시' },
+                { label: '10월 기숙사', usd: 931, due: '청구 10월 1일' },
+            ],
+        },
+        {
+            sendBy: '11월 1일',
+            dueNote: '등록금 4차 마감 11/20 · 마지막 등록금',
+            semester: 'Fall 2026', estimated: false,
+            items: [
+                { label: '4차 등록금 분할 (마지막)', usd: 3563.45, due: '마감 11월 20일 오후 5시' },
+                { label: '11월 기숙사', usd: 931, due: '청구 11월 1일' },
+            ],
+        },
+        {
+            sendBy: '12월 1일',
+            dueNote: '등록금 없는 달 · 기숙사 + 생활비만',
+            semester: 'Fall 2026', estimated: false,
+            items: [
+                { label: '12월 기숙사', usd: 931, due: '청구 12월 1일' },
+            ],
+        },
+        {
+            sendBy: '1월 1일',
+            dueNote: 'Spring 1차 납부 대비 · Spring 건강보험 포함 (예상)',
+            semester: 'Spring 2027', estimated: true,
+            items: [
+                { label: 'Spring 1차 등록금 (예상)', usd: 3563.45 },
+                { label: 'Spring 건강보험 (예상)', usd: 1051 },
+                { label: '1월 기숙사', usd: 931 },
+            ],
+        },
+        {
+            sendBy: '2월 1일',
+            dueNote: 'Spring 2차 납부 대비 (예상)',
+            semester: 'Spring 2027', estimated: true,
+            items: [
+                { label: 'Spring 2차 등록금 (예상)', usd: 3563.45 },
+                { label: '2월 기숙사', usd: 931 },
+            ],
+        },
+        {
+            sendBy: '3월 1일',
+            dueNote: 'Spring 3차 납부 대비 (예상)',
+            semester: 'Spring 2027', estimated: true,
+            items: [
+                { label: 'Spring 3차 등록금 (예상)', usd: 3563.45 },
+                { label: '3월 기숙사', usd: 931 },
+            ],
+        },
+        {
+            sendBy: '4월 1일',
+            dueNote: 'Spring 4차 납부 대비 (예상)',
+            semester: 'Spring 2027', estimated: true,
+            items: [
+                { label: 'Spring 4차 등록금 (예상)', usd: 3563.45 },
+                { label: '4월 기숙사', usd: 931 },
+            ],
+        },
+        {
+            sendBy: '5월 1일',
+            dueNote: '마지막 달 · 기숙사만 (예상)',
+            semester: 'Spring 2027', estimated: true,
+            items: [
+                { label: '5월 기숙사 (마지막)', usd: 931 },
+            ],
+        },
+    ];
+
+    // ── Render schedule
+    function renderSchedule() {
+        const container = document.getElementById('schedule-container');
+        const allowUSD = allowanceKRW / rate;
+        let html = '';
+        let prevSem = '';
+
+        SCHEDULE.forEach((entry) => {
+            if (entry.estimated && !showSpring) return;
+
+            if (entry.semester !== prevSem) {
+                prevSem = entry.semester;
+                html += `<div class="sc-semester-label">${entry.semester}${entry.estimated ? ' <span class="sc-est-badge">예상치</span>' : ''}</div>`;
+            }
+
+            const itemsTotal = entry.items.reduce((s, it) => s + it.usd, 0);
+            const totalUSD = itemsTotal + allowUSD;
+
+            const rows = entry.items.map(it => `
+                <div class="sc-row">
+                    <span class="sc-row-label">
+                        ${it.label}
+                        ${it.due ? `<span style="display:block;font-size:10px;color:var(--amber);margin-top:1px;">${it.due}</span>` : ''}
+                    </span>
+                    <div class="sc-row-right">
+                        <span class="sc-row-usd">${fmtUSD(it.usd)}</span>
+                        <span class="sc-row-krw">${fmtKRWShort(it.usd * rate)}</span>
+                    </div>
+                </div>`).join('');
+
+            html += `
+                <div class="sc-card${entry.estimated ? ' est' : ''}">
+                    <div class="sc-send-date">${entry.sendBy}</div>
+                    <div class="sc-due">${entry.dueNote}</div>
+                    <div class="sc-rows">
+                        ${rows}
+                        <div class="sc-row allowance">
+                            <span class="sc-row-label">월 용돈</span>
+                            <div class="sc-row-right">
+                                <span class="sc-row-usd">${fmtUSD(allowUSD)}</span>
+                                <span class="sc-row-krw">${fmtKRWShort(allowanceKRW)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sc-total">
+                        <span class="sc-total-label">이번에 보낼 금액</span>
+                        <div class="sc-total-right">
+                            <span class="sc-total-usd">${fmtUSD(totalUSD)}</span>
+                            <span class="sc-total-krw">${fmtKRW(totalUSD * rate)}</span>
+                        </div>
+                    </div>
+                </div>`;
+        });
+
+        // Spring toggle button
+        const btn = showSpring
+            ? `<button class="spring-toggle" onclick="toggleSpring()">Spring 2027 일정 접기 ▲</button>`
+            : `<button class="spring-toggle" onclick="toggleSpring()">Spring 2027 일정 보기 (예상치) ▼</button>`;
+
+        container.innerHTML = html + btn;
+    }
+
+    function toggleSpring() {
+        showSpring = !showSpring;
+        renderSchedule();
+    }
+
+    // ── Update .amt elements
+    function updateAmts() {
+        document.querySelectorAll('.amt[data-usd]').forEach(el => {
+            const w = el.querySelector('.amt-w');
+            if (w) w.textContent = fmtKRW(parseFloat(el.dataset.usd) * rate);
+        });
+        document.querySelectorAll('[data-pill]').forEach(el => {
+            el.textContent = fmtKRW(parseFloat(el.dataset.pill) * rate);
+        });
+        document.querySelectorAll('.pill-krw[data-usd]').forEach(el => {
+            el.textContent = '(' + fmtKRWShort(parseFloat(el.dataset.usd) * rate) + ')';
+            el.style.fontSize = '12px';
+            el.style.fontWeight = '400';
+            el.style.opacity = '0.7';
+        });
+    }
+
+    // ── Update summary
+    function updateSummary() {
+        const allowUSD10 = (allowanceKRW / rate) * 10;
+        const allow10KRW = allowanceKRW * 10;
+        const grandUSD = 39717 + allowUSD10;
+        const grandKRW = grandUSD * rate;
+
+        document.getElementById('sum-fall-krw').textContent    = fmtKRWShort(15567 * rate);
+        document.getElementById('sum-spring-krw').textContent  = '~' + fmtKRWShort(15305 * rate);
+        document.getElementById('sum-housing-krw').textContent = fmtKRWShort(8845 * rate);
+        document.getElementById('sum-allow-usd').textContent   = fmtUSD(allowUSD10);
+        document.getElementById('sum-allow-krw').textContent   = fmtKRWShort(allow10KRW);
+        document.getElementById('sum-grand-usd').textContent   = fmtUSD(grandUSD);
+        document.getElementById('sum-grand-krw').textContent   = fmtKRW(grandKRW);
+        document.getElementById('sum-total-usd').textContent   = fmtUSD(grandUSD);
+        document.getElementById('sum-total-krw').textContent   = fmtKRW(grandKRW);
+    }
+
+    // ── Update allowance display
+    function updateAllowanceDisplay() {
+        const usd = allowanceKRW / rate;
+        const man = allowanceKRW / 10000;
+        document.getElementById('allow-krw-label').textContent  = man.toLocaleString() + '만원';
+        document.getElementById('allow-usd-label').textContent  = fmtUSD(usd) + '/월';
+        document.getElementById('allow-year-krw').textContent   = (man * 10).toLocaleString() + '만원';
+        document.getElementById('allow-year-usd').textContent   = fmtUSD(usd * 10);
+    }
+
+    // ── Rate badge
+    function updateRateBadge() {
+        const el = document.getElementById('rate-badge');
+        if (rateSource === 'live') {
+            el.innerHTML = `<span class="rate-dot"></span> $1 = ₩${rate.toLocaleString()}`;
+        } else {
+            el.innerHTML = `인터넷 연결 불가로 환율 1,500원 적용`;
+        }
+    }
+
+    // ── Full update
+    function updateAll() {
+        updateRateBadge();
+        updateAmts();
+        updateSummary();
+        updateAllowanceDisplay();
+        renderSchedule();
+    }
+
+    // ── Slider
+    document.getElementById('allowance-slider').addEventListener('input', function () {
+        allowanceKRW = parseInt(this.value);
+        updateAllowanceDisplay();
+        updateSummary();
+        renderSchedule();
+    });
+
+    // ── Fetch live rate
+    async function fetchRate() {
+        try {
+            const ctrl = new AbortController();
+            setTimeout(() => ctrl.abort(), 5000);
+            const res = await fetch('https://open.er-api.com/v6/latest/USD', { signal: ctrl.signal });
+            const d = await res.json();
+            if (d.result === 'success' && d.rates && d.rates.KRW) {
+                rate = Math.round(d.rates.KRW);
+                rateSource = 'live';
+            }
+        } catch (_) {}
+        updateAll();
+    }
+
+    // ── Init
+    updateAll();
+    fetchRate();
+</script>
+</body>
+</html>
