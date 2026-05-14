@@ -8,7 +8,7 @@
         "image": "/uploads/1776935911791_3974.gif",
         "timestamp": "2026-04-23T18:18:31.806955",
         "reactions": {
-          "❤️": 1,
+          "❤️": 2,
           "😂": 1,
           "🔥": 1,
           "👍": 1
@@ -34,7 +34,7 @@
         "timestamp": "2026-04-24T23:28:15.508605",
         "reactions": {
           "❤️": 0,
-          "😂": 0,
+          "😂": 5,
           "🔥": 0,
           "👍": 0,
           "✈️": 0,
@@ -119,6 +119,32 @@
         "replies": [],
         "_fp": "fosop7ty83tmocnaq99"
       }
+    ],
+    "day21": [
+      {
+        "id": 1777546760312,
+        "nickname": "Sejik",
+        "text": "🤫",
+        "image": null,
+        "timestamp": "2026-04-30T19:59:20.312529",
+        "reactions": {
+          "❤️": 0,
+          "😂": 0,
+          "🔥": 0,
+          "👍": 0,
+          "✈️": 0,
+          "🍜": 0,
+          "🏯": 0,
+          "🫡": 0,
+          "😭": 0,
+          "✅": 0,
+          "😱": 0,
+          "🤮": 0,
+          "🤨": 0
+        },
+        "replies": [],
+        "_fp": "z6fglth47tjmocoxuft"
+      }
     ]
   },
   "reactions": {
@@ -147,6 +173,12 @@
       "text": "HAUS NOWHERE SEOUL",
       "nickname": "Jere",
       "timestamp": "2026-04-24T23:03:32.569243"
+    },
+    {
+      "id": 1777485750281,
+      "text": "Dongdaemun Design Plaza",
+      "nickname": "Jere",
+      "timestamp": "2026-04-30T03:02:30.281442"
     }
   ]
 }

@@ -41,7 +41,34 @@ function initGlobe() {
   let t0 = performance.now();
   // Scroll-driven rotation: starts at FIXED_ROT, rotates as user scrolls
   const ROT_BASE = 83;
-  let scrollRot = 0; // additional rotation from scroll
+  let scrollRot = 0;
+  // Focus state — when hovering a calendar card
+  let focusTarget = null; // {lat, lon} or null
+  let focusLat = 0, focusLon = 0; // current animated values
+  let focusActive = 0; // 0 → 1 progress
+  let zoomTarget = 1, zoomCurrent = 1;
+  window.KG_GLOBE_FOCUS = function(coord, zoom) {
+    if (coord) {
+      focusTarget = { lat: coord[0], lon: coord[1] };
+      zoomTarget = (typeof zoom === 'number') ? zoom : 1;
+    } else {
+      focusTarget = null;
+      zoomTarget = 1;
+    }
+  };
+  // Initialize from sessionStorage (when coming back from day.html)
+  try {
+    const saved = sessionStorage.getItem('kg_globe_focus');
+    if (saved) {
+      const o = JSON.parse(saved);
+      focusTarget = { lat: o.lat, lon: o.lon };
+      focusLat = o.lat; focusLon = o.lon;
+      focusActive = 1; zoomCurrent = o.zoom || 1; zoomTarget = 1;
+      // Release focus after a moment so the globe returns to default
+      setTimeout(() => { focusTarget = null; }, 700);
+      sessionStorage.removeItem('kg_globe_focus');
+    }
+  } catch(_) {}
   window.addEventListener('scroll', () => {
     // Every 100px scroll = 1 degree rotation
     scrollRot = window.scrollY * 0.01;
@@ -59,6 +86,36 @@ function initGlobe() {
     const y = -Math.sin(la) + mouseY * 0.3;
     const z = Math.cos(la) * Math.cos(lo);
     return { x: cx + r * x, y: cy + r * y, z };
+  }
+
+  // Land polygons
+  let landRings = [];
+  if (window.KG_GEO) {
+    window.KG_GEO.getLandRings().then(function(r) { landRings = r; });
+  }
+
+
+
+  function drawLand(cx, cy, r, rot) {
+    if (!landRings.length) return;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(26,20,16,0.38)';
+    ctx.lineWidth   = 0.9;
+    ctx.lineJoin    = 'round';
+    for (var ri = 0; ri < landRings.length; ri++) {
+      var ring = landRings[ri];
+      ctx.beginPath();
+      var first = true;
+      for (var pi = 0; pi < ring.length; pi++) {
+        var la = ring[pi][0], lo = ring[pi][1];
+        var p = toXY(la, lo, cx, cy, r, rot);
+        if (p.z <= 0.01) { first = true; continue; }
+        if (first) { ctx.moveTo(p.x, p.y); first = false; }
+        else ctx.lineTo(p.x, p.y);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
   }
 
   function drawGraticule(cx, cy, r, rot) {
@@ -95,15 +152,36 @@ function initGlobe() {
   function draw() {
     const now = performance.now();
     const elapsed = (now - t0);
-    const rotation = ROT_BASE + scrollRot; // base + scroll-driven
+    // Smooth focus animation
+    const ease = 0.08;
+    if (focusTarget) {
+      focusActive += (1 - focusActive) * ease;
+      // Animate longitude / latitude smoothly
+      let dLon = focusTarget.lon - focusLon;
+      // Wrap to nearest direction
+      if (dLon > 180) dLon -= 360;
+      if (dLon < -180) dLon += 360;
+      focusLon += dLon * ease;
+      focusLat += (focusTarget.lat - focusLat) * ease;
+    } else {
+      focusActive += (0 - focusActive) * ease;
+    }
+    zoomCurrent += (zoomTarget - zoomCurrent) * ease;
+
+    const baseRot = ROT_BASE + scrollRot;
+    // Blend base rotation with focus longitude
+    const focusedRot = focusLon;
+    const rotation = baseRot * (1 - focusActive) + focusedRot * focusActive;
     const pathProgress = Math.min(1, ((elapsed / 1000) % 10) / 7);
 
     const W = c.getBoundingClientRect().width;
     const H = c.getBoundingClientRect().height;
     const isMobile = W < 720;
     const cx = W / 2 + mouseX * 20;
-    const cy = H * (isMobile ? 0.55 : 0.52);
-    const r = Math.min(W, H) * 0.42;
+    const r = Math.min(W, H) * 0.42 * zoomCurrent;
+    // Vertical offset: shift globe so focused city ends up near center
+    const latOffset = focusActive * Math.sin(focusLat * Math.PI / 180) * r;
+    const cy = H * (isMobile ? 0.55 : 0.52) + latOffset;
 
     ctx.clearRect(0, 0, W, H);
 
@@ -121,6 +199,7 @@ function initGlobe() {
     ctx.lineWidth = 1;
     ctx.stroke();
 
+    drawLand(cx, cy, r, rotation);
     drawGraticule(cx, cy, r, rotation);
 
     // Animated flight arc
@@ -241,6 +320,25 @@ function initiateCardNav(e, card) {
   const href = card.getAttribute('href');
   const rect = card.getBoundingClientRect();
 
+  // Zoom globe to 3x at the day's city
+  const m = href.match(/d=(\d+)/);
+  if (m && typeof cityFor === 'function') {
+    const coord = cityFor(+m[1]);
+    if (coord && window.KG_GLOBE_FOCUS) {
+      window.KG_GLOBE_FOCUS(coord, 3);
+      // Persist for day.html
+      try {
+        sessionStorage.setItem('kg_globe_focus_day', JSON.stringify({
+          lat: coord[0], lon: coord[1], zoom: 3
+        }));
+        // Mark for return-from-day to restore
+        sessionStorage.setItem('kg_globe_focus_return', JSON.stringify({
+          lat: coord[0], lon: coord[1], zoom: 3
+        }));
+      } catch(_) {}
+    }
+  }
+
   // Phase 1: card flips to 90deg (disappears edge-on)
   const fly = document.createElement('div');
   fly.className = 'card-nav-fly';
@@ -259,25 +357,18 @@ function initiateCardNav(e, card) {
 
   // Step 1: flip to edge (90deg) while expanding slightly
   requestAnimationFrame(() => {
-    fly.style.transition = 'transform .22s cubic-bezier(.4,0,1,1), left .22s, top .22s, width .22s, height .22s, border-radius .22s';
+    fly.style.transition = 'transform .3s cubic-bezier(.4,0,1,1), left .3s, top .3s, width .3s, height .3s, border-radius .3s, opacity .3s';
     fly.style.transform = 'perspective(800px) rotateY(90deg)';
     fly.style.left = `${rect.left + rect.width/2 - window.innerWidth/2}px`;
     fly.style.top = `${rect.top + rect.height/2 - window.innerHeight/2}px`;
     fly.style.width = '100vw';
     fly.style.height = '100vh';
     fly.style.borderRadius = '0';
+    fly.style.opacity = '0.4';
   });
 
-  // Step 2: flip from edge to flat (parchment full-screen)
-  setTimeout(() => {
-    fly.style.transition = 'transform .22s cubic-bezier(0,0,.6,1)';
-    fly.style.left = '0'; fly.style.top = '0';
-    fly.style.transform = 'perspective(800px) rotateY(0deg)';
-    fly.style.background = 'var(--paper)';
-  }, 220);
-
-  // Navigate
-  setTimeout(() => { location.href = href; }, 460);
+  // Navigate after the flip + zoom completes
+  setTimeout(() => { location.href = href; }, 400);
 }
 
 function initTilt() {
@@ -347,6 +438,17 @@ async function renderCalendar() {
       </a>`;
   }).join('');
   initTilt();
+  // Globe focus on hover
+  document.querySelectorAll('.it-card[href^="day.html"]').forEach(card => {
+    const m = card.getAttribute('href').match(/d=(\d+)/);
+    if (!m) return;
+    const d = +m[1];
+    const coord = (typeof cityFor === 'function') ? cityFor(d) : null;
+    if (!coord) return;
+    card.addEventListener('mouseenter', () => window.KG_GLOBE_FOCUS && window.KG_GLOBE_FOCUS(coord, 2));
+    card.addEventListener('mouseleave', () => window.KG_GLOBE_FOCUS && window.KG_GLOBE_FOCUS(null));
+    card.addEventListener('focus', () => window.KG_GLOBE_FOCUS && window.KG_GLOBE_FOCUS(coord, 2));
+  });
 }
 
 async function renderWishlist() {

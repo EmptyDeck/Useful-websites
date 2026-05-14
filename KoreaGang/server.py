@@ -59,7 +59,7 @@ def load():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'r', encoding='utf-8') as f:
             return json.load(f)
-    return {'comments': {}, 'reactions': {}, 'hidden': {}, 'wishlist': []}
+    return {'comments': {}, 'reactions': {}, 'hidden': {}, 'wishlist': [], 'packing': {}}
 
 def save(d):
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
@@ -133,6 +133,7 @@ class H(http.server.SimpleHTTPRequestHandler):
             return self.ok({'hidden': bool(v), 'message': (v or {}).get('message','')})
         if path == '/api/hidden_days':
             return self.ok(normalize_hidden(d.get('hidden', {})))
+        if path == '/api/packing':    return self.ok(d.get('packing', {}))
         if path == '/api/wishlist':   return self.ok(d.get('wishlist', []))
         self.send_error(404)
 
@@ -161,6 +162,16 @@ class H(http.server.SimpleHTTPRequestHandler):
                     'text': text, 'nickname': nick,
                     'timestamp': datetime.now().isoformat(),
                 })
+                save(d)
+            return self.ok({'ok': True})
+
+        if route == '/api/packing':
+            key = (body.get('key') or '')[:60]
+            val = bool(body.get('value', False))
+            if not key: return self.ok({'ok': False})
+            with _lock:
+                d = load()
+                d.setdefault('packing', {})[key] = val
                 save(d)
             return self.ok({'ok': True})
 
@@ -208,6 +219,17 @@ class H(http.server.SimpleHTTPRequestHandler):
                             'text': (body.get('text') or '')[:500],
                             'timestamp': datetime.now().isoformat(),
                         })
+                save(d); return self.ok({'ok': True})
+
+            if route == '/api/reply/react':
+                cid = body.get('comment_id')
+                ridx = body.get('reply_index')
+                emoji = (body.get('emoji') or '')
+                for c in d['comments'].get(page, []):
+                    if c['id'] == cid and isinstance(ridx, int):
+                        if 0 <= ridx < len(c.get('replies', [])):
+                            c['replies'][ridx].setdefault('reactions', {})
+                            c['replies'][ridx]['reactions'][emoji] = c['replies'][ridx]['reactions'].get(emoji, 0) + 1
                 save(d); return self.ok({'ok': True})
 
             if route == '/api/admin/set_day_hide':
@@ -262,7 +284,7 @@ class H(http.server.SimpleHTTPRequestHandler):
         self.end_headers(); self.wfile.write(body)
 
     def end_headers(self):
-        p = self.path.split('?')[0]
+        p = getattr(self, 'path', '').split('?')[0]
         if p.endswith(('.html', '.js', '.css')):
             self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
         super().end_headers()

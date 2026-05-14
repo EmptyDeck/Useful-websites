@@ -218,7 +218,9 @@
   overflow: hidden;
 }
 @media (max-width: 560px) {
-  .it-card { padding: 12px 12px 44px; min-height: 160px; }
+  .it-card { padding: 12px 12px 58px; min-height: 160px; }
+  .it-tags { right: 86px; }
+  .it-cmt-badge { bottom: 44px; right: 12px; }
 }
 .it-card::before {
   content: "";

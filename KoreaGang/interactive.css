@@ -263,6 +263,7 @@
   display: block;
   border-radius: 2px;
 }
+.kg-rpl-form {
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px dashed var(--line);
@@ -305,6 +306,27 @@
   color: var(--ink-soft); margin-left: 8px;
 }
 .kg-reply p { margin-top: 4px; }
+
+.kg-reply-reacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+.kg-rrt {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 14px;
+  min-height: 32px;
+  transition: border-color .15s, transform .15s;
+}
+.kg-rrt:hover { border-color: var(--ink); transform: translateY(-1px); }
+.kg-rrt span { font-family: var(--mono); font-size: 10px; color: var(--ink-soft); }
 
 .kg-empty, .kg-loading {
   padding: 40px 0;

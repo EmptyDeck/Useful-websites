@@ -127,6 +127,15 @@ function renderSealed(msg) {
         <div class="kg-sealed-sub">It's a secret yet<br>Let Sejik Cook</div>
         <a href="_index.html" class="kg-sealed-back">← Back to calendar</a>
       </div>
+    </section>
+    <section class="wrap" style="padding-bottom:60px">
+      <div class="section-head">
+        <div>
+          <div class="section-eyebrow">§ Conversation</div>
+          <h2 class="section-title">Say <em>something.</em></h2>
+        </div>
+      </div>
+      <div id="kg-interactive"></div>
     </section>`;
 }
 
@@ -143,7 +152,7 @@ ready(async () => {
 
   if (hideInfo && !isAdm) {
     renderSealed(hideInfo.message);
-    // Still show admin banner if needed? No — guests don't see admin.
+    await initInteractive(pageKey);
     return;
   }
 

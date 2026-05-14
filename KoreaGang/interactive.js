@@ -140,15 +140,17 @@ async function postComment(page) {
 
 function renderComment(c, page) {
   const when = new Date(c.timestamp).toLocaleString('en-GB', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
-  const reacts = Object.entries(c.reactions || {}).map(([e,n]) =>
-    `<button class="kg-crt" onclick="cmtReact('${page}',${c.id},'${e}',this)">${e} <span>${n}</span></button>`
-  ).join('');
+  const reacts = REACT_EMOJIS.map(e => {
+    const n = (c.reactions || {})[e] || 0;
+    return `<button class="kg-crt" onclick="cmtReact('${page}',${c.id},'${e}',this)">${e} <span>${n}</span></button>`;
+  }).join('');
   const replies = (c.replies || []).map((r, ridx) => `
     <div class="kg-reply">
       <strong>${esc(r.nickname)}</strong>
       <time>${new Date(r.timestamp).toLocaleString('en-GB', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' })}</time>
       ${isAdmin() ? `<button class="kg-del" style="font-size:11px" onclick="adminDelReply('${page}',${c.id},${ridx})">✕</button>` : ''}
       <p>${esc(r.text)}</p>
+      <div class="kg-reply-reacts">${REACT_EMOJIS.map(e => { const n = (r.reactions||{})[e]||0; return `<button class="kg-rrt" onclick="replyReact('${page}',${c.id},${ridx},'${e}',this)">${e}${n>0?` <span>${n}</span>`:''}</button>`; }).join('')}</div>
     </div>`).join('');
   const adminDel = isAdmin() ? `<button class="kg-del" onclick="adminDel('${page}',${c.id})" title="Delete">Delete</button>` : '';
   return `
@@ -239,6 +241,15 @@ function lightbox(src) {
   lb.innerHTML = `<img src="${src}"><div class="kg-lb-close">✕ close</div>`;
   lb.onclick = () => lb.remove();
   document.body.appendChild(lb);
+}
+
+async function replyReact(page, commentId, replyIndex, emoji, btn) {
+  try {
+    await apiPost('/api/reply/react', { page, comment_id: commentId, reply_index: replyIndex, emoji });
+  } catch(_) {}
+  const s = btn.querySelector('span');
+  if (s) { s.textContent = +s.textContent + 1; }
+  else { btn.innerHTML = emoji + ' <span>1</span>'; }
 }
 
 // ===== Admin ================================================

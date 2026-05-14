@@ -334,7 +334,7 @@ class H(http.server.SimpleHTTPRequestHandler):
         self.end_headers(); self.wfile.write(body)
 
     def end_headers(self):
-        p = self.path.split('?')[0]
+        p = getattr(self, 'path', '').split('?')[0]
         if p.endswith(('.html', '.js', '.css')):
             self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
         super().end_headers()
