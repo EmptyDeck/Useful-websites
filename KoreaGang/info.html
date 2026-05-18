@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Travel Notes — KoreaGang 2026</title>
+  <link rel="stylesheet" href="common.css">
+  <style>
+    .info-hero {
+      padding: 120px 0 52px;
+      border-bottom: 1px solid var(--ink);
+    }
+    .info-eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .info-eyebrow::before { content: ""; width: 36px; height: 1px; background: var(--ink); display: block; }
+    .info-title {
+      font-family: var(--serif);
+      font-size: clamp(52px, 11vw, 140px);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      font-weight: 400;
+    }
+    .info-title em { font-style: italic; color: var(--dc-red); }
+    .info-intro {
+      margin-top: 22px;
+      font-size: 14px;
+      color: var(--ink-soft);
+      max-width: 460px;
+      line-height: 1.6;
+    }
+
+    /* ===== Section ===== */
+    .info-section {
+      padding: 52px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .info-section:last-child { border-bottom: none; }
+
+    .info-section-num {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+    }
+    .info-section-title {
+      font-family: var(--serif);
+      font-size: clamp(30px, 5vw, 52px);
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      font-weight: 400;
+      margin-bottom: 32px;
+    }
+    .info-section-title em { font-style: italic; color: var(--dc-red); }
+
+    /* ===== Alert box ===== */
+    .info-alert {
+      display: flex;
+      gap: 16px;
+      padding: 18px 20px;
+      margin-bottom: 28px;
+      border: 1px solid var(--line);
+      background: var(--paper-2);
+    }
+    .info-alert.red   { border-left: 4px solid var(--dc-red);    background: rgba(200,49,43,.04); }
+    .info-alert.blue  { border-left: 4px solid var(--dc-blue);   background: rgba(29,63,138,.04); }
+    .info-alert.green { border-left: 4px solid var(--dc-green);  background: rgba(30,107,92,.04); }
+    .info-alert.yellow{ border-left: 4px solid var(--dc-yellow); background: rgba(230,180,34,.06); }
+    .info-alert-body { flex: 1; }
+    .info-alert-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+    }
+    .info-alert-text {
+      font-family: var(--serif);
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+
+    /* ===== Step list ===== */
+    .info-steps-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+      margin-top: 24px;
+    }
+    .info-steps-label:first-child { margin-top: 0; }
+
+    .info-steps {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 8px;
+    }
+    .info-steps li {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line-2);
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.4;
+      color: var(--ink);
+      align-items: baseline;
+    }
+    .info-steps li:last-child { border-bottom: none; }
+    .info-steps li .step-num {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--dc-red);
+      padding-top: 3px;
+    }
+    .info-steps li b {
+      font-weight: 600;
+      font-family: var(--sans);
+      font-size: 15px;
+    }
+
+    /* ===== Two-col layout for wide screens ===== */
+    .info-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-top: 8px;
+    }
+    @media (max-width: 700px) {
+      .info-cols { grid-template-columns: 1fr; gap: 0; }
+    }
+
+    /* ===== Pill tags ===== */
+    .info-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .info-pill {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--ink-soft);
+    }
+    .info-pill.red   { border-color: rgba(200,49,43,.35); color: var(--dc-red); }
+    .info-pill.blue  { border-color: rgba(29,63,138,.35); color: var(--dc-blue); }
+    .info-pill.green { border-color: rgba(30,107,92,.35); color: var(--dc-green); }
+
+    /* ===== Plain body text ===== */
+    .info-text {
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+    .info-text:last-child { margin-bottom: 0; }
+
+    @media (max-width: 600px) {
+      .info-hero { padding: 100px 0 36px; }
+      .info-section { padding: 36px 0; }
+    }
+  </style>
+</head>
+<body>
+  <section class="info-hero">
+    <div class="wrap">
+      <div class="info-eyebrow">§ Travel Notes & Info</div>
+      <h1 class="info-title">Good to<br><em>know.</em></h1>
+      <p class="info-intro">Practical info for the trip — tax refunds, cards, gear, and apps.</p>
+    </div>
+  </section>
+
+  <div class="wrap">
+
+    <!-- Tax Refund -->
+    <div class="info-section">
+      <div class="info-section-num">§ 01 — Shopping</div>
+      <h2 class="info-section-title">Tax <em>Refund</em><br>in Korea</h2>
+
+      <div class="info-alert green">
+        <div class="info-alert-body">
+          <div class="info-alert-label">TL;DR</div>
+          <div class="info-alert-text">Spend ₩30,000+ in one store → get the VAT refund slip → claim cash at the airport before departing.</div>
+        </div>
+      </div>
+
+      <div class="info-cols">
+        <div>
+          <div class="info-steps-label">At the store</div>
+          <ol class="info-steps">
+            <li><span class="step-num">01</span><span>Spend <b>₩30,000 or more</b> in a single store.</span></li>
+            <li><span class="step-num">02</span><span>Tell the cashier <b>"Tax refund please"</b> and show your passport.</span></li>
+            <li><span class="step-num">03</span><span>Receive the tax refund envelope / receipt — keep it safe.</span></li>
+          </ol>
+        </div>
+        <div>
+          <div class="info-steps-label">At the airport (ICN)</div>
+          <ol class="info-steps">
+            <li><span class="step-num">01</span><span>If total purchases exceed ₩750,000 — get a customs stamp <b>before</b> departing the arrivals area.</span></li>
+            <li><span class="step-num">02</span><span>After security, find a <b>Tax Refund counter</b> (Global Blue, KT&G, etc.).</span></li>
+            <li><span class="step-num">03</span><span>Get your refund in cash or back to your card.</span></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="info-alert blue" style="margin-top:24px">
+        <div class="info-alert-body">
+          <div class="info-alert-label">Japan Tax Free</div>
+          <div class="info-alert-text">In Japan, spend ¥5,000+ in one store and show your passport at checkout — tax is removed on the spot. No airport step needed (but don't use the items before leaving Japan).</div>
+        </div>
+      </div>
+
+      <div class="info-steps-label" style="margin-top:24px">Common stores that offer it</div>
+      <p class="info-text">Olive Young, Lotte Duty Free, Shinsegae Duty Free, Musinsa, most large malls and shopping centres.</p>
+    </div>
+
+    <!-- Before You Go -->
+    <div class="info-section">
+      <div class="info-section-num">§ 02 — Before You Go</div>
+      <h2 class="info-section-title">Before<br><em>You Go</em></h2>
+
+      <ol class="info-steps">
+        <li><span class="step-num">01</span><span><b>Enable international use on your card.</b> Call your bank or do it in the app before departing — some cards block foreign transactions by default.</span></li>
+        <li><span class="step-num">02</span><span><b>Check your power bank size.</b> Flights prohibit power banks over 100Wh (≈27,000 mAh). Anything larger must be declared or may be confiscated.</span></li>
+        <li><span class="step-num">03</span><span><b>Download Naver Map.</b> Google Maps transit is unreliable in Korea. Naver Map works offline and has full English support.</span></li>
+        <li><span class="step-num">04</span><span><b>Download KakaoMap</b> as a backup — also excellent for navigation and finding restaurants.</span></li>
+      </ol>
+
+      <div class="info-alert yellow" style="margin-top:8px">
+        <div class="info-alert-body">
+          <div class="info-alert-label">Card tip</div>
+          <div class="info-alert-text">Revolut or Wise are ideal — no foreign transaction fees and great exchange rates. Load some balance before the trip.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /wrap -->
+
+  <footer class="kg-footer">
+    <div class="wrap">
+      <div class="kg-footer-row">
+        <div><div class="kg-footer-mark">KoreaGang</div></div>
+        <a href="_index.html">← Calendar</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="common.js?v=2"></script>  <script>
+    ready(() => {
+      initCursor();
+      injectNav('info');
+    });
+  </script>
+</body>
+</html>

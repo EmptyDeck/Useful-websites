@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dice Roll</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="hero">
+        <p class="eyebrow">Pocket Dice</p>
+        <h1>Roll the Bones</h1>
+        <p class="sub">A crisp, tactile dice roller with a little drama.</p>
+      </header>
+
+      <section class="board" aria-live="polite">
+        <div class="dice" id="dice" aria-label="Dice face">
+          <span class="pip" data-pos="1"></span>
+          <span class="pip" data-pos="2"></span>
+          <span class="pip" data-pos="3"></span>
+          <span class="pip" data-pos="4"></span>
+          <span class="pip" data-pos="5"></span>
+          <span class="pip" data-pos="6"></span>
+          <span class="pip" data-pos="7"></span>
+          <span class="pip" data-pos="8"></span>
+          <span class="pip" data-pos="9"></span>
+        </div>
+        <div class="result" id="result">Roll to begin</div>
+      </section>
+
+      <section class="controls">
+        <button class="primary" id="rollBtn" type="button">Roll</button>
+        <button class="ghost" id="resetBtn" type="button">Reset</button>
+        <label class="toggle">
+          <input id="soundToggle" type="checkbox" checked />
+          <span>Sound</span>
+        </label>
+      </section>
+
+      <section class="history">
+        <h2>Recent Rolls</h2>
+        <ul id="historyList" aria-live="polite"></ul>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
