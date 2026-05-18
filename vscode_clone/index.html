@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VS Code Clone Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app" id="appRoot">
+    <aside class="activity-bar">
+      <button class="activity-btn active" data-panel="explorer" title="Explorer">📁</button>
+      <button class="activity-btn" data-panel="search" title="Search">🔍</button>
+      <button class="activity-btn" data-panel="settings" title="Settings">⚙️</button>
+    </aside>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header" id="sidebarTitle">EXPLORER</div>
+      <div class="sidebar-content" id="sidebarContent"></div>
+    </aside>
+
+    <main class="main-area">
+      <div class="title-bar">
+        <div class="window-controls">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="title-text">vscode_clone - Browser Workspace</div>
+        <button id="toggleSidebarBtn" class="ghost-btn">Toggle Sidebar</button>
+      </div>
+
+      <div class="tab-bar" id="tabBar"></div>
+
+      <section class="editor-shell">
+        <div class="line-numbers" id="lineNumbers"></div>
+        <textarea id="editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+        <div class="minimap" id="minimap"></div>
+      </section>
+
+      <footer class="status-bar" id="statusBar">
+        <div class="status-left">
+          <span id="statusFile">No file</span>
+          <span id="statusDirty"></span>
+        </div>
+        <div class="status-right">
+          <span id="cursorPos">Ln 1, Col 1</span>
+          <span id="charCount">0 chars</span>
+          <span id="fileType">Plain Text</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <div class="palette hidden" id="commandPalette" aria-hidden="true">
+    <div class="palette-box">
+      <input id="paletteInput" type="text" placeholder="Type a command" />
+      <ul id="paletteList"></ul>
+    </div>
+  </div>
+
+  <input type="file" id="fileOpenInput" accept=".txt,.md,.js,.json,.html,.css,.py,.ts" hidden />
+
+  <script src="app.js"></script>
+</body>
+</html>
