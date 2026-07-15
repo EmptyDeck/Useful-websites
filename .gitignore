@@ -1,0 +1,10 @@
+# Local runtime data (contains account emails) — regenerated on run
+.usage-cache.json
+
+# Python local environments and caches
+.venv/
+__pycache__/
+*.pyc
+
+# Local logs
+*.log
