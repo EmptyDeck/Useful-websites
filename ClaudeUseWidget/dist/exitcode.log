@@ -1,0 +1,8 @@
+Starting claude: C:\Users\DRS\.vscode\extensions\anthropic.claude-code-2.1.120-win32-x64\resources\native-binary\claude.exe
+CLAUDECODE in env: 1
+ELECTRON_RUN_AS_NODE: 1
+CLAUDE_CODE_ENTRYPOINT: claude-vscode
+spawned PID=31988
+read 16b
+read 4b
+reader exit: Pty is closed

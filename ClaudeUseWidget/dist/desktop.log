@@ -1,0 +1,6 @@
+using: C:\Users\DRS\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude\claude-code\2.1.111\claude.exe
+spawned pid=22760
+read 16b total=16
+read 4b total=20
+exit: Pty is closed
+alive=False exitstatus=3221225786

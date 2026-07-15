@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/DRS/.claude/**)",
+      "Bash(env)",
+      "Bash(python -c \"import json,time;d=json.load\\(open\\('.usage-cache.json',encoding='utf-8'\\)\\);ts=d['timestamp']/1000;print\\('cache 시각:',time.strftime\\('%H:%M:%S',time.localtime\\(ts\\)\\),'| 현재:',time.strftime\\('%H:%M:%S'\\)\\)\")",
+      "Bash(powershell.exe -NoProfile -Command \"Get-Process pythonw,python -ErrorAction SilentlyContinue | Select-Object Id,ProcessName,StartTime | Format-Table -AutoSize\")"
+    ]
+  }
+}

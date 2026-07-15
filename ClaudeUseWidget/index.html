@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude 사용량</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 16px;
+    padding: 28px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #e6edf3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .title-icon {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #d97706, #f59e0b);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #8b949e;
+  }
+
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #8b949e;
+    flex-shrink: 0;
+  }
+  .status-dot.live { background: #3fb950; }
+  .status-dot.cached { background: #d29922; }
+  .status-dot.fetching {
+    background: #388bfd;
+    animation: pulse 1s infinite;
+  }
+  .status-dot.error { background: #f85149; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .refresh-btn {
+    background: none;
+    border: 1px solid #30363d;
+    color: #8b949e;
+    border-radius: 8px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .refresh-btn:hover { background: #21262d; color: #e6edf3; border-color: #8b949e; }
+  .refresh-btn.spinning svg { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #sections { display: flex; flex-direction: column; gap: 22px; }
+  .sections { display: flex; flex-direction: column; gap: 16px; }
+
+  .account { display: flex; flex-direction: column; gap: 12px; }
+  .account + .account { padding-top: 20px; border-top: 1px solid #30363d; }
+
+  .account-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #58a6ff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .account-name::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #58a6ff;
+  }
+
+  .section {
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+
+  .section-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .section-right {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .section-pct {
+    font-size: 22px;
+    font-weight: 700;
+    color: #e6edf3;
+  }
+
+  .section-reset {
+    font-size: 11px;
+    color: #6e7681;
+  }
+
+  .bar-track {
+    height: 8px;
+    background: #0d1117;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+    min-width: 2px;
+  }
+
+  .bar-session { background: linear-gradient(90deg, #388bfd, #58a6ff); }
+  .bar-week    { background: linear-gradient(90deg, #3fb950, #56d364); }
+  .bar-sonnet  { background: linear-gradient(90deg, #8957e5, #a371f7); }
+  .bar-extra   { background: linear-gradient(90deg, #d29922, #e3b341); }
+
+  .bar-danger   { background: linear-gradient(90deg, #db6d28, #f0883e) !important; }
+  .bar-critical { background: linear-gradient(90deg, #da3633, #f85149) !important; }
+
+  .section.hidden { display: none; }
+
+  .no-data {
+    text-align: center;
+    padding: 20px;
+    color: #6e7681;
+    font-size: 14px;
+  }
+
+  .updated-at {
+    text-align: center;
+    font-size: 11px;
+    color: #484f58;
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <div class="title">
+      <div class="title-icon">⚡</div>
+      Claude 사용량
+    </div>
+    <div class="header-right">
+      <div class="status">
+        <div class="status-dot" id="statusDot"></div>
+        <span id="statusText">로딩 중...</span>
+      </div>
+      <button class="refresh-btn" id="refreshBtn" onclick="refresh()">
+        <svg id="refreshIcon" width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+          <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+        </svg>
+        새로고침
+      </button>
+    </div>
+  </div>
+
+  <div class="sections" id="sections">
+    <div class="no-data">데이터 로딩 중...</div>
+  </div>
+
+  <div class="updated-at" id="updatedAt"></div>
+</div>
+
+<script>
+let pollTimer = null;
+
+function barClass(base, pct) {
+  if (pct >= 90) return 'bar-fill bar-critical';
+  if (pct >= 75) return 'bar-fill bar-danger';
+  return 'bar-fill ' + base;
+}
+
+function shortTime(t) {
+  if (!t) return '';
+  const m = t.match(/\d{1,2}:\d{2}\s*(?:AM|PM)?/i);
+  return m ? m[0] : '';
+}
+
+function renderSection(id, label, barCls, data) {
+  if (!data) return `<div class="section hidden" id="${id}"></div>`;
+  const pct = data.percent;
+  const reset = data.resetTime ? `리셋 ${shortTime(data.resetTime) || data.resetTime}` : '';
+  const spend = (data.spent !== undefined && data.limit !== undefined)
+    ? `$${data.spent.toFixed(2)} / $${data.limit.toFixed(2)}`
+    : reset;
+  return `
+    <div class="section" id="${id}">
+      <div class="section-header">
+        <span class="section-label">${label}</span>
+        <div class="section-right">
+          <span class="section-pct">${pct}%</span>
+          <span class="section-reset">${spend}</span>
+        </div>
+      </div>
+      <div class="bar-track">
+        <div class="${barClass(barCls, pct)}" style="width:${pct}%"></div>
+      </div>
+    </div>`;
+}
+
+function renderAccount(key, name, usage) {
+  if (!usage) {
+    return `
+      <div class="account">
+        <div class="account-name">${name}</div>
+        <div class="no-data">데이터 없음<br><span style="font-size:11px">이 계정으로 로그인됐는지 확인하세요</span></div>
+      </div>`;
+  }
+  const body =
+    renderSection(`${key}-session`, '세션', 'bar-session', usage.session) +
+    renderSection(`${key}-week`,    '주간 전체', 'bar-week', usage.week) +
+    (usage.weekSonnet ? renderSection(`${key}-sonnet`, '주간 Sonnet', 'bar-sonnet', usage.weekSonnet) : '') +
+    (usage.extra ? renderSection(`${key}-extra`, '추가 사용', 'bar-extra', usage.extra) : '');
+  return `
+    <div class="account">
+      <div class="account-name">${name}</div>
+      <div class="sections">${body}</div>
+    </div>`;
+}
+
+function render(data) {
+  if (!data || data.error || !data.accounts) {
+    document.getElementById('sections').innerHTML =
+      `<div class="no-data">${data?.error || '데이터 없음'}<br><br>새로고침을 눌러주세요</div>`;
+    return;
+  }
+
+  document.getElementById('sections').innerHTML =
+    Object.entries(data.accounts)
+      .map(([key, acct]) => renderAccount(key, acct.name || key, acct.usage))
+      .join('');
+
+  const ts = new Date(data.timestamp).toLocaleString('ko-KR');
+  const suffix = data.fromCache ? ' (캐시)' : '';
+  document.getElementById('updatedAt').textContent = `마지막 업데이트: ${ts}${suffix}`;
+}
+
+function setStatus(state, text) {
+  document.getElementById('statusDot').className = 'status-dot ' + state;
+  document.getElementById('statusText').textContent = text;
+}
+
+async function load() {
+  try {
+    const res = await fetch('/api/usage');
+    const data = await res.json();
+    render(data);
+    if (data.fromCache || data.error) {
+      setStatus('cached', '캐시됨');
+    } else {
+      setStatus('live', '실시간');
+    }
+  } catch {
+    setStatus('error', '서버 오류');
+  }
+}
+
+async function pollFetching() {
+  try {
+    const res = await fetch('/api/status');
+    const { fetching } = await res.json();
+    if (fetching) {
+      setStatus('fetching', '가져오는 중... (~20초)');
+      document.getElementById('refreshBtn').classList.add('spinning');
+      pollTimer = setTimeout(pollFetching, 2000);
+    } else {
+      document.getElementById('refreshBtn').classList.remove('spinning');
+      await load();
+    }
+  } catch {}
+}
+
+async function refresh() {
+  setStatus('fetching', '가져오는 중... (~20초)');
+  document.getElementById('refreshBtn').classList.add('spinning');
+  clearTimeout(pollTimer);
+  await fetch('/api/refresh');
+  pollTimer = setTimeout(pollFetching, 3000);
+}
+
+// Init
+load();
+// Check if already fetching on load
+pollFetching();
+// Auto-refresh every 5 minutes
+setInterval(load, 5 * 60 * 1000);
+</script>
+</body>
+</html>
