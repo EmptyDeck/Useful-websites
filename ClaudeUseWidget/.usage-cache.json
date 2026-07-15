@@ -1,0 +1,43 @@
+{
+  "accounts": {
+    "a": {
+      "name": "gnumax01@gnu.ac.kr",
+      "usage": {
+        "session": {
+          "percent": 24,
+          "resetTime": "9:10pm (Asia/Seoul)"
+        },
+        "week": {
+          "percent": 59,
+          "resetTime": "Jul 17, 8pm (Asia/Seoul)"
+        },
+        "weekSonnet": null,
+        "design": null,
+        "timestamp": 1784025204581
+      }
+    },
+    "b": {
+      "name": "apexatgnu@gmail.com",
+      "usage": {
+        "session": {
+          "percent": 0,
+          "resetTime": "11:20pm (Asia/Seoul)"
+        },
+        "week": {
+          "percent": 63,
+          "resetTime": "Jul 16, 12pm (Asia/Seoul)"
+        },
+        "weekSonnet": {
+          "percent": 0,
+          "resetTime": "11:20pm (Asia/Seoul)"
+        },
+        "design": {
+          "percent": 63,
+          "resetTime": "Jul 16, 12pm (Asia/Seoul)"
+        },
+        "timestamp": 1784025215597
+      }
+    }
+  },
+  "timestamp": 1784025215598
+}

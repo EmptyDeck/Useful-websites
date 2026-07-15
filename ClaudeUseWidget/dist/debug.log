@@ -1,0 +1,40 @@
+[12:02:12] fetch_pty start, CWD=C:\AAAA\Useful-websites\ClaudeUse\dist
+[12:02:12] winpty imported OK
+[12:02:12] claude: C:\Users\DRS\.vscode\extensions\anthropic.claude-code-2.1.120-win32-x64\resources\native-binary\claude.exe
+[12:02:12] clean env built, keys=['APPDATA', 'COMMONPROGRAMFILES', 'COMPUTERNAME', 'FORCE_COLOR', 'HOME', 'LOCALAPPDATA', 'NO_COLOR', 'NUMBER_OF_PROCESSORS', 'OS', 'PATH', 'PATHEXT', 'PROCESSOR_ARCHITECTURE', 'PROGRAMFILES', 'PROGRAMFILES(X86)', 'SYSTEMDRIVE', 'SYSTEMROOT', 'TEMP', 'TMP', 'USERDOMAIN', 'USERNAME', 'USERPROFILE', 'WINDIR']
+[12:02:12] spawned PID=103628
+[12:02:12] read 8b total=8
+[12:02:12] read 11b total=19
+[12:02:12] read 6b total=25
+[12:02:13] read 18b total=43
+[12:02:13] read 1786b total=1829
+[12:02:13] read 249b total=2078
+[12:02:13] wait_for matched: effort
+[12:02:14] read 133b total=2211
+[12:02:14] sending /usage
+[12:02:14] read 1066b total=3277
+[12:02:14] read 352b total=3629
+[12:02:14] read 944b total=4573
+[12:02:22] final text len=2506, sample='╭─── Claude Code v2.1.120 ─────────────────────────────────────────────────────────────────────────────────────────────╮\n│ │ Tips for getting started │\n│ Welcome back APEX! │ Run /init to create a CLA'
+[12:02:23] reader exit: [WinError 10053] 현재 연결은 사용자의 호스트 시스템의 소프트웨어의 의해 중단되었습니다
+[12:02:23] parsed: {'session': {'percent': 21, 'resetTime': '12:50pm (Asia/Seoul)'}, 'week': {'percent': 49, 'resetTime': 'Apr 30, 12pm (Asia/Seoul)'}, 'weekSonnet': {'percent': 22, 'resetTime': '12:50pm (Asia/Seoul)'}, 'timestamp': 1777172543314}
+[12:02:52] fetch_pty start, CWD=C:\AAAA\Useful-websites\ClaudeUse\dist
+[12:02:52] winpty imported OK
+[12:02:52] claude: C:\Users\DRS\.vscode\extensions\anthropic.claude-code-2.1.120-win32-x64\resources\native-binary\claude.exe
+[12:02:52] clean env built, keys=['APPDATA', 'COMMONPROGRAMFILES', 'COMPUTERNAME', 'FORCE_COLOR', 'HOME', 'LOCALAPPDATA', 'NO_COLOR', 'NUMBER_OF_PROCESSORS', 'OS', 'PATH', 'PATHEXT', 'PROCESSOR_ARCHITECTURE', 'PROGRAMFILES', 'PROGRAMFILES(X86)', 'SYSTEMDRIVE', 'SYSTEMROOT', 'TEMP', 'TMP', 'USERDOMAIN', 'USERNAME', 'USERPROFILE', 'WINDIR']
+[12:02:52] spawned PID=43508
+[12:02:52] read 16b total=16
+[12:02:52] read 4b total=20
+[12:02:52] reader exit: Pty is closed
+[12:02:57] fetch_pty start, CWD=C:\AAAA\Useful-websites\ClaudeUse\dist
+[12:02:57] winpty imported OK
+[12:02:57] claude: C:\Users\DRS\.vscode\extensions\anthropic.claude-code-2.1.120-win32-x64\resources\native-binary\claude.exe
+[12:02:57] env keys removed, ELECTRON_RUN_AS_NODE present: False
+[12:02:57] spawned PID=95064
+[12:02:57] read 16b total=16
+[12:02:57] read 4b total=20
+[12:02:57] reader exit: Pty is closed
+[12:03:02] wait_for timeout, kws=['effort', 'shortcuts', 'trust this folder', 'trust the folder']
+[12:03:03] sending /usage
+[12:03:07] wait_for timeout, kws=['effort', 'shortcuts', 'trust this folder', 'trust the folder']
+[12:03:08] sending /usage

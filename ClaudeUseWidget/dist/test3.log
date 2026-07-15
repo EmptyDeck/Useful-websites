@@ -1,0 +1,5 @@
+claude: C:\Users\DRS\.vscode\extensions\anthropic.claude-code-2.1.120-win32-x64\resources\native-binary\claude.exe
+--version exit=0 out=2.1.120 (Claude Code) err=
+pipe mode exit=0
+stdout: b"`/usage` and `/exit` are UI commands that must be run directly in the Claude Code interface \xe2\x80\x94 they can't be invoked through me. You can type them in the command input yourself.\n"
+stderr: b''
