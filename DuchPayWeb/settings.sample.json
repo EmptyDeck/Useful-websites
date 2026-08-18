@@ -1,0 +1,9 @@
+{
+  "editPassword": "change-me",
+  "fallbackRates": {
+    "KRW": 1,
+    "USD": 1400,
+    "EUR": 1600
+  },
+  "theme": "cream"
+}

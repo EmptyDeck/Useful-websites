@@ -1,0 +1,35 @@
+[
+  {
+    "id": "demo-1",
+    "title": "Airport taxi",
+    "amount": 48000,
+    "ccy": "KRW",
+    "paidBy": "you",
+    "split": ["you", "min", "alex"],
+    "cat": "transit",
+    "when": "Jun 1, 09:30",
+    "_ts": 1780273800000
+  },
+  {
+    "id": "demo-2",
+    "title": "Lunch",
+    "amount": 36000,
+    "ccy": "KRW",
+    "paidBy": "min",
+    "split": ["you", "min", "alex"],
+    "cat": "food",
+    "when": "Jun 1, 12:20",
+    "_ts": 1780284000000
+  },
+  {
+    "id": "demo-3",
+    "title": "Museum tickets",
+    "amount": 45,
+    "ccy": "USD",
+    "paidBy": "alex",
+    "split": ["you", "alex"],
+    "cat": "tickets",
+    "when": "Jun 1, 15:10",
+    "_ts": 1780294200000
+  }
+]

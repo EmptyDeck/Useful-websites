@@ -1,0 +1,12 @@
+# Runtime data created by the local server.
+expenses_log.json
+dist/uploads/*
+!dist/uploads/.gitkeep
+
+# Local-only backups and OS/editor noise.
+*_offline_.html
+*_export.csv
+*.pid
+__pycache__/
+.DS_Store
+Thumbs.db

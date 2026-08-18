@@ -87,24 +87,49 @@ def parse_usage(text):
         "timestamp": int(time.time() * 1000),
     }
 
-    # Find all "NN% used"
-    pct_matches = re.findall(r'(\d+)\s*%\s*used', text, re.IGNORECASE)
-    # Find reset times like "Resets 12:50pm (Asia/Seoul)" or "Resets Apr 30, 12pm ..."
-    reset_matches = re.findall(r'[Rr]esets?\s+([\w\d,: ]+\([\w/]+\))', text)
-    # Spend pattern
+    # /usage 화면은 [제목] / [NN% used] / [리셋 시각] 블록이 반복되는 구조다.
+    # 위치(index)로 짝짓지 말 것: 주간 리셋 줄에는 "Resets" 접두어가 없고,
+    # 화면 재출력 때문에 같은 블록이 여러 번 나온다. 제목으로 짝지어야 정확하다.
+    #
+    #   Current session          week (all models)        Current week (Fable)
+    #   13% used                 7% used                  0% used
+    #   Resets 5am (Asia/Seoul)  Aug13, 12pm (Asia/Seoul)
+    lines = [l.strip() for l in text.splitlines() if l.strip()]
+    pct_re = re.compile(r'^(\d+)\s*%\s*used', re.IGNORECASE)
+    # "5am (Asia/Seoul)", "Resets 12:50pm (Asia/Seoul)", "Aug13, 12pm(Asia/Seoul)"
+    reset_re = re.compile(r'^(?:resets?\s*)?([A-Za-z]{3,}\s*\d{1,2},\s*)?\d{1,2}(:\d{2})?\s*(am|pm)\s*\(', re.IGNORECASE)
+
+    def bucket(title):
+        # pty 화면 캡처라 글자가 종종 빠진다("wek (allmodels)"). 느슨하게 본다.
+        t = re.sub(r'[^a-z]', '', title.lower())
+        if 'session' in t or 'sesion' in t:
+            return "session"
+        if re.search(r'we{0,2}k', t):
+            return "week" if 'allmodel' in t else "weekSonnet"
+        return None
+
+    for i, line in enumerate(lines):
+        m = pct_re.match(line)
+        if not m or i == 0:
+            continue
+        key = bucket(lines[i - 1])
+        if not key:
+            continue
+        entry = {"percent": int(m.group(1))}
+        # 바로 다음 줄이 리셋 시각이면 함께 기록
+        if i + 1 < len(lines) and reset_re.match(lines[i + 1]):
+            reset = re.sub(r'^resets?\s*', '', lines[i + 1], flags=re.IGNORECASE)
+            entry["resetTime"] = re.sub(r'\s+', ' ', reset).strip()
+        # 화면이 여러 번 그려지므로 나중(=최신) 블록이 이긴다
+        result[key] = entry
+
+    # 추가 사용량(과금) 블록은 형식이 달라 따로 찾는다
     spend_match = re.search(r'\$(\d+\.?\d*)\s*/\s*\$(\d+\.?\d*)\s*spent', text, re.IGNORECASE)
-
-    keys = ["session", "week", "weekSonnet", "extra"]
-    for i, key in enumerate(keys):
-        if i >= len(pct_matches):
-            break
-        result[key] = {"percent": int(pct_matches[i])}
-        if i < len(reset_matches):
-            result[key]["resetTime"] = re.sub(r'\s+', ' ', reset_matches[i].strip())
-
-    if result["extra"] and spend_match:
-        result["extra"]["spent"] = float(spend_match.group(1))
-        result["extra"]["limit"] = float(spend_match.group(2))
+    if spend_match:
+        result["extra"] = {
+            "spent": float(spend_match.group(1)),
+            "limit": float(spend_match.group(2)),
+        }
 
     return result
 
