@@ -8,3 +8,11 @@ __pycache__/
 
 # Local logs
 *.log
+
+# Usage-tracker runtime data (contains account emails) — regenerated on run
+usage-history.jsonl
+rows.json
+ClaudeUsageTracker/backups/
+
+# DuchPayWeb local config (contains editPassword) — copy from settings.sample.json
+DuchPayWeb/settings.json
