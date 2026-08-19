@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "id": "gmszbw05a114",
+    "name": "roommate",
+    "members": [
+      {
+        "id": "mmszbvofpc3z",
+        "name": "me",
+        "tone": "#8b4d6b"
+      },
+      {
+        "id": "mmszbvpedtps",
+        "name": "him",
+        "tone": "#4d8b6b"
+      }
+    ],
+    "settlementHub": "mmszbvofpc3z",
+    "language": "en",
+    "createdAt": "2026-08-18T19:03:20.645608",
+    "password": "208"
+  }
+]

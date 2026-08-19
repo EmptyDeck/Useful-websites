@@ -71,6 +71,19 @@ function Sheet({ children, onClose, title }) {
   );
 }
 
+// ---- Validation wrapper: red outline + shake on failed save ----
+function VField({ err, shakeKey, className = "", children }) {
+  return (
+    <div key={err ? "e" + shakeKey : "ok"} className={className + (err ? " vfield-err vshake" : "")}>
+      {children}
+      {err && <div className="field-err-msg">{err}</div>}
+    </div>
+  );
+}
+function scrollToFirstError() {
+  setTimeout(() => document.querySelector(".vfield-err")?.scrollIntoView({ behavior: "smooth", block: "center" }), 60);
+}
+
 // ---- PIN Keypad ----
 function PinPad({ value, onChange, onSubmit, err, busy }) {
   function press(d) { if (busy) return; onChange((value + d).slice(0, 12)); }
@@ -364,12 +377,15 @@ function GroupForm({ group, onClose, onSave }) {
   const [removePw, setRemovePw]   = useState(false);
   const hasPw = !!group?.hasPassword;
   const ref = useRef();
+  const [errs, setErrs] = useState({});
+  const [shakeKey, setShakeKey] = useState(0);
 
   function addMember() {
     const n = newMemberName.trim(); if (!n) return;
     const id = genId("m");
     const m = { id, name:n, tone:randomTone(members.map(m=>m.tone)) };
     setMembers(prev => { const next=[...prev,m]; if(!hub) setHub(id); return next; });
+    setErrs(p => ({ ...p, members: null }));
     setNew(""); setTimeout(() => ref.current?.focus(), 50);
   }
 
@@ -378,7 +394,11 @@ function GroupForm({ group, onClose, onSave }) {
   }
 
   function save() {
-    if (!name.trim() || members.length === 0) return;
+    const e = {};
+    if (!name.trim()) e.name = t.errTitleRequired;
+    if (members.length === 0) e.members = t.errMembersRequired;
+    setErrs(e);
+    if (Object.keys(e).length) { setShakeKey(k => k + 1); scrollToFirstError(); return; }
     const data = { id: group?.id||genId("g"), name:name.trim(), members, settlementHub:hub||members[0]?.id||"", language:groupLang };
     if (gpw.trim()) data.password = gpw.trim();
     else if (removePw) data.password = "";
@@ -394,12 +414,15 @@ function GroupForm({ group, onClose, onSave }) {
   return (
     <Sheet onClose={onClose} title={isEdit ? t.editGroupTitle : t.createGroup}>
       <div className="form">
-        <label className="field field-big">
-          <span className="field-k">{t.groupName}</span>
-          <input className="field-input" placeholder={t.groupNamePlaceholder} value={name} onChange={e=>setName(e.target.value)} autoFocus={!isEdit}/>
-        </label>
+        <VField err={errs.name} shakeKey={shakeKey} className="field field-big">
+          <label>
+            <span className="field-k">{t.groupName}</span>
+            <input className={"field-input"+(errs.name?" input-bad":"")} placeholder={t.groupNamePlaceholder} value={name}
+              onChange={e=>{setName(e.target.value); if(errs.name) setErrs(p=>({...p,name:null}));}} autoFocus={!isEdit}/>
+          </label>
+        </VField>
 
-        <div className="field">
+        <VField err={errs.members} shakeKey={shakeKey} className="field">
           <span className="field-k">{t.addMemberLabel}</span>
           <div className="member-add-row">
             <input ref={ref} className="field-input member-input" placeholder={t.memberNamePlaceholder}
@@ -425,7 +448,7 @@ function GroupForm({ group, onClose, onSave }) {
             </div>
           )}
           {members.length === 0 && <div className="field-hint">{t.noMembersHint}</div>}
-        </div>
+        </VField>
 
         {members.length > 1 && (
           <div className="field">
@@ -475,7 +498,7 @@ function GroupForm({ group, onClose, onSave }) {
 
         <div className="form-foot">
           <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button className="btn btn-primary" disabled={!name.trim()||members.length===0} onClick={save}>
+          <button className="btn btn-primary" onClick={save}>
             {isEdit ? t.editGroupTitle.replace("Edit ","Save ") : t.createGroup}
           </button>
         </div>
@@ -516,7 +539,7 @@ function SettingsSheet({ onClose }) {
         ) : (
           <>
             {tab==="password" && <PasswordSettings hasPassword={serverSettings.hasPassword}/>}
-            {tab==="rates"    && <RateSettings fallbackRates={serverSettings.fallbackRates||{KRW:1,USD:1400,EUR:1600}}/>}
+            {tab==="rates"    && <RateSettings fallbackRates={serverSettings.fallbackRates||{KRW:1,USD:1400,EUR:1600}} defaultTaxRate={serverSettings.defaultTaxRate??8.25}/>}
             {tab==="language" && <LanguageSettings currentLang={serverSettings.language||"en"} onSaved={setSS}/>}
             {tab==="about"    && <AboutTab/>}
           </>
@@ -562,16 +585,17 @@ function PasswordSettings({ hasPassword }) {
   );
 }
 
-function RateSettings({ fallbackRates }) {
+function RateSettings({ fallbackRates, defaultTaxRate }) {
   const t = useT();
   const [usd, setUsd] = useState(String(fallbackRates.USD||1400));
   const [eur, setEur] = useState(String(fallbackRates.EUR||1600));
+  const [tax, setTax] = useState(String(defaultTaxRate??8.25));
   const [msg, setMsg] = useState(null);
 
   async function save() {
-    const u=parseFloat(usd), e=parseFloat(eur);
-    if (!u||!e||u<=0||e<=0) { setMsg({ err:true, text:t.ratesInvalid }); return; }
-    const res = await fetch("/api/settings", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ fallbackRates:{ KRW:1,USD:u,EUR:e } }) });
+    const u=parseFloat(usd), e=parseFloat(eur), tx=parseFloat(tax);
+    if (!u||!e||u<=0||e<=0||isNaN(tx)||tx<0) { setMsg({ err:true, text:t.ratesInvalid }); return; }
+    const res = await fetch("/api/settings", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ fallbackRates:{ KRW:1,USD:u,EUR:e }, defaultTaxRate:tx }) });
     const d = await res.json();
     if (d.ok) setMsg({ err:false, text:t.ratesSaved });
   }
@@ -583,6 +607,9 @@ function RateSettings({ fallbackRates }) {
         <input type="number" className="field-input" value={usd} onChange={e=>setUsd(e.target.value)} min="1" step="1"/></label>
       <label className="field"><span className="field-k">{t.eurRate}</span>
         <input type="number" className="field-input" value={eur} onChange={e=>setEur(e.target.value)} min="1" step="1"/></label>
+      <label className="field"><span className="field-k">{t.taxDefaultLabel}</span>
+        <input type="number" className="field-input" value={tax} onChange={e=>setTax(e.target.value)} min="0" step="0.01"/></label>
+      <div className="field-hint">{t.taxDefaultHint}</div>
       {msg && <div className={"settings-msg"+(msg.err?" msg-err":" msg-ok")}>{msg.text}</div>}
       <button className="btn btn-primary" onClick={save}>{t.saveRates}</button>
     </div>

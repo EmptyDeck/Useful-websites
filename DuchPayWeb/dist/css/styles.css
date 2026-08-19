@@ -1841,3 +1841,177 @@ body {
   margin-left: 5px;
   letter-spacing: 0.04em;
 }
+
+/* ===== VALIDATION (shake + red) ===== */
+@keyframes vshake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-7px); }
+  30% { transform: translateX(6px); }
+  45% { transform: translateX(-5px); }
+  60% { transform: translateX(4px); }
+  75% { transform: translateX(-2px); }
+}
+.vshake { animation: vshake 0.4s ease; }
+.vfield-err .field-input,
+.vfield-err .amt-input,
+.field-input.input-bad,
+.amt-input.input-bad {
+  border-bottom-color: var(--neg) !important;
+}
+.field-err-msg {
+  color: var(--neg);
+  font-size: 12px;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+/* ===== EXPENSE MODE TOGGLE ===== */
+.mode-seg {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+.mode-seg-b {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font: inherit;
+  font-size: 13px;
+  padding: 9px 0;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.mode-seg-on {
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 500;
+}
+
+/* ===== ITEMIZED EDITOR ===== */
+.item-list { display: flex; flex-direction: column; gap: 14px; }
+.item-row-wrap {
+  border: 1px solid var(--line-2);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: var(--paper-2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.item-name { flex: 1; min-width: 0; }
+.item-price-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+.item-cur { color: var(--ink-3); font-size: 14px; }
+.item-price { width: 76px; text-align: right; }
+.item-people-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.item-add-btn { align-self: flex-start; margin-top: 10px; }
+.tax-toggle {
+  border: 1px solid var(--line);
+  background: transparent;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  color: var(--ink-3);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.12s;
+}
+.tax-toggle.tax-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.extras-btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.extras-btn {
+  border: 1px dashed var(--line);
+  background: transparent;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 13px;
+  padding: 7px 14px;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.extras-btn:hover { border-color: var(--ink-3); }
+.extras-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+}
+.extras-cell { display: flex; flex-direction: column; gap: 6px; }
+.extras-x {
+  border: none;
+  background: transparent;
+  color: var(--ink-3);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.itemized-total {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.itemized-total strong {
+  font-family: "Instrument Serif", serif;
+  font-size: 22px;
+  color: var(--ink);
+}
+
+/* ===== ITEMIZED DETAIL (expense row) ===== */
+.detail-row-col { flex-direction: column; align-items: stretch; gap: 6px; }
+.item-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--paper-2);
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.item-bd-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.item-bd-name { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; }
+.item-bd-people { display: flex; gap: 2px; }
+.item-bd-price { white-space: nowrap; }
+.item-tax-badge {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent-soft);
+  border-radius: 999px;
+  padding: 1px 6px;
+}
+.item-bd-extras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  border-top: 1px dashed var(--line);
+  padding-top: 7px;
+  font-size: 12px;
+  color: var(--ink-2);
+}

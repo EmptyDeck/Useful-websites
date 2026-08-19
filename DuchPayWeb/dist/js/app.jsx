@@ -56,15 +56,26 @@ function formatWhenT(t, dateStr) {
 function todayInputValue(){ const d=new Date(); return d.toISOString().slice(0,16); }
 
 // ---- Balance calc ----
+// Share of `pid` for expense `e`, in the expense's own currency.
+// Itemized expenses carry exact per-person amounts in e.shares; others split evenly.
+function shareOf(e,pid){
+  if(e.shares&&typeof e.shares==="object") return e.shares[pid]||0;
+  if(!Array.isArray(e.split)||e.split.length===0||!e.split.includes(pid)) return 0;
+  return e.amount/e.split.length;
+}
 function computeBalances(expenses,people,rates){
   const bal=Object.fromEntries(people.map(p=>[p.id,0]));
   for(const e of expenses){
     if(!e||!e.paidBy||!Array.isArray(e.split)||e.split.length===0) continue;
     if(bal[e.paidBy]==null) bal[e.paidBy]=0;
-    const ab=convert(e.amount,e.ccy||BASE,BASE,rates);
-    const sh=ab/e.split.length;
-    bal[e.paidBy]+=ab;
-    for(const pid of e.split){ if(bal[pid]==null) bal[pid]=0; bal[pid]-=sh; }
+    const ids=e.shares&&typeof e.shares==="object"?Object.keys(e.shares):e.split;
+    let credited=0;
+    for(const pid of ids){
+      if(bal[pid]==null) bal[pid]=0;
+      const sh=convert(shareOf(e,pid),e.ccy||BASE,BASE,rates);
+      bal[pid]-=sh; credited+=sh;
+    }
+    bal[e.paidBy]+=credited;
   }
   return bal;
 }
@@ -282,6 +293,8 @@ function App(){
   const[hasPassword,setHasPassword]=useState(false);
   const[locked,setLocked]=useState(false);
   const[backPw,setBackPw]=useState(false);
+  const[pwAction,setPwAction]=useState(null);
+  const[defaultTaxRate,setDefaultTaxRate]=useState(8.25);
   const[searchQuery,setSearch]=useState("");
   const[filterCat,setFilterCat]=useState("");
   const[sortOrder,setSortOrder]=useState("newest");
@@ -296,6 +309,7 @@ function App(){
   async function loadData(){
     const s=await API.getSettings();
     setHasPassword(s?.hasPassword||false);
+    if(s&&s.defaultTaxRate!=null)setDefaultTaxRate(s.defaultTaxRate);
     const r=await authFetch(`/api/groups/${GROUP_ID}`);
     if(r.status===401){
       setEffectiveLang(s?.language||"en");
@@ -362,6 +376,17 @@ function App(){
     catch{alert(t.saveFailed);}
   }
   async function deleteExpense(exp){await API.deleteExpense(exp.id);setExpenses(prev=>prev.filter(e=>e.id!==exp.id));}
+  // Destructive/modifying actions re-ask for the group password (or owner password)
+  function requestExpenseAction(type,exp){
+    const needPw=!!(group?.hasPassword||hasPassword);
+    if(!needPw){type==="delete"?deleteExpense(exp):setEditTarget(exp);return;}
+    setPwAction({type,exp});
+  }
+  function confirmPwAction(){
+    const a=pwAction;setPwAction(null);
+    if(!a)return;
+    if(a.type==="delete")deleteExpense(a.exp);else setEditTarget(a.exp);
+  }
   async function editExpense(payload){await API.editExpense(payload);setExpenses(prev=>prev.map(e=>e.id===payload.id?{...e,...payload}:e));setEditTarget(null);}
   async function settleOne(s){
     const fp=people.find(p=>p.id===s.from);const tp=people.find(p=>p.id===s.to);
@@ -488,7 +513,7 @@ function App(){
         <div className="section-head"><h2>{t.spendingLabel}</h2><span className="section-sub">{fmtShort(total,BASE,rates,displayCcy)}</span></div>
         <div className="spending-list">
           {people.map(p=>{
-            const spent=realExpenses.filter(e=>e.split?.includes(p.id)&&!e.isSettlement).reduce((s,e)=>s+convert(e.amount,e.ccy||BASE,BASE,rates)/e.split.length,0);
+            const spent=realExpenses.filter(e=>!e.isSettlement).reduce((s,e)=>s+convert(shareOf(e,p.id),e.ccy||BASE,BASE,rates),0);
             const pct=total>0?spent/total:0;
             return(
               <div key={p.id} className="spending-row">
@@ -539,8 +564,8 @@ function App(){
           )}
           {filteredExpenses.map(e=>(
             <ExpenseRow key={e.id} exp={e} me={me} people={people} lang={effectiveLang}
-              onDelete={exp=>deleteExpense(exp)}
-              onEdit={exp=>setEditTarget(exp)}/>
+              onDelete={exp=>requestExpenseAction("delete",exp)}
+              onEdit={exp=>requestExpenseAction("edit",exp)}/>
           ))}
         </ul>
       </section>
@@ -550,12 +575,18 @@ function App(){
         <span className="fab-label">{t.addExpenseBtn}</span>
       </button>
 
-      {view==="add"&&<AddExpense people={people} onClose={()=>setView("home")} onSave={addExpense} defaultPayer={me} lang={effectiveLang}/>}
-      {editTarget&&<EditExpense exp={editTarget} people={people} onClose={()=>setEditTarget(null)} onSave={editExpense} lang={effectiveLang}/>}
+      {view==="add"&&<AddExpense people={people} onClose={()=>setView("home")} onSave={addExpense} defaultPayer={me} lang={effectiveLang} defaultTaxRate={defaultTaxRate}/>}
+      {editTarget&&<EditExpense exp={editTarget} people={people} onClose={()=>setEditTarget(null)} onSave={editExpense} lang={effectiveLang} defaultTaxRate={defaultTaxRate}/>}
       {view==="settle"&&<SettleUp settles={settles} people={people} onClose={()=>setView("home")} onSettle={settleOne} me={me}/>}
       {view==="person"&&activePerson&&<PersonDetail id={activePerson} people={people} expenses={realExpenses} balance={balances[activePerson]} onClose={()=>setView("home")}/>}
       {view==="groupSettings"&&<GroupSettingsSheet group={group} onClose={()=>setView("home")} onAddMember={addMember} onRemoveMember={removeMember} hasPassword={hasPassword} onLangChange={updateGroupLang} globalLang={effectiveLang} onSetGroupPassword={setGroupPassword}/>}
 
+      {pwAction&&<PasswordModal
+        title={pwAction.type==="delete"?t.pwDeleteExpenseTitle:t.pwEditExpenseTitle}
+        hint={t.pwActionHint}
+        verify={group?.hasPassword?API.unlockGroup:API.verifyPassword}
+        onConfirm={confirmPwAction}
+        onCancel={()=>setPwAction(null)}/>}
       {backPw&&<PasswordModal title={t.backPwTitle} hint={t.backPwHint}
         verify={API.unlockAdmin}
         onConfirm={()=>{window.location.href="/";}}
@@ -595,8 +626,10 @@ function ExpenseRow({exp,me,people,lang,onDelete,onEdit}){
   const[open,setOpen]=useState(false); const{rates,displayCcy}=useCcy(); const t=useT();
   const payer=people.find(p=>p.id===exp.paidBy)||{name:exp.paidBy,tone:"#8a8073"};
   const expCcy=exp.ccy||BASE; const share=exp.split?.length?exp.amount/exp.split.length:exp.amount;
-  const youOwe=exp.split?.includes(me)&&exp.paidBy!==me?share:0;
-  const youAreOwed=exp.paidBy===me?exp.amount-(exp.split?.includes(me)?share:0):0;
+  const myShare=shareOf(exp,me);
+  const othersTotal=(exp.split||[]).reduce((s,id)=>id===exp.paidBy?s:s+shareOf(exp,id),0);
+  const youOwe=exp.paidBy!==me?myShare:0;
+  const youAreOwed=exp.paidBy===me?othersTotal:0;
   return(
     <li className={"exp"+(open?" exp-open":"")+(exp.isSettlement?" exp-settle":"")}>
       <button className="exp-row" onClick={()=>setOpen(o=>!o)}>
@@ -620,7 +653,8 @@ function ExpenseRow({exp,me,people,lang,onDelete,onEdit}){
           <div className="detail-row"><span className="detail-k">{t.paidByLabel}</span><span className="detail-v"><PersonChipG id={exp.paidBy} people={people} selected size="sm"/></span></div>
           <div className="detail-row"><span className="detail-k">{t.splitBetweenRow}</span><span className="detail-v detail-chips">{exp.split?.map(id=><PersonChipG key={id} id={id} people={people} selected size="sm"/>)}</span></div>
           <div className="detail-row"><span className="detail-k">{t.amountLabel}</span><span className="detail-v"><strong>{fmt(exp.amount,expCcy,rates,"KRW")}</strong>{displayCcy!=="KRW"&&<span className="muted">  ·  {fmt(exp.amount,expCcy,rates,displayCcy)}</span>}</span></div>
-          <div className="detail-row"><span className="detail-k">{t.eachOwesLabel}</span><span className="detail-v"><strong>{fmt(share,expCcy,rates,"KRW")}</strong>{displayCcy!=="KRW"&&<span className="muted">  ·  {fmt(share,expCcy,rates,displayCcy)}</span>}</span></div>
+          {!exp.itemized&&<div className="detail-row"><span className="detail-k">{t.eachOwesLabel}</span><span className="detail-v"><strong>{fmt(share,expCcy,rates,"KRW")}</strong>{displayCcy!=="KRW"&&<span className="muted">  ·  {fmt(share,expCcy,rates,displayCcy)}</span>}</span></div>}
+          {exp.itemized&&<ItemizedDetail exp={exp} people={people}/>}
           {exp.notes&&<div className="detail-row"><span className="detail-k">{t.notesLabel}</span><span className="detail-v detail-notes">{exp.notes}</span></div>}
           {exp.image&&<div className="detail-img"><img src={exp.image} alt="receipt"/></div>}
           {(onEdit||onDelete)&&!exp.isSettlement&&(
@@ -649,8 +683,174 @@ function ImagePicker({value,onChange}){
   );
 }
 
+// ---- Validation wrapper: red outline + shake on failed save ----
+function VField({err,shakeKey,className="",children}){
+  return(
+    <div key={err?"e"+shakeKey:"ok"} className={className+(err?" vfield-err vshake":"")}>
+      {children}
+      {err&&<div className="field-err-msg">{err}</div>}
+    </div>
+  );
+}
+function scrollToFirstError(){
+  setTimeout(()=>document.querySelector(".vfield-err")?.scrollIntoView({behavior:"smooth",block:"center"}),60);
+}
+
+// ---- Itemized math ----
+// Fee & tip are split evenly per receipt item (÷ divisor, which may exceed the
+// items entered here — untracked items implicitly belong to the payer).
+// Tax applies per taxable item. Each item's total splits among its people.
+function round2(v){return Math.round(v*100)/100;}
+function computeItemized(items,fee,tip,divisor,taxRate){
+  const div=Math.max(1,divisor||items.length||1);
+  const feePer=(fee||0)/div, tipPer=(tip||0)/div;
+  const shares={}; let total=0;
+  const rows=items.map(it=>{
+    const price=parseFloat(it.price)||0;
+    const tax=it.taxable?price*((taxRate||0)/100):0;
+    const itemTotal=price+tax+feePer+tipPer;
+    total+=itemTotal;
+    const per=it.people.length?itemTotal/it.people.length:0;
+    for(const pid of it.people) shares[pid]=(shares[pid]||0)+per;
+    return{name:it.name,price,tax,itemTotal,people:it.people};
+  });
+  return{shares,total,feePer,tipPer,rows};
+}
+
+// ---- Itemized breakdown (expense detail) ----
+function ItemizedDetail({exp,people}){
+  const{rates,displayCcy}=useCcy(); const t=useT();
+  const ccy=exp.ccy||BASE;
+  const items=exp.items||[];
+  const shares=exp.shares||{};
+  const feePer=((exp.fee||0)+(exp.tip||0))/Math.max(1,exp.feeDivisor||items.length||1);
+  return(
+    <>
+      <div className="detail-row detail-row-col">
+        <span className="detail-k">{t.itemsBreakdownLabel}</span>
+        <div className="item-breakdown">
+          {items.map((it,i)=>(
+            <div key={i} className="item-bd-row">
+              <span className="item-bd-name">{it.name}{it.taxable&&<span className="item-tax-badge">{t.itemTaxBadge}</span>}</span>
+              <span className="item-bd-people">{(it.people||[]).map(id=><PersonDotG key={id} id={id} people={people} size={16}/>)}</span>
+              <span className="item-bd-price">{fmt(it.price,ccy,rates,ccy)}</span>
+            </div>
+          ))}
+          {(exp.fee||exp.tip||exp.taxRate)?(
+            <div className="item-bd-extras">
+              {!!exp.fee&&<span>{t.deliveryFeeLabel}: {fmt(exp.fee,ccy,rates,ccy)}</span>}
+              {!!exp.tip&&<span>{t.tipLabel}: {fmt(exp.tip,ccy,rates,ccy)}</span>}
+              {!!exp.taxRate&&<span>{t.taxRateLabel}: {exp.taxRate}%</span>}
+              {feePer>0&&<span className="muted">{t.feeTipPerItem(fmt(feePer,ccy,rates,ccy))}</span>}
+            </div>
+          ):null}
+        </div>
+      </div>
+      <div className="detail-row detail-row-col">
+        <span className="detail-k">{t.perPersonBreakdown}</span>
+        <div className="item-breakdown">
+          {Object.entries(shares).map(([pid,amt])=>(
+            <div key={pid} className="item-bd-row">
+              <span className="item-bd-name"><PersonDotG id={pid} people={people} size={16}/> {(people.find(p=>p.id===pid)||{name:pid}).name}</span>
+              <span className="item-bd-price"><strong>{fmt(amt,ccy,rates,ccy)}</strong>{displayCcy!==ccy&&<span className="muted"> · {fmt(amt,ccy,rates,displayCcy)}</span>}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ---- Itemized editor ----
+function ItemizedEditor({items,setItems,fee,setFee,tip,setTip,divisor,setDivisor,taxRate,setTaxRate,showFee,setShowFee,showTip,setShowTip,showTax,setShowTax,ccy,people,errs,shakeKey}){
+  const{rates,displayCcy}=useCcy(); const t=useT();
+  const meta=ccyMeta(ccy);
+  function upd(id,patch){setItems(prev=>prev.map(it=>it.id===id?{...it,...patch}:it));}
+  function togglePerson(id,pid){setItems(prev=>prev.map(it=>it.id===id?{...it,people:it.people.includes(pid)?it.people.filter(x=>x!==pid):[...it.people,pid]}:it));}
+  function addItem(){setItems(prev=>[...prev,{id:genId("i"),name:"",price:"",people:people.map(p=>p.id),taxable:showTax}]);}
+  function removeItem(id){setItems(prev=>prev.filter(it=>it.id!==id));}
+  const{total}=computeItemized(items,parseFloat(fee)||0,parseFloat(tip)||0,parseInt(divisor)||0,parseFloat(taxRate)||0);
+  return(
+    <>
+      <VField err={errs.items} shakeKey={shakeKey} className="field">
+        <span className="field-k">{t.itemsLabel}</span>
+        <div className="item-list">
+          {items.map((it,idx)=>{
+            const rowErr=errs["item_"+it.id];
+            return(
+              <VField key={it.id} err={rowErr} shakeKey={shakeKey} className="item-row-wrap">
+                <div className="item-row">
+                  <input className={"field-input item-name"+(rowErr===t.errItemName?" input-bad":"")} placeholder={t.itemNamePlaceholder} value={it.name} onChange={e=>upd(it.id,{name:e.target.value})}/>
+                  <div className="item-price-wrap"><span className="item-cur">{meta.symbol}</span>
+                    <input className={"field-input item-price"+(rowErr===t.errItemPrice?" input-bad":"")} inputMode="decimal" placeholder={t.itemPricePlaceholder} value={it.price} onChange={e=>upd(it.id,{price:e.target.value.replace(/[^\d.]/g,"")})}/></div>
+                  {showTax&&<button type="button" className={"tax-toggle"+(it.taxable?" tax-on":"")} onClick={()=>upd(it.id,{taxable:!it.taxable})}>{t.itemTaxBadge}</button>}
+                  <button type="button" className="member-remove" onClick={()=>removeItem(it.id)}>✕</button>
+                </div>
+                <div className="item-people-row">
+                  {people.map(p=><PersonChipG key={p.id} id={p.id} people={people} selected={it.people.includes(p.id)} onClick={()=>togglePerson(it.id,p.id)} size="sm"/>)}
+                </div>
+              </VField>
+            );
+          })}
+        </div>
+        <button type="button" className="btn btn-ghost btn-sm item-add-btn" onClick={addItem}>{t.addItemBtn}</button>
+      </VField>
+
+      <div className="extras-btn-row">
+        {!showFee&&<button type="button" className="extras-btn" onClick={()=>setShowFee(true)}>{t.addDeliveryFeeBtn}</button>}
+        {!showTip&&<button type="button" className="extras-btn" onClick={()=>setShowTip(true)}>{t.addTipBtn}</button>}
+        {!showTax&&<button type="button" className="extras-btn" onClick={()=>setShowTax(true)}>{t.addTaxBtn}</button>}
+      </div>
+
+      {(showFee||showTip)&&(
+        <div className="field">
+          <div className="extras-grid">
+            {showFee&&(
+              <label className="extras-cell">
+                <span className="field-k">{t.deliveryFeeLabel} <button type="button" className="extras-x" onClick={()=>{setShowFee(false);setFee("");}}>✕</button></span>
+                <div className="item-price-wrap"><span className="item-cur">{meta.symbol}</span>
+                  <input className="field-input" inputMode="decimal" placeholder="0" value={fee} onChange={e=>setFee(e.target.value.replace(/[^\d.]/g,""))}/></div>
+              </label>
+            )}
+            {showTip&&(
+              <label className="extras-cell">
+                <span className="field-k">{t.tipLabel} <button type="button" className="extras-x" onClick={()=>{setShowTip(false);setTip("");}}>✕</button></span>
+                <div className="item-price-wrap"><span className="item-cur">{meta.symbol}</span>
+                  <input className="field-input" inputMode="decimal" placeholder="0" value={tip} onChange={e=>setTip(e.target.value.replace(/[^\d.]/g,""))}/></div>
+              </label>
+            )}
+            <label className="extras-cell">
+              <span className="field-k">{t.divideByLabel}</span>
+              <input className="field-input" inputMode="numeric" placeholder={String(items.length||1)} value={divisor} onChange={e=>setDivisor(e.target.value.replace(/\D/g,""))}/>
+            </label>
+          </div>
+          <div className="field-hint">{t.divideByHint}</div>
+        </div>
+      )}
+
+      {showTax&&(
+        <div className="field">
+          <label className="extras-cell">
+            <span className="field-k">{t.taxRateLabel} <button type="button" className="extras-x" onClick={()=>{setShowTax(false);setTaxRate("");}}>✕</button></span>
+            <input className="field-input" inputMode="decimal" placeholder="8.25" value={taxRate} onChange={e=>setTaxRate(e.target.value.replace(/[^\d.]/g,""))}/>
+          </label>
+          <div className="field-hint">{t.taxHint}</div>
+        </div>
+      )}
+
+      {total>0&&(
+        <div className="itemized-total">
+          <span>{t.itemizedTotalLabel} · {t.itemsCountUnit(items.length)}</span>
+          <strong>{fmt(total,ccy,rates,ccy)}</strong>
+          {displayCcy!==ccy&&<span className="muted">≈ {fmt(total,ccy,rates,displayCcy)}</span>}
+        </div>
+      )}
+    </>
+  );
+}
+
 // ---- Expense Form Fields ----
-function ExpenseFields({title,setTitle,amount,setAmount,ccy,setCcy,payer,setPayer,split,setSplit,cat,setCat,image,setImage,notes,setNotes,dateInput,setDateInput,people,lang,isEdit}){
+function ExpenseFields({mode,setMode,title,setTitle,amount,setAmount,ccy,setCcy,payer,setPayer,split,setSplit,cat,setCat,image,setImage,notes,setNotes,dateInput,setDateInput,people,lang,isEdit,errs,shakeKey,itemizedProps}){
   const{rates,displayCcy}=useCcy(); const t=useT();
   const CATS=getCats(lang);
   function toggle(id){setSplit(s=>s.includes(id)?s.filter(x=>x!==id):[...s,id]);}
@@ -659,10 +859,18 @@ function ExpenseFields({title,setTitle,amount,setAmount,ccy,setCcy,payer,setPaye
   const meta=ccyMeta(ccy);
   return(
     <>
-      <label className="field field-big">
-        <span className="field-k">{t.whatFor}</span>
-        <input className="field-input" placeholder={t.whatForPlaceholder} value={title} onChange={e=>setTitle(e.target.value)} autoFocus={!isEdit}/>
-      </label>
+      <div className="mode-seg">
+        <button type="button" className={"mode-seg-b"+(mode==="simple"?" mode-seg-on":"")} onClick={()=>setMode("simple")}>{t.modeSimple}</button>
+        <button type="button" className={"mode-seg-b"+(mode==="itemized"?" mode-seg-on":"")} onClick={()=>setMode("itemized")}>{t.modeItemized}</button>
+      </div>
+
+      <VField err={errs.title} shakeKey={shakeKey} className="field field-big">
+        <label>
+          <span className="field-k">{t.whatFor}</span>
+          <input className={"field-input"+(errs.title?" input-bad":"")} placeholder={t.whatForPlaceholder} value={title} onChange={e=>setTitle(e.target.value)} autoFocus={!isEdit}/>
+        </label>
+      </VField>
+
       <div className="field">
         <div className="field-k-row">
           <span className="field-k">{t.howMuch}</span>
@@ -670,9 +878,16 @@ function ExpenseFields({title,setTitle,amount,setAmount,ccy,setCcy,payer,setPaye
             {CURRENCIES.map(c=><button key={c.code} type="button" className={"ccy-seg-b "+(ccy===c.code?"ccy-seg-on":"")} onClick={()=>setCcy(c.code)}>{c.symbol}</button>)}
           </div>
         </div>
-        <div className="amt-input"><span className="amt-cur">{meta.symbol}</span><input className="amt-num" inputMode="decimal" placeholder="0" value={amount} onChange={e=>setAmount(e.target.value)}/></div>
-        {amt>0&&ccy!==displayCcy&&<div className="amt-convert">≈ {fmt(amt,ccy,rates,displayCcy)} ({displayCcy})</div>}
+        {mode==="simple"&&(
+          <VField err={errs.amount} shakeKey={shakeKey}>
+            <div className={"amt-input"+(errs.amount?" input-bad":"")}><span className="amt-cur">{meta.symbol}</span><input className="amt-num" inputMode="decimal" placeholder="0" value={amount} onChange={e=>setAmount(e.target.value)}/></div>
+            {amt>0&&ccy!==displayCcy&&<div className="amt-convert">≈ {fmt(amt,ccy,rates,displayCcy)} ({displayCcy})</div>}
+          </VField>
+        )}
       </div>
+
+      {mode==="itemized"&&<ItemizedEditor {...itemizedProps} ccy={ccy} people={people} errs={errs} shakeKey={shakeKey}/>}
+
       <div className="field">
         <span className="field-k">{t.dateTimeLabel}</span>
         <input type="datetime-local" className="field-input date-input" value={dateInput} onChange={e=>setDateInput(e.target.value)}/>
@@ -687,20 +902,22 @@ function ExpenseFields({title,setTitle,amount,setAmount,ccy,setCcy,payer,setPaye
         <span className="field-k">{t.whoPaidLabel}</span>
         <div className="chip-row">{people.map(p=><PersonChipG key={p.id} id={p.id} people={people} selected={payer===p.id} onClick={()=>setPayer(p.id)} size="md"/>)}</div>
       </div>
-      <div className="field">
-        <div className="field-k-row">
-          <span className="field-k">{t.splitBetweenLabel}</span>
-          <div className="quick-row">
-            <button type="button" className="mini" onClick={()=>setSplit(people.map(p=>p.id))}>{t.allBtn}</button>
-            <button type="button" className="mini" onClick={()=>setSplit([])}>{t.noneBtn}</button>
+      {mode==="simple"&&(
+        <VField err={errs.split} shakeKey={shakeKey} className="field">
+          <div className="field-k-row">
+            <span className="field-k">{t.splitBetweenLabel}</span>
+            <div className="quick-row">
+              <button type="button" className="mini" onClick={()=>setSplit(people.map(p=>p.id))}>{t.allBtn}</button>
+              <button type="button" className="mini" onClick={()=>setSplit([])}>{t.noneBtn}</button>
+            </div>
           </div>
-        </div>
-        <div className="chip-row">{people.map(p=><PersonChipG key={p.id} id={p.id} people={people} selected={split.includes(p.id)} onClick={()=>toggle(p.id)} size="md"/>)}</div>
-        <div className="split-helper">
-          {split.length>0?<span><strong>{fmt(each,ccy,rates,ccy)}</strong> <span className="muted">{t.perPersonLabel} · {t.peopleUnit(split.length)}</span></span>
-            :<span className="muted">{t.pickAtLeastOne}</span>}
-        </div>
-      </div>
+          <div className="chip-row">{people.map(p=><PersonChipG key={p.id} id={p.id} people={people} selected={split.includes(p.id)} onClick={()=>toggle(p.id)} size="md"/>)}</div>
+          <div className="split-helper">
+            {split.length>0?<span><strong>{fmt(each,ccy,rates,ccy)}</strong> <span className="muted">{t.perPersonLabel} · {t.peopleUnit(split.length)}</span></span>
+              :<span className="muted">{t.pickAtLeastOne}</span>}
+          </div>
+        </VField>
+      )}
       <div className="field">
         <span className="field-k">{t.notesLabel}</span>
         <textarea className="field-input field-textarea" placeholder={t.notesPlaceholder} value={notes} onChange={e=>setNotes(e.target.value)} rows={2}/>
@@ -710,43 +927,108 @@ function ExpenseFields({title,setTitle,amount,setAmount,ccy,setCcy,payer,setPaye
   );
 }
 
+// ---- Shared form state + validation for Add/Edit ----
+function useExpenseForm(exp,defaultPayer,people,displayCcy,t,defaultTaxRate){
+  const isEdit=!!exp;
+  const[mode,setMode]=useState(exp?.itemized?"itemized":"simple");
+  const[title,setTitle]=useState(exp?.title||"");
+  const[amount,setAmount]=useState(exp&&!exp.itemized?String(exp.amount):"");
+  const[ccy,setCcy]=useState(exp?.ccy||displayCcy);
+  const[payer,setPayer]=useState(exp?.paidBy||defaultPayer);
+  const[split,setSplit]=useState(exp?(exp.split||[]):people.map(p=>p.id));
+  const[cat,setCat]=useState(exp?.cat||"food");
+  const[image,setImage]=useState(exp?.image||null);
+  const[notes,setNotes]=useState(exp?.notes||"");
+  const[dateInput,setDateInput]=useState(exp?._ts?new Date(exp._ts).toISOString().slice(0,16):todayInputValue());
+  const[items,setItems]=useState(exp?.items?.length
+    ?exp.items.map(it=>({id:genId("i"),name:it.name,price:String(it.price),people:it.people||[],taxable:!!it.taxable}))
+    :[{id:genId("i"),name:"",price:"",people:people.map(p=>p.id),taxable:false}]);
+  const[fee,setFee]=useState(exp?.fee?String(exp.fee):"");
+  const[tip,setTip]=useState(exp?.tip?String(exp.tip):"");
+  const[divisor,setDivisor]=useState(exp?.feeDivisor?String(exp.feeDivisor):"");
+  const[taxRate,setTaxRate]=useState(exp?.taxRate?String(exp.taxRate):defaultTaxRate!=null?String(defaultTaxRate):"");
+  const[showFee,setShowFee]=useState(!!exp?.fee);
+  const[showTip,setShowTip]=useState(!!exp?.tip);
+  const[showTax,setShowTax]=useState(!!exp?.taxRate);
+  const[errs,setErrs]=useState({});
+  const[shakeKey,setShakeKey]=useState(0);
+
+  function validate(){
+    const e={};
+    if(!title.trim())e.title=t.errTitleRequired;
+    if(mode==="simple"){
+      const amt=parseFloat(amount.replace(/[^\d.]/g,""))||0;
+      if(amt<=0)e.amount=t.errAmountRequired;
+      if(split.length===0)e.split=t.errSplitRequired;
+    }else{
+      if(items.length===0)e.items=t.errNoItems;
+      for(const it of items){
+        if(!it.name.trim())e["item_"+it.id]=t.errItemName;
+        else if(!(parseFloat(it.price)>0))e["item_"+it.id]=t.errItemPrice;
+        else if(it.people.length===0)e["item_"+it.id]=t.errItemPeople;
+      }
+    }
+    setErrs(e);
+    if(Object.keys(e).length){setShakeKey(k=>k+1);scrollToFirstError();return false;}
+    return true;
+  }
+
+  function buildPayload(){
+    const base={title:title.trim(),ccy,paidBy:payer,cat,image,notes,dateInput};
+    if(mode==="simple"){
+      const amt=parseFloat(amount.replace(/[^\d.]/g,""))||0;
+      return{...base,amount:amt,split,itemized:false,items:[],shares:null,fee:0,tip:0,feeDivisor:0,taxRate:0};
+    }
+    const f=parseFloat(fee)||0,tp=parseFloat(tip)||0,tr=parseFloat(taxRate)||0;
+    const div=parseInt(divisor)||items.length||1;
+    const{shares,total}=computeItemized(items,f,tp,div,tr);
+    const rShares=Object.fromEntries(Object.entries(shares).map(([k,v])=>[k,round2(v)]));
+    return{...base,amount:round2(total),split:[...new Set(items.flatMap(it=>it.people))],
+      itemized:true,items:items.map(it=>({name:it.name.trim(),price:parseFloat(it.price)||0,people:it.people,taxable:!!it.taxable})),
+      shares:rShares,fee:f,tip:tp,feeDivisor:div,taxRate:tr};
+  }
+
+  return{isEdit,mode,setMode,title,setTitle,amount,setAmount,ccy,setCcy,payer,setPayer,split,setSplit,cat,setCat,image,setImage,notes,setNotes,dateInput,setDateInput,errs,shakeKey,validate,buildPayload,
+    itemizedProps:{items,setItems,fee,setFee,tip,setTip,divisor,setDivisor,taxRate,setTaxRate,showFee,setShowFee,showTip,setShowTip,showTax,setShowTax}};
+}
+
 // ---- Add / Edit Expense ----
-function AddExpense({people,onClose,onSave,defaultPayer,lang}){
-  const{rates,displayCcy}=useCcy(); const t=useT();
-  const[title,setTitle]=useState(""); const[amount,setAmount]=useState(""); const[ccy,setCcy]=useState(displayCcy);
-  const[payer,setPayer]=useState(defaultPayer); const[split,setSplit]=useState(people.map(p=>p.id));
-  const[cat,setCat]=useState("food"); const[image,setImage]=useState(null); const[notes,setNotes]=useState(""); const[dateInput,setDateInput]=useState(todayInputValue());
-  const amt=parseFloat(amount.replace(/[^\d.]/g,""))||0; const valid=title.trim()&&amt>0&&split.length>0;
+function AddExpense({people,onClose,onSave,defaultPayer,lang,defaultTaxRate}){
+  const{displayCcy}=useCcy(); const t=useT();
+  const f=useExpenseForm(null,defaultPayer,people,displayCcy,t,defaultTaxRate);
+  function handleSave(){
+    if(!f.validate())return;
+    onSave(f.buildPayload());
+  }
   return(
     <Sheet onClose={onClose} title={t.addExpenseTitle}>
       <div className="form">
-        <ExpenseFields title={title} setTitle={setTitle} amount={amount} setAmount={setAmount} ccy={ccy} setCcy={setCcy} payer={payer} setPayer={setPayer} split={split} setSplit={setSplit} cat={cat} setCat={setCat} image={image} setImage={setImage} notes={notes} setNotes={setNotes} dateInput={dateInput} setDateInput={setDateInput} people={people} lang={lang}/>
+        <ExpenseFields {...f} people={people} lang={lang}/>
         <div className="form-foot">
           <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button className="btn btn-primary" disabled={!valid} onClick={()=>valid&&onSave({title:title.trim(),amount:amt,ccy,paidBy:payer,split,cat,image,notes,dateInput})}>{t.saveExpense}</button>
+          <button className="btn btn-primary" onClick={handleSave}>{t.saveExpense}</button>
         </div>
       </div>
     </Sheet>
   );
 }
-function EditExpense({exp,people,onClose,onSave,lang}){
-  const{rates,displayCcy}=useCcy(); const t=useT();
-  const[title,setTitle]=useState(exp.title); const[amount,setAmount]=useState(String(exp.amount)); const[ccy,setCcy]=useState(exp.ccy||BASE);
-  const[payer,setPayer]=useState(exp.paidBy); const[split,setSplit]=useState(exp.split||[]);
-  const[cat,setCat]=useState(exp.cat||"other"); const[image,setImage]=useState(exp.image||null); const[notes,setNotes]=useState(exp.notes||"");
-  const[dateInput,setDateInput]=useState(exp._ts?new Date(exp._ts).toISOString().slice(0,16):todayInputValue());
-  const amt=parseFloat(amount.replace(/[^\d.]/g,""))||0; const valid=title.trim()&&amt>0&&split.length>0;
+function EditExpense({exp,people,onClose,onSave,lang,defaultTaxRate}){
+  const{displayCcy}=useCcy(); const t=useT();
+  const f=useExpenseForm(exp,exp.paidBy,people,displayCcy,t,defaultTaxRate);
   function handleSave(){
-    if(!valid) return;
-    onSave({id:exp.id,title:title.trim(),amount:amt,ccy,paidBy:payer,split,cat,image,notes,when:formatWhenT(t,dateInput),_ts:dateInput?new Date(dateInput).getTime():exp._ts,removeImage:!image});
+    if(!f.validate())return;
+    const p=f.buildPayload();
+    const payload={id:exp.id,...p,when:formatWhenT(t,p.dateInput),_ts:p.dateInput?new Date(p.dateInput).getTime():exp._ts,removeImage:!p.image};
+    delete payload.dateInput;
+    onSave(payload);
   }
   return(
     <Sheet onClose={onClose} title={t.editExpenseTitle}>
       <div className="form">
-        <ExpenseFields title={title} setTitle={setTitle} amount={amount} setAmount={setAmount} ccy={ccy} setCcy={setCcy} payer={payer} setPayer={setPayer} split={split} setSplit={setSplit} cat={cat} setCat={setCat} image={image} setImage={setImage} notes={notes} setNotes={setNotes} dateInput={dateInput} setDateInput={setDateInput} people={people} lang={lang} isEdit/>
+        <ExpenseFields {...f} people={people} lang={lang} isEdit/>
         <div className="form-foot">
           <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button className="btn btn-primary" disabled={!valid} onClick={handleSave}>{t.saveChanges}</button>
+          <button className="btn btn-primary" onClick={handleSave}>{t.saveChanges}</button>
         </div>
       </div>
     </Sheet>
@@ -786,7 +1068,7 @@ function PersonDetail({id,people,expenses,balance,onClose}){
   const p=people.find(p=>p.id===id)||{name:id,tone:"#8a8073"};
   const involved=expenses.filter(e=>e.paidBy===id||e.split?.includes(id));
   const paid=expenses.filter(e=>e.paidBy===id).reduce((s,e)=>s+convert(e.amount,e.ccy||BASE,BASE,rates),0);
-  const owes=expenses.filter(e=>e.split?.includes(id)).reduce((s,e)=>s+convert(e.amount,e.ccy||BASE,BASE,rates)/(e.split?.length||1),0);
+  const owes=expenses.reduce((s,e)=>s+convert(shareOf(e,id),e.ccy||BASE,BASE,rates),0);
   const st=balance>0.5?"pos":balance<-0.5?"neg":"zero";
   return(
     <Sheet onClose={onClose} title={p.name}>
@@ -903,16 +1185,18 @@ function AppSettingsTab({hasPassword}){
   const t=useT();
   const[oldPw,setOldPw]=useState("");const[newPw,setNewPw]=useState("");const[cnfPw,setCnfPw]=useState("");const[msg,setMsg]=useState(null);
   const[usd,setUsd]=useState("");const[eur,setEur]=useState("");const[rMsg,setRMsg]=useState(null);
+  const[tax,setTax]=useState("");
   const[globalLang,setGlobalLang]=useState("en");const[langMsg,setLangMsg]=useState(null);
   useEffect(()=>{
     fetch("/api/settings").then(r=>r.json()).then(s=>{
       setUsd(String(s.fallbackRates?.USD||1400));
       setEur(String(s.fallbackRates?.EUR||1600));
+      setTax(String(s.defaultTaxRate??8.25));
       setGlobalLang(s.language||"en");
     });
   },[]);
   async function savePw(){if(newPw!==cnfPw){setMsg({err:true,text:t.passwordMismatch});return;}const res=await fetch("/api/settings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({oldPassword:oldPw,newPassword:newPw})});const d=await res.json();if(d.ok){setMsg({err:false,text:newPw?t.passwordChanged:t.passwordRemoved});setOldPw("");setNewPw("");setCnfPw("");}else setMsg({err:true,text:t.passwordWrongOld});}
-  async function saveRates(){const u=parseFloat(usd),e=parseFloat(eur);if(!u||!e||u<=0||e<=0){setRMsg({err:true,text:t.ratesInvalid});return;}const res=await fetch("/api/settings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fallbackRates:{KRW:1,USD:u,EUR:e}})});const d=await res.json();if(d.ok)setRMsg({err:false,text:t.ratesSaved});}
+  async function saveRates(){const u=parseFloat(usd),e=parseFloat(eur),tx=parseFloat(tax);if(!u||!e||u<=0||e<=0||isNaN(tx)||tx<0){setRMsg({err:true,text:t.ratesInvalid});return;}const res=await fetch("/api/settings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fallbackRates:{KRW:1,USD:u,EUR:e},defaultTaxRate:tx})});const d=await res.json();if(d.ok)setRMsg({err:false,text:t.ratesSaved});}
   async function saveLang(lang){
     setGlobalLang(lang);
     const res=await fetch("/api/settings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({language:lang})});
@@ -940,6 +1224,8 @@ function AppSettingsTab({hasPassword}){
       <div className="settings-sub-title">{t.ratesSubtitle}</div>
       <label className="field"><span className="field-k">{t.usdRate}</span><input type="number" className="field-input" value={usd} onChange={e=>setUsd(e.target.value)}/></label>
       <label className="field"><span className="field-k">{t.eurRate}</span><input type="number" className="field-input" value={eur} onChange={e=>setEur(e.target.value)}/></label>
+      <label className="field"><span className="field-k">{t.taxDefaultLabel}</span><input type="number" step="0.01" min="0" className="field-input" value={tax} onChange={e=>setTax(e.target.value)}/></label>
+      <div className="field-hint">{t.taxDefaultHint}</div>
       {rMsg&&<div className={"settings-msg"+(rMsg.err?" msg-err":" msg-ok")}>{rMsg.text}</div>}
       <button className="btn btn-primary btn-sm" onClick={saveRates}>{t.saveRates}</button>
     </div>

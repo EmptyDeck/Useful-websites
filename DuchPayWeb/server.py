@@ -37,6 +37,7 @@ DEFAULT_SETTINGS = {
     "fallbackRates": {"KRW": 1, "USD": 1400, "EUR": 1600},
     "theme": "cream",
     "language": "en",
+    "defaultTaxRate": 8.25,
 }
 
 TONES = ["#c4502a","#7a8c5c","#4d6b85","#8b6b4d","#6b4d8b","#4d8b6b","#8b4d6b","#5c7a8c"]
@@ -225,6 +226,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             safe["hasPassword"] = bool(settings.get("editPassword"))
             safe.setdefault("language", "en")
             safe.setdefault("fallbackRates", DEFAULT_SETTINGS["fallbackRates"])
+            safe.setdefault("defaultTaxRate", DEFAULT_SETTINGS["defaultTaxRate"])
             self.ok(safe)
 
         elif path == "/api/rates":
@@ -417,6 +419,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     settings["editPassword"] = body["newPassword"]
                 if "fallbackRates" in body:
                     settings["fallbackRates"] = body["fallbackRates"]
+                if "defaultTaxRate" in body:
+                    try:
+                        settings["defaultTaxRate"] = max(0.0, float(body["defaultTaxRate"]))
+                    except (TypeError, ValueError):
+                        pass
                 if "theme" in body:
                     settings["theme"] = body["theme"]
                 if "language" in body:

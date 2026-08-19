@@ -1,4 +1,7 @@
 # Runtime data created by the local server.
+settings.json
+expenses_*.json
+expenses.json.migrated
 expenses_log.json
 dist/uploads/*
 !dist/uploads/.gitkeep
