@@ -44,6 +44,10 @@ TONES = ["#c4502a","#7a8c5c","#4d6b85","#8b6b4d","#6b4d8b","#4d8b6b","#8b4d6b","
 
 TOKEN_SALT = "dutch-pay-auth-v1"
 
+# 환율 서버측 메모리 캐시: 1시간. 외부 API(Frankfurter)를 매 요청마다 때리지 않도록.
+_RATE_CACHE = {"data": None, "ts": 0.0}
+_RATE_TTL = 3600.0
+
 
 def make_token(kind, secret):
     return hashlib.sha256(f"{kind}:{secret}:{TOKEN_SALT}".encode()).hexdigest()
@@ -265,7 +269,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_error(404)
 
     def fetch_rates(self):
-        import concurrent.futures
+        import concurrent.futures, time
+
+        # 1시간 이내면 캐시된 환율을 그대로 반환 (외부 호출 없이 즉시 응답)
+        cached = _RATE_CACHE.get("data")
+        if cached and (time.time() - _RATE_CACHE.get("ts", 0)) < _RATE_TTL:
+            self.ok(cached)
+            return
 
         def _fetch():
             url = "https://api.frankfurter.app/latest?from=USD&to=KRW,EUR"
@@ -291,6 +301,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 "date": raw.get("date"),
                 "updatedAt": datetime.now().isoformat(),
             }
+            _RATE_CACHE["data"] = data
+            _RATE_CACHE["ts"] = time.time()
             self.ok(data)
         except Exception as ex:
             print(f"[환율] 가져오기 실패: {ex}")
@@ -510,8 +522,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def end_headers(self):
         path = getattr(self, "path", "").split("?")[0]
-        if path.endswith((".html", ".js", ".jsx", ".css")):
-            self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+        # 벤더 라이브러리(React·Babel)와 폰트는 바뀌지 않으므로 장기 캐시.
+        # -> 첫 로드만 무겁고 이후 재방문/새로고침은 브라우저 캐시에서 즉시 로드.
+        if "/vendor/" in path or path.startswith("/fonts/") or path.endswith((".woff2", ".woff", ".ttf")):
+            self.send_header("Cache-Control", "public, max-age=31536000, immutable")
+        # 앱 코드는 수정될 수 있으므로 저장은 허용하되 매번 갱신 확인(변경 없으면 304, 거의 0바이트).
+        elif path.endswith((".html", ".js", ".jsx", ".css")):
+            self.send_header("Cache-Control", "no-cache")
         super().end_headers()
 
     def address_string(self):

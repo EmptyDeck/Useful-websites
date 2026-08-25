@@ -59,6 +59,20 @@ if (-not $pythonCmd) {
   }
 }
 
+# JSX -> JS 미리 컴파일 (변경된 것만). node 가 있으면 자동 빌드, 없으면 기존 .js 사용.
+$nodeCmd = Get-Command node -ErrorAction SilentlyContinue
+if ($nodeCmd) {
+  Write-Host '빌드 확인 중 (변경된 JSX 컴파일)...'
+  & $nodeCmd.Source "$PSScriptRoot\build.js"
+  if ($LASTEXITCODE -ne 0) {
+    Write-Host '경고: 빌드 실패. 기존 .js 파일로 계속 진행합니다.'
+  }
+} else {
+  Write-Host 'node 가 없어 자동 빌드를 건너뜁니다 (기존 .js 사용).'
+  Write-Host 'app.jsx/groups.jsx 를 수정했다면 node build.js 를 직접 실행하세요.'
+}
+
+Write-Host ''
 Write-Host '=== 더치페이 서버 ==='
 Write-Host ''
 Write-Host "브라우저에서 열리는 중: http://localhost:$port"

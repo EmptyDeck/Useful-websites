@@ -1,12 +1,12 @@
 // DutchPay i18n — English (default) & Korean
 
 window.DUTCH_CATS_DATA = [
-  { id:"food",    en:"Food",     ko:"식비", enGlyph:"F", koGlyph:"식" },
-  { id:"stay",    en:"Stay",     ko:"숙박", enGlyph:"S", koGlyph:"숙" },
-  { id:"transit", en:"Transit",  ko:"교통", enGlyph:"T", koGlyph:"교" },
-  { id:"tickets", en:"Tickets",  ko:"티켓", enGlyph:"K", koGlyph:"표" },
-  { id:"shop",    en:"Shopping", ko:"쇼핑", enGlyph:"H", koGlyph:"쇼" },
-  { id:"other",   en:"Other",    ko:"기타", enGlyph:"O", koGlyph:"기" },
+  { id:"food",    en:"Food",     ko:"식비", enGlyph:"🍔", koGlyph:"🍔" },
+  { id:"stay",    en:"Stay",     ko:"숙박", enGlyph:"🏠", koGlyph:"🏠" },
+  { id:"transit", en:"Transit",  ko:"교통", enGlyph:"🚗", koGlyph:"🚗" },
+  { id:"tickets", en:"Tickets",  ko:"티켓", enGlyph:"🎫", koGlyph:"🎫" },
+  { id:"shop",    en:"Shopping", ko:"쇼핑", enGlyph:"🛒", koGlyph:"🛒" },
+  { id:"other",   en:"Other",    ko:"기타", enGlyph:"📦", koGlyph:"📦" },
 ];
 
 window.DUTCH_I18N = {

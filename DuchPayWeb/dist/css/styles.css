@@ -522,12 +522,13 @@ body {
   background: var(--bg);
   color: var(--ink-2);
   border-radius: 50%;
-  font-family: "Instrument Serif", serif;
-  font-style: italic;
+  font-family: "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Segoe UI Symbol",sans-serif;
+  font-style: normal;
   font-weight: 400;
   border: 1px solid var(--line);
   flex-shrink: 0;
   line-height: 1;
+  /* 이모지는 자체 색상을 쓰므로 color 지정이 먹지 않는다 */
 }
 
 .exp-mid { min-width: 0; }

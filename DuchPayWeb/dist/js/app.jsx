@@ -169,7 +169,7 @@ function PersonChipG({id,people,selected,onClick,size="md",showName=true,disable
 function CatGlyphLang({id,lang,size=32}){
   const cats=getCats(lang);
   const c=cats.find(c=>c.id===id)||cats[cats.length-1]||{glyph:"?"};
-  return <span className="cat-glyph" style={{width:size,height:size,fontSize:size*0.5}}>{c.glyph}</span>;
+  return <span className="cat-glyph" style={{width:size,height:size,fontSize:size*0.56}}>{c.glyph}</span>;
 }
 function PaperGrain(){return(<svg className="grain" aria-hidden="true"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0"/></filter><rect width="100%" height="100%" filter="url(#g)"/></svg>);}
 
