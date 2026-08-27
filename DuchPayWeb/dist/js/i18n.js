@@ -1,7 +1,7 @@
 // DutchPay i18n — English (default) & Korean
 
 window.DUTCH_CATS_DATA = [
-  { id:"food",    en:"Food",     ko:"식비", enGlyph:"🍔", koGlyph:"🍔" },
+  { id:"food",    en:"Food",     ko:"식비", enGlyph:"🍽️", koGlyph:"🍽️" },
   { id:"stay",    en:"Stay",     ko:"숙박", enGlyph:"🏠", koGlyph:"🏠" },
   { id:"transit", en:"Transit",  ko:"교통", enGlyph:"🚗", koGlyph:"🚗" },
   { id:"tickets", en:"Tickets",  ko:"티켓", enGlyph:"🎫", koGlyph:"🎫" },
